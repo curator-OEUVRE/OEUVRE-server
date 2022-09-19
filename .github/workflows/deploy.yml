@@ -56,7 +56,7 @@ jobs:
           host: ${{ secrets.HOST_DEV }}
           username: ubuntu
           key: ${{ secrets.KEY_DEV }}
-          script: mkdir -p ~/srv/ubuntu oeuvre-dev
+          script: mkdir -p ~/srv/ubuntu/oeuvre-dev
 
       - name: copy source via ssh key
         uses: burnett01/rsync-deployments@4.1
