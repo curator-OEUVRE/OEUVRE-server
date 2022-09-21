@@ -56,13 +56,13 @@ jobs:
           host: ${{ secrets.HOST_DEV }}
           username: ubuntu
           key: ${{ secrets.KEY_DEV }}
-          script: mkdir -p ~/srv/ubuntu
+          script: mkdir -p ~/srv/ubuntu/oeuvre-dev
 
       - name: copy source via ssh key
         uses: burnett01/rsync-deployments@4.1
         with:
           switches: -avzr --delete
-          remote_path: ~/srv/ubuntu/
+          remote_path: ~/srv/ubuntu/oeuvre-dev
           remote_host: ${{ secrets.HOST_DEV }}
           remote_user: ubuntu
           remote_key: ${{ secrets.KEY_DEV }}
@@ -74,4 +74,4 @@ jobs:
           username: ubuntu
           key: ${{ secrets.KEY_DEV }}
           script: |
-            java -jar ~/srv/ubuntu/build/libs/oeuvre-0.0.1-SNAPSHOT.jar             
+            java -jar ~/srv/ubuntu/oeuvre-dev/build/libs/oeuvre-0.0.1-SNAPSHOT.jar             
