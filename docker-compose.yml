@@ -2,11 +2,11 @@ version: "3"
 
 services:
   backend-dev:
-    image: sanbonai06/bankids-server-dev:dev
+    image: kimwonjin/oeuvre-server-dev:dev
     container_name: backend-dev
     hostname: backend-dev
     expose:
-      - "8080"
+      - "9090"
 
   nginx:
     depends_on:
