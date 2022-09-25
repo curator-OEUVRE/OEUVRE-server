@@ -1,0 +1,19 @@
+version: "3"
+
+  backend-prod:
+    image: kimwonjin/oeuvre-server-prod:main
+    container_name: backend-prod
+    hostname: backend-prod
+    expose:
+      - "8080"
+
+  nginx:
+    depends_on:
+      - backend-prod
+    restart: always
+    container_name: oeuvre-nginx-prod
+    build:
+      dockerfile: Dockerfile.prod
+      context: ./config/nginx/prod
+    ports:
+      - "81:81"
