@@ -20,6 +20,7 @@ services:
       - backend-dev
       - backend-prod
     restart: always
+    container_name: oeuvre-nginx
     build:
       dockerfile: Dockerfile
       context: ./config/nginx
