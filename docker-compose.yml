@@ -14,7 +14,7 @@ services:
     restart: always
     container_name: oeuvre-nginx-dev
     build:
-      dockerfile: config/nginx/dev/Dockerfile
+      dockerfile: Dockerfile
       context: ./config/nginx/dev
     ports:
       - "80:80"
