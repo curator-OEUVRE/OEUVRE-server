@@ -7,10 +7,18 @@ services:
     hostname: backend-dev
     expose:
       - "9090"
+  backend-prod:
+    image: kimwonjin/oeuvre-server-prod:main
+    container_name: backend-prod
+    hostname: backend-prod
+    expose:
+      - "8080"
+
 
   nginx:
     depends_on:
       - backend-dev
+      - backend-prod
     restart: always
     build:
       dockerfile: Dockerfile

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthCheckController {
 
     @Operation(summary = "테스트 api", description = "테스트용 api 입니덩")
-    @GetMapping
+    @GetMapping(produces = "application/json;charset=utf-8")
     public String healthCheck () {
         return "테스트 성공!";
     }
