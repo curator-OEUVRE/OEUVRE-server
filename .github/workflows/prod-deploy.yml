@@ -104,5 +104,5 @@ jobs:
             sudo docker stop backend-prod
             sudo docker rm backend-prod
             sudo docker rmi $(sudo docker images -q)
-            sudo docker-compose -f ~/srv/ubuntu/oeuvre-prod/docker-compose.yml pull
-            sudo docker-compose -f ~/srv/ubuntu/oeuvre-prod/docker-compose.yml up --build -d
+            sudo docker-compose -f ~/srv/ubuntu/oeuvre-prod/docker-compose-prod.yml pull
+            sudo docker-compose -f ~/srv/ubuntu/oeuvre-prod/docker-compose-prod.yml up --build -d
