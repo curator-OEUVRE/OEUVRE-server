@@ -17,4 +17,4 @@ services:
       dockerfile: Dockerfile.prod
       context: ./config/nginx/prod
     ports:
-      - "81:81"
+      - "80:80"
