@@ -79,9 +79,9 @@ jobs:
       - name: create remote directory
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DEV }}
+          host: ${{ secrets.HOST_PROD }}
           username: ubuntu
-          key: ${{ secrets.KEY_DEV }}
+          key: ${{ secrets.KEY_PROD }}
           script: mkdir -p ~/srv/ubuntu/oeuvre-prod
 
       - name: copy source via ssh key
@@ -89,16 +89,16 @@ jobs:
         with:
           switches: -avzr --delete
           remote_path: ~/srv/ubuntu/oeuvre-prod
-          remote_host: ${{ secrets.HOST_DEV }}
+          remote_host: ${{ secrets.HOST_PROD }}
           remote_user: ubuntu
-          remote_key: ${{ secrets.KEY_DEV }}
+          remote_key: ${{ secrets.KEY_PROD }}
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DEV }}
+          host: ${{ secrets.HOST_PROD }}
           username: ubuntu
-          key: ${{ secrets.KEY_DEV }}
+          key: ${{ secrets.KEY_PROD }}
           script: |
             sh ~/srv/ubuntu/oeuvre-prod/config/scripts/deploy.sh
             sudo docker stop backend-prod
