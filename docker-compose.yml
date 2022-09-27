@@ -17,4 +17,4 @@ services:
       dockerfile: Dockerfile
       context: ./config/nginx/dev
     ports:
-      - "80:80"
+      - "81:81"
