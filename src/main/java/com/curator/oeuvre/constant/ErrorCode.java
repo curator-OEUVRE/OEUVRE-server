@@ -30,7 +30,7 @@ public enum ErrorCode {
     LOGIN_FAILED(UNAUTHORIZED, "AUTH008", "로그인에 실패했습니다"),
 
     /* OAuth 관련 오류 */
-    KAKAO_BAD_REQUEST(BAD_REQUEST, "OAUTH001", "카카오 토큰 오류"),
+    KAKAO_BAD_REQUEST(BAD_REQUEST, "OAUTH001", "유효하지 않은 카카오 토큰입니다."),
     KAKAO_USER_NOT_FOUND(BAD_REQUEST, "OAUTH002", "카카오 유저를 찾을 수 없습니다"),
     KAKAO_USER_EMAIL_NOT_FOUND(BAD_REQUEST, "OAUTH003", "이메일 동의를 하지 않았습니다"),
 
