@@ -5,6 +5,7 @@ import com.curator.oeuvre.domain.Users;
 import com.curator.oeuvre.dto.oauth.TokenDto;
 import com.curator.oeuvre.dto.oauth.request.LoginRequestDto;
 import com.curator.oeuvre.dto.oauth.response.LoginResponseDto;
+import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.BaseException;
 import com.curator.oeuvre.repository.UserRepository;
 import com.google.gson.JsonElement;
@@ -42,7 +43,7 @@ public class LoginServiceImpl implements LoginService {
 
             // 200 성공 아닐 시 에러
             int responseCode = conn.getResponseCode();
-            if (responseCode != HttpStatus.OK.value()) throw new BaseException(USER_NOT_FOUND, Map.of("email", "email"));
+            if (responseCode != HttpStatus.OK.value()) throw new BadRequestException(KAKAO_BAD_REQUEST);
 
             //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기 (응답 한번에 읽어서 string으로 리턴)
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -63,7 +64,7 @@ public class LoginServiceImpl implements LoginService {
             String email = "";
             if(hasEmail){
                 email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
-            } else throw new BaseException(KAKAO_USER_EMAIL_NOT_FOUND);
+            } else throw new BadRequestException(KAKAO_USER_EMAIL_NOT_FOUND);
 
             //System.out.println(email);
             br.close();
