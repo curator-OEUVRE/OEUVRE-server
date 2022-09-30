@@ -4,10 +4,13 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Null;
 
 @Getter
@@ -27,10 +30,12 @@ public class Users extends AbstractTimestamp {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false, length = 10)
+    @Length(min = 1, max = 15)
+    @Column(nullable = false)
     private String id;
 
-    @Column(nullable = false, length = 10)
+    @Length(min = 2, max = 12)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
@@ -39,10 +44,11 @@ public class Users extends AbstractTimestamp {
     @Nullable
     private String profileImageUrl;
 
-    @Column(nullable = false, length = 10)
+    @Length(min = 4, max = 15)
+    @Column(nullable = false)
     private String exhibitionName;
 
-    @Column(length = 10)
+    @Length(max = 50)
     @Nullable
     private String introduceMessage;
 
@@ -69,7 +75,7 @@ public class Users extends AbstractTimestamp {
     @Column(nullable = false)
     private Boolean isGroupRequestAlarmOn;
 
-    @Column(nullable = false)
+    @Nullable
     private String refreshToken;
 
     @Builder

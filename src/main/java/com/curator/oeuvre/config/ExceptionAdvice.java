@@ -47,7 +47,7 @@ public class ExceptionAdvice {
     public ResponseEntity onException(Exception exception, @AuthenticationPrincipal Users user,
                                       HttpServletRequest request) {
         getExceptionStackTrace(exception, user, request);
-        return new ResponseEntity<>(CommonResponse.onFailure("500", ErrorCode._INTERNAL_SERVER_ERROR.getMessage(), null), null,
+        return new ResponseEntity<>(CommonResponse.onFailure("500", exception.getMessage(), null), null,
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

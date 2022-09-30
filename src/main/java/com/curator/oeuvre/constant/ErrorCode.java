@@ -39,6 +39,8 @@ public enum ErrorCode {
     CANNOT_FOLLOW_MYSELF(BAD_REQUEST, "U001", "자기 자신은 팔로우 할 수 없습니다"),
     USER_ALREADY_EXIST(BAD_REQUEST, "U002", "이미 가입된 유저입니다"),
     USER_NOT_FOUND(NOT_FOUND, "U003", "가입되지 않은 유저입니다."),
+    DUPLICATED_ID(BAD_REQUEST, "U004", "중복된 ID 입니다."),
+
 
 
     /* Database 관련 오류 */

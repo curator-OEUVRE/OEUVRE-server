@@ -14,6 +14,6 @@ import javax.validation.constraints.NotNull;
 public class LoginRequestDto {
 
     @ApiModelProperty(example = "p1b3M_ikmtHivvFJqwY5bXAYg-ilCq4E7DnJwlT5CisM0wAAAYOPy1oR")
-    @NotNull(message = "token may not be null")
+    @NotNull(message = "token을 입력해주세요.")
     private String token;
 }
