@@ -1,6 +1,6 @@
 package com.curator.oeuvre.service;
 
-import com.curator.oeuvre.domain.Users;
+import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.oauth.TokenDto;
 import com.curator.oeuvre.dto.oauth.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.oauth.user.response.SignUpResponseDto;
@@ -9,8 +9,6 @@ import com.curator.oeuvre.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Map;
 
 import static com.curator.oeuvre.constant.ErrorCode.*;
 
@@ -34,7 +32,7 @@ public class UserServiceImpl implements UserService{
         }
 
         // 사용자 생성
-        Users user = Users.builder()
+        User user = User.builder()
                 .email(signUpRequestDto.getEmail())
                 .type(signUpRequestDto.getType())
                 .id(signUpRequestDto.getId())
@@ -56,3 +54,4 @@ public class UserServiceImpl implements UserService{
         return new SignUpResponseDto(user.getNo(), newAccessToken, newRefreshToken);
     }
 }
+

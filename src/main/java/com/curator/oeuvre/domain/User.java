@@ -6,21 +6,23 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
-
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Null;
+import java.util.Collection;
+import java.util.Collections;
 
+@ToString
 @Getter
 @Setter
 @Entity
-@Table(name = "Users")
+@Table(name = "User")
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
-public class Users extends AbstractTimestamp {
+public class User extends AbstractTimestamp implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,7 +81,7 @@ public class Users extends AbstractTimestamp {
     private String refreshToken;
 
     @Builder
-    public Users(
+    public User(
             Long no,
             String email,
             String id,
@@ -111,5 +113,40 @@ public class Users extends AbstractTimestamp {
             this.isFollowAlarmOn = isFollowAlarmOn;
             this.isGroupRequestAlarmOn = isGroupRequestAlarmOn;
             this.refreshToken = refreshToken;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

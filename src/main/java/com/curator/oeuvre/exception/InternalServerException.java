@@ -8,7 +8,7 @@ public class InternalServerException extends BaseException {
     private String message;
 
     public InternalServerException(String message) {
-        super(ErrorCode._BAD_REQUEST);
+        super(ErrorCode._INTERNAL_SERVER_ERROR);
         this.message = message;
     }
 

@@ -1,7 +1,7 @@
 package com.curator.oeuvre.service;
 
 import static com.curator.oeuvre.constant.ErrorCode.*;
-import com.curator.oeuvre.domain.Users;
+import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.oauth.TokenDto;
 import com.curator.oeuvre.dto.oauth.request.LoginRequestDto;
 import com.curator.oeuvre.dto.oauth.response.LoginResponseDto;
@@ -73,7 +73,7 @@ public class LoginServiceImpl implements LoginService {
 
             // 이메일, 타입으로 유저 조회
             // 가입되지 않은 유저 일 경우 에러와 함께 이메일 반환
-            Users user = userRepository.findByEmailAndType(email, "KAKAO").orElseThrow(() ->
+            User user = userRepository.findByEmailAndType(email, "KAKAO").orElseThrow(() ->
                     new BaseException(USER_NOT_FOUND, Map.of("email", finalEmail)));
 
             // 가입된 유저 확인 시 jwt, refreshToken 반환
@@ -89,5 +89,18 @@ public class LoginServiceImpl implements LoginService {
         } catch (IOException e) {
             throw new BaseException(KAKAO_USER_NOT_FOUND);
         }
+    }
+
+    @Override
+    public LoginResponseDto updateUserToken(User user) {
+        String newRefreshToken = jwtService.encodeJwtRefreshToken(user.getNo());
+        String newAccessToken = jwtService.encodeJwtToken(new TokenDto(user));
+
+        user.setRefreshToken(newRefreshToken);
+        userRepository.save(user);
+
+        LoginResponseDto loginDto  = new LoginResponseDto(newAccessToken, newRefreshToken);
+
+        return loginDto;
     }
 }

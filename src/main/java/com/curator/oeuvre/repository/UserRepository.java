@@ -1,13 +1,16 @@
 package com.curator.oeuvre.repository;
 
-import com.curator.oeuvre.domain.Users;
+import com.curator.oeuvre.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<Users, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<Users> findByEmailAndType(String email, String type);
-    Optional<Users> findById(String id);
+    Optional<User> findByEmailAndType(String email, String type);
+
+    Optional<User> findById(String id);
+
+    Optional<User> findByNo(Long no);
 
 }

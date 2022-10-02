@@ -1,6 +1,6 @@
 package com.curator.oeuvre.dto.oauth;
 
-import com.curator.oeuvre.domain.Users;
+import com.curator.oeuvre.domain.User;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -12,7 +12,7 @@ public class TokenDto {
 
     private final Long no;
 
-    public TokenDto(Users user) {
+    public TokenDto(User user) {
         this.no = user.getNo();
     }
 }
