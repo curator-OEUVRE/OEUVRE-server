@@ -43,6 +43,8 @@ public class LoginServiceImpl implements LoginService {
 
             // 200 성공 아닐 시 에러
             int responseCode = conn.getResponseCode();
+            System.out.println("errorStream = " + conn.getErrorStream());
+            System.out.println("conn.getResponseMessage() = " + conn.getResponseMessage());
             System.out.println(responseCode);
             if (responseCode != HttpStatus.OK.value()) throw new BadRequestException(KAKAO_BAD_REQUEST);
 
