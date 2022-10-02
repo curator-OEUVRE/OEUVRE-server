@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/health-check").permitAll()
                 .antMatchers(SwaggerPatterns).permitAll()
-                .antMatchers("/login/kakao").permitAll()
+                .antMatchers("/login/kakao/**").permitAll()
                 .antMatchers("/login/apple").permitAll()
                 .antMatchers("/login/google").permitAll()
                 .antMatchers("/users").permitAll()
