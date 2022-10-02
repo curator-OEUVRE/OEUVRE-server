@@ -54,6 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login/apple").permitAll()
                 .antMatchers("/login/google").permitAll()
                 .antMatchers("/users").permitAll()
+                .antMatchers("/users/check-id").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter,

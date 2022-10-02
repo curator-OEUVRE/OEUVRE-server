@@ -4,28 +4,31 @@ import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.dto.oauth.request.LoginRequestDto;
 import com.curator.oeuvre.dto.oauth.response.LoginResponseDto;
 import com.curator.oeuvre.dto.oauth.user.request.SignUpRequestDto;
+import com.curator.oeuvre.dto.oauth.user.response.CheckIdResponseDto;
 import com.curator.oeuvre.dto.oauth.user.response.SignUpResponseDto;
 import com.curator.oeuvre.exception.BaseException;
 import com.curator.oeuvre.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @RestController
 @Slf4j
 @RequestMapping("/users")
 @Api(tags = "02. 사용자 🙋")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
 
     private final UserService userService;
@@ -41,6 +44,15 @@ public class UserController {
         }
         SignUpResponseDto signUpResponseDto = userService.signUp(signUpRequestDto);
         return CommonResponse.onSuccess(signUpResponseDto);
+    }
+
+    @GetMapping(value = "/check-id")
+    @Operation(summary = "ID 중복 검사", description = "ID 사용가능 여부를 검사하는 API 입니다.\n 길이와 중복 여부를 검사하며, 회원가입 전 ID 입력 시에 사용합니다.")
+    public CommonResponse<CheckIdResponseDto> checkId(@Parameter(description = "id", example = "one_zzini_")
+                                  @RequestParam(required = true)
+                                  @Length(min = 4, max = 15) String id) {
+
+        return CommonResponse.onSuccess(userService.checkId(id));
     }
 }
 

@@ -65,7 +65,6 @@ public class JwtServiceImpl implements JwtService {
                         StandardCharsets.UTF_8)))
                 .parseClaimsJws(token)
                 .getBody();
-        System.out.println("claims.getSubject() = " + claims.getSubject());
         return Long.parseLong(claims.getSubject());
     }
 

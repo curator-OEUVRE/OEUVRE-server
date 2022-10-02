@@ -1,6 +1,7 @@
 package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.dto.oauth.user.request.SignUpRequestDto;
+import com.curator.oeuvre.dto.oauth.user.response.CheckIdResponseDto;
 import com.curator.oeuvre.dto.oauth.user.response.SignUpResponseDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,4 +12,5 @@ public interface UserService {
 
     SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto);
 
+    CheckIdResponseDto checkId(String id);
 }
