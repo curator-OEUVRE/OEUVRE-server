@@ -2,13 +2,12 @@ package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.oauth.TokenDto;
-import com.curator.oeuvre.dto.oauth.user.request.SignUpRequestDto;
-import com.curator.oeuvre.dto.oauth.user.response.CheckIdResponseDto;
-import com.curator.oeuvre.dto.oauth.user.response.SignUpResponseDto;
+import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
+import com.curator.oeuvre.dto.user.response.CheckIdResponseDto;
+import com.curator.oeuvre.dto.user.response.SignUpResponseDto;
 import com.curator.oeuvre.exception.BaseException;
 import com.curator.oeuvre.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Check;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

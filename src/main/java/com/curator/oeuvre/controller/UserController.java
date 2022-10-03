@@ -1,12 +1,9 @@
 package com.curator.oeuvre.controller;
 
 import com.curator.oeuvre.config.CommonResponse;
-import com.curator.oeuvre.dto.oauth.request.LoginRequestDto;
-import com.curator.oeuvre.dto.oauth.response.LoginResponseDto;
-import com.curator.oeuvre.dto.oauth.user.request.SignUpRequestDto;
-import com.curator.oeuvre.dto.oauth.user.response.CheckIdResponseDto;
-import com.curator.oeuvre.dto.oauth.user.response.SignUpResponseDto;
-import com.curator.oeuvre.exception.BaseException;
+import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
+import com.curator.oeuvre.dto.user.response.CheckIdResponseDto;
+import com.curator.oeuvre.dto.user.response.SignUpResponseDto;
 import com.curator.oeuvre.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,14 +11,12 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 
 @RestController
 @Slf4j

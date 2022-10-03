@@ -25,6 +25,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+	implementation 'org.apache.httpcomponents:httpclient:4.5'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -32,6 +34,7 @@ dependencies {
 	implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
 	implementation 'com.google.code.gson:gson:2.9.0'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.0.0'
 
 
 	//swagger openapi
