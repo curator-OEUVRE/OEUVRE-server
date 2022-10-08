@@ -65,6 +65,23 @@ public class LoginController {
         return CommonResponse.onSuccess(loginResponseDto);
     }
 
+    @PostMapping(value = "/apple")
+    @Operation(summary = "애플 로그인", description = "애플 로그인 API 입니다.\n가입되지 않은 유저일 경우 에러와 함께 애플 이메일을 반환합니다.")
+    public CommonResponse<LoginResponseDto> appleLogin(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult) {
+        log.info("apple-login");
+
+        LoginResponseDto loginResponseDto;
+
+        if (bindingResult.hasErrors()) {
+            ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
+            return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
+        }
+
+        loginResponseDto = loginService.appleLogin(loginRequestDto);
+
+        return CommonResponse.onSuccess(loginResponseDto);
+    }
+
     @PatchMapping(value = "/refresh")
     @Operation(summary = "토큰 리프레시 (자동 로그인)", description = "자동 로그인 API 입니다.\n리프레시 토큰을 통해 유저의 jwt를 갱신합니다.")
     @ResponseBody

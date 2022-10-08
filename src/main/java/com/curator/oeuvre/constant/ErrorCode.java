@@ -35,6 +35,11 @@ public enum ErrorCode {
     KAKAO_USER_NOT_FOUND(BAD_REQUEST, "OAUTH002", "카카오 유저를 찾을 수 없습니다"),
     KAKAO_USER_EMAIL_NOT_FOUND(BAD_REQUEST, "OAUTH003", "이메일 동의를 하지 않았습니다"),
     GOOGLE_BAD_REQUEST(BAD_REQUEST, "OAUTH004", "유효하지 않은 구글 토큰입니다."),
+    APPLE_BAD_REQUEST(BAD_REQUEST, "OAUTH005", "유효하지 않은 애플 토큰입니다."),
+    APPLE_SERVER_ERROR(FORBIDDEN, "OAUTH006", "애플 서버와 통신에 실패하였습니다."),
+    FAIL_TO_MAKE_APPLE_PUBLIC_KEY(BAD_REQUEST, "OAUTH007", "새로운 애플 공개키 생성에 실패하였습니다."),
+
+
 
 
     /* User 관련 오류 */
