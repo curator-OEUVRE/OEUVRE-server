@@ -5,7 +5,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -58,23 +57,23 @@ public class User extends AbstractTimestamp implements UserDetails {
     @Column(length = 10, nullable = false)
     private String birthday;
 
-    @ColumnDefault(value = "1")
+    @ColumnDefault("true")
     @Column(nullable = false)
     private Boolean isMessageAlarmOn;
 
-    @ColumnDefault(value = "1")
+    @ColumnDefault("true")
     @Column(nullable = false)
     private Boolean isLikeAlarmOn;
 
-    @ColumnDefault(value = "1")
+    @ColumnDefault("true")
     @Column(nullable = false)
     private Boolean isCommentAlarmOn;
 
-    @ColumnDefault(value = "1")
+    @ColumnDefault("true")
     @Column(nullable = false)
     private Boolean isFollowAlarmOn;
 
-    @ColumnDefault(value = "1")
+    @ColumnDefault("true")
     @Column(nullable = false)
     private Boolean isGroupRequestAlarmOn;
 

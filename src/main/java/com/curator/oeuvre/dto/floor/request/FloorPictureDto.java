@@ -2,6 +2,8 @@ package com.curator.oeuvre.dto.floor.request;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.springframework.validation.annotation.Validated;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 

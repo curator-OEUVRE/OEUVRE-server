@@ -50,6 +50,18 @@ public enum ErrorCode {
 
 
 
+
+    /* Floor 관련 오류 */
+
+
+
+    /* Picture 관련 오류 */
+    EMPTY_IMAGE_URL(BAD_REQUEST, "P001", "image_url은 null이 될 수 없습니다"),
+    EMPTY_QUEUE(BAD_REQUEST, "P002", "queue는 null이 될 수 없습니다"),
+    EMPTY_HEIGHT(BAD_REQUEST, "P003", "height는 null이 될 수 없습니다"),
+    EMPTY_LOCATION(BAD_REQUEST, "P004", "location은 null이 될 수 없습니다"),
+
+
     /* Database 관련 오류 */
     DUPLICATE_RESOURCE(CONFLICT, "D001", "데이터가 이미 존재합니다"),
 

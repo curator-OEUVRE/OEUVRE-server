@@ -4,7 +4,7 @@ import com.google.firebase.database.annotations.Nullable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import javax.validation.constraints.Email;
+import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 

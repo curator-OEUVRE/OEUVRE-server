@@ -4,7 +4,6 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
 
 @ToString
@@ -22,7 +21,7 @@ public class Floor extends AbstractTimestamp {
     private Long no;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userNo", nullable = false)
+    @JoinColumn(name = "user_no", nullable = false)
     private User user;
 
     @Column(nullable = false)
@@ -32,23 +31,22 @@ public class Floor extends AbstractTimestamp {
     private String name;
 
     @Column(nullable = false)
-    @ColumnDefault(value = "#FFFFFF")
     private String color;
 
     @Column(nullable = false)
-    @ColumnDefault(value = "0")
+    @ColumnDefault("0")
     private Integer texture;
 
     @Column(nullable = false)
-    @ColumnDefault(value = "true")
+    @ColumnDefault("true")
     private Boolean isPublic;
 
     @Column(nullable = false)
-    @ColumnDefault(value = "true")
+    @ColumnDefault("true")
     private Boolean isCommentAvailable;
 
     @Column(nullable = false)
-    @ColumnDefault(value = "false")
+    @ColumnDefault("false")
     private Boolean isGroupExhibition;
 
     @Builder
