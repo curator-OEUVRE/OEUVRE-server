@@ -41,8 +41,8 @@ public class LoginController {
             return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
         }
 
-        LoginResponseDto loginResponseDto = loginService.kakaoLogin(loginRequestDto);
-        return CommonResponse.onSuccess(loginResponseDto);
+        LoginResponseDto result = loginService.kakaoLogin(loginRequestDto);
+        return CommonResponse.onSuccess(result);
     }
 
     @PostMapping(value = "/google")
@@ -50,7 +50,7 @@ public class LoginController {
     public CommonResponse<LoginResponseDto> googleLogin(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult) {
         log.info("google-login");
 
-        LoginResponseDto loginResponseDto;
+        LoginResponseDto result;
 
         if (bindingResult.hasErrors()) {
             ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
@@ -58,11 +58,11 @@ public class LoginController {
         }
 
         try {
-            loginResponseDto = loginService.googleLogin(loginRequestDto);
+            result = loginService.googleLogin(loginRequestDto);
         } catch (IOException e) {
             throw new BaseException(GOOGLE_BAD_REQUEST);
         }
-        return CommonResponse.onSuccess(loginResponseDto);
+        return CommonResponse.onSuccess(result);
     }
 
     @PostMapping(value = "/apple")
@@ -70,16 +70,15 @@ public class LoginController {
     public CommonResponse<LoginResponseDto> appleLogin(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult) {
         log.info("apple-login");
 
-        LoginResponseDto loginResponseDto;
+        LoginResponseDto result;
 
         if (bindingResult.hasErrors()) {
             ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
             return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
         }
 
-        loginResponseDto = loginService.appleLogin(loginRequestDto);
-
-        return CommonResponse.onSuccess(loginResponseDto);
+        result = loginService.appleLogin(loginRequestDto);
+        return CommonResponse.onSuccess(result);
     }
 
     @PatchMapping(value = "/refresh")
@@ -89,8 +88,7 @@ public class LoginController {
 
         log.info("api = 토큰 리프레시, user = {}", authUser.getNo());
 
-        LoginResponseDto loginResponseDto = loginService.updateUserToken(authUser);
-
-        return CommonResponse.onSuccess(loginResponseDto);
+        LoginResponseDto result= loginService.updateUserToken(authUser);
+        return CommonResponse.onSuccess(result);
     }
 }

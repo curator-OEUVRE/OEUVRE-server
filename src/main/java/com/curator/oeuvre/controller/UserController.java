@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @RestController
 @Slf4j
 @RequestMapping("/users")
-@Api(tags = "02. 사용자 🙋")
+@Api(tags = "02. 사용자 👤")
 @RequiredArgsConstructor
 @Validated
 public class UserController {
@@ -37,8 +37,8 @@ public class UserController {
             ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
             return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
         }
-        SignUpResponseDto signUpResponseDto = userService.signUp(signUpRequestDto);
-        return CommonResponse.onSuccess(signUpResponseDto);
+        SignUpResponseDto result = userService.signUp(signUpRequestDto);
+        return CommonResponse.onSuccess(result);
     }
 
     @GetMapping(value = "/check-id")
@@ -47,7 +47,8 @@ public class UserController {
                                   @RequestParam(required = true)
                                   @Length(min = 4, max = 15) String id) {
 
-        return CommonResponse.onSuccess(userService.checkId(id));
+        CheckIdResponseDto result = userService.checkId(id);
+        return CommonResponse.onSuccess(result);
     }
 }
 

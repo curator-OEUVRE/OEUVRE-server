@@ -5,6 +5,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -54,7 +55,7 @@ public class User extends AbstractTimestamp implements UserDetails {
     @Nullable
     private String introduceMessage;
 
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private String birthday;
 
     @ColumnDefault(value = "1")
@@ -78,6 +79,9 @@ public class User extends AbstractTimestamp implements UserDetails {
     private Boolean isGroupRequestAlarmOn;
 
     @Nullable
+    private String fcmToken;
+
+    @Nullable
     private String refreshToken;
 
     @Builder
@@ -96,6 +100,7 @@ public class User extends AbstractTimestamp implements UserDetails {
             Boolean isCommentAlarmOn,
             Boolean isFollowAlarmOn,
             Boolean isGroupRequestAlarmOn,
+            String fcmToken,
             String refreshToken
     ) {
             this.no = no;
@@ -112,6 +117,7 @@ public class User extends AbstractTimestamp implements UserDetails {
             this.isCommentAlarmOn = isCommentAlarmOn;
             this.isFollowAlarmOn = isFollowAlarmOn;
             this.isGroupRequestAlarmOn = isGroupRequestAlarmOn;
+            this.fcmToken = fcmToken;
             this.refreshToken = refreshToken;
     }
 
