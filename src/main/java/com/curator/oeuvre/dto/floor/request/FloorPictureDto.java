@@ -2,7 +2,6 @@ package com.curator.oeuvre.dto.floor.request;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -15,15 +14,14 @@ import java.util.List;
 public class FloorPictureDto {
 
     @ApiModelProperty(notes = "사진 순서", example = "1")
-    @NotNull
+    @NotNull(message = "사진 순서를 입력해주세요")
     private Integer queue;
 
     @ApiModelProperty(notes = "이미지 url", example = "image_url")
-    @NotNull
+    @NotNull(message = "이미지 url을 입력해주세요")
     private String imageUrl;
 
     @ApiModelProperty(notes = "사진 설명", example = "노을을 보면서 한컷")
-    @NotNull
     private String description;
 
     @ApiModelProperty(notes = "세로 길이", example = "188")
@@ -35,6 +33,5 @@ public class FloorPictureDto {
     private Float location;
 
     @ApiModelProperty(notes = "해시태그 목록", example = "[\"#노을\", \"#바다\", \"#제주\"]")
-    @NotNull
     private List<String> hashtags;
 }
