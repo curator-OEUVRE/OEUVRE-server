@@ -60,6 +60,8 @@ public enum ErrorCode {
     EMPTY_QUEUE(BAD_REQUEST, "P002", "queue는 null이 될 수 없습니다."),
     EMPTY_HEIGHT(BAD_REQUEST, "P003", "height는 null이 될 수 없습니다."),
     EMPTY_LOCATION(BAD_REQUEST, "P004", "location은 null이 될 수 없습니다."),
+    PICTURE_NOT_FOUND(NOT_FOUND, "P005", "존재하지 않는 사진 입니다."),
+
 
 
     /* Database 관련 오류 */
