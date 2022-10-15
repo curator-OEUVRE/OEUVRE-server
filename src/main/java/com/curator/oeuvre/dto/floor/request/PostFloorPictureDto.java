@@ -2,7 +2,6 @@ package com.curator.oeuvre.dto.floor.request;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FloorPictureDto {
+public class PostFloorPictureDto {
 
     @ApiModelProperty(notes = "사진 순서", example = "1")
     @NotNull(message = "사진 순서를 입력해주세요")

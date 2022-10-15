@@ -7,4 +7,6 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
 
     Hashtag findByHashtag(String hashtag);
 
+    Hashtag findByNo(Long hashtagNo);
+
 }

@@ -3,6 +3,7 @@ package com.curator.oeuvre.controller;
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.floor.request.PostFloorRequestDto;
+import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
 import com.curator.oeuvre.dto.floor.response.PostFloorResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.service.FloorService;
@@ -14,10 +15,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import static com.curator.oeuvre.constant.ErrorCode.*;
 
@@ -51,4 +50,16 @@ public class FloorController {
         PostFloorResponseDto result = floorService.postFloor(authUser, postFloorRequestDto);
         return CommonResponse.onSuccess(result);
     }
+
+    @GetMapping("/{floorNo}")
+    @Operation(summary = "플로어 조회", description = "플로어 조회 API 입니다. \n해당 플로어의 정보와 사진들을 조회 합니다.")
+    public CommonResponse<GetFloorResponseDto> getFloor(@AuthenticationPrincipal User authUser,
+                                                        @PathVariable Long floorNo) {
+        log.info("get-floor");
+        log.info("api = 플로어 조회, user = {}", authUser.getNo());
+
+        GetFloorResponseDto result = floorService.getFloor(authUser, floorNo);
+        return CommonResponse.onSuccess(result);
+    }
+
 }

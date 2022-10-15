@@ -21,11 +21,11 @@ public class PictureHashtag extends AbstractTimestamp {
     private Long no;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "picture_no", nullable = false)
+    @JoinColumn(name = "pictureNo", nullable = false)
     private Picture picture;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hashtag_no", nullable = false)
+    @JoinColumn(name = "hashtagNo", nullable = false)
     private Hashtag hashtag;
 
     @Builder

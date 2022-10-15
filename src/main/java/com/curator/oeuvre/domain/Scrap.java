@@ -21,11 +21,11 @@ public class Scrap extends AbstractTimestamp {
     private Long no;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "picture_no", nullable = false)
+    @JoinColumn(name = "pictureNo", nullable = false)
     private Picture picture;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_no", nullable = false)
+    @JoinColumn(name = "userNo", nullable = false)
     private User user;
 
     @Builder

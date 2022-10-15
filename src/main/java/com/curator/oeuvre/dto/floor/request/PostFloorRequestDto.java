@@ -4,7 +4,7 @@ import com.google.firebase.database.annotations.Nullable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.springframework.validation.annotation.Validated;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class PostFloorRequestDto {
     @NotNull
     private String name;
 
-    @ApiModelProperty(notes = "배경 색싱코드", example = "#FFFFFF")
+    @ApiModelProperty(notes = "배경 색상코드", example = "#FFFFFF")
     @NotNull
     private String color;
 
@@ -39,6 +39,6 @@ public class PostFloorRequestDto {
 
     @ApiModelProperty(notes = "사진 목록")
     @NotNull
-    private List<FloorPictureDto> pictures;
+    private List<PostFloorPictureDto> pictures;
 
 }

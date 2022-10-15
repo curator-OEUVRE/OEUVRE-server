@@ -22,7 +22,7 @@ public class Picture extends AbstractTimestamp {
     private Long no;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "floor_no", nullable = false)
+    @JoinColumn(name = "floorNo", nullable = false)
     private Floor floor;
 
     @Column(nullable = false)

@@ -1,9 +1,12 @@
 package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.domain.*;
-import com.curator.oeuvre.dto.floor.request.FloorPictureDto;
+import com.curator.oeuvre.dto.floor.request.PostFloorPictureDto;
 import com.curator.oeuvre.dto.floor.request.PostFloorRequestDto;
+import com.curator.oeuvre.dto.floor.response.GetFloorPictureDto;
+import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
 import com.curator.oeuvre.dto.floor.response.PostFloorResponseDto;
+import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.FloorRepository;
 import com.curator.oeuvre.repository.HashtagRepository;
 import com.curator.oeuvre.repository.PictureHashtagRepository;
@@ -11,8 +14,8 @@ import com.curator.oeuvre.repository.PictureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
+import java.util.*;
+import static com.curator.oeuvre.constant.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +46,7 @@ public class FloorServiceImpl implements FloorService {
         floorRepository.save(floor);
 
         // 3. 사진 생성
-        List<FloorPictureDto> pictures = postFloorRequestDto.getPictures();
+        List<PostFloorPictureDto> pictures = postFloorRequestDto.getPictures();
         pictures.forEach( pictureDto -> {
             Picture picture = Picture.builder()
                     .floor(floor)
@@ -88,5 +91,48 @@ public class FloorServiceImpl implements FloorService {
             });
         });
         return new PostFloorResponseDto(floor.getNo());
+    }
+
+    @Override
+    public GetFloorResponseDto getFloor(User user, Long floorNo) {
+
+        Floor floor = floorRepository.findByNo(floorNo).orElseThrow(() ->
+                new NotFoundException(FLOOR_NOT_FOUND));
+        List<Picture> pictures = pictureRepository.findAllByFloorNoOrderByQueue(floorNo);
+
+        List<GetFloorPictureDto> pictureDtos = new ArrayList<GetFloorPictureDto>();
+        pictures.forEach( picture -> {
+            List<PictureHashtag> pictureHashtags = pictureHashtagRepository.findAllByPictureNo(picture.getNo());
+
+            List<String> hashtags = new ArrayList<String>();
+            pictureHashtags.forEach( tag -> {
+                Hashtag hashtag = hashtagRepository.findByNo(tag.getHashtag().getNo());
+                hashtags.add(hashtag.getHashtag());
+            });
+
+            pictureDtos.add(
+                    new GetFloorPictureDto(
+                            picture.getNo(),
+                            picture.getQueue(),
+                            picture.getImageUrl(),
+                            picture.getDescription(),
+                            picture.getHeight(),
+                            picture.getLocation(),
+                            hashtags
+                    )
+            );
+        });
+
+        return new GetFloorResponseDto(
+                floor.getNo(),
+                floor.getUser().getNo(),
+                floor.getName(),
+                floor.getColor(),
+                floor.getTexture(),
+                floor.getIsPublic(),
+                floor.getIsCommentAvailable(),
+                Objects.equals(user.getNo(), floor.getUser().getNo()),
+                pictureDtos
+        );
     }
 }

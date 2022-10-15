@@ -21,11 +21,11 @@ public class Comment extends AbstractTimestamp {
     private Long no;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "floor_no", nullable = false)
+    @JoinColumn(name = "floorNo", nullable = false)
     private Floor floor;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_no", nullable = false)
+    @JoinColumn(name = "userNo", nullable = false)
     private User user;
 
     @Column(nullable = false)

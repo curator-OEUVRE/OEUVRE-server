@@ -21,11 +21,11 @@ public class Following extends AbstractTimestamp {
     private Long no;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follow_user_no", nullable = false)
+    @JoinColumn(name = "followUserNo", nullable = false)
     private User followUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "followed_user_no", nullable = false)
+    @JoinColumn(name = "followedUserNo", nullable = false)
     private User followedUser;
 
     @Builder
