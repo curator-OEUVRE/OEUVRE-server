@@ -4,6 +4,7 @@ import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
 import com.curator.oeuvre.dto.picture.response.GetPictureResponseDto;
+import com.curator.oeuvre.dto.user.response.GetPictureLikeUserResponseDto;
 import com.curator.oeuvre.service.PictureService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -76,6 +79,16 @@ public class PictureController {
 
         pictureService.deletePictureScrap(authUser, pictureNo);
         return CommonResponse.onSuccess("사진 스크랩 취소 성공");
+    }
+
+    @GetMapping("/{pictureNo}/like")
+    @Operation(summary = "사진 좋아요 한 유저 전체 조회", description = "사진 좋아요 한 유저 전체 조회 API 입니다.\n최근에 좋아요 한 유저 순으로 보여집니다.")
+    public CommonResponse<List<GetPictureLikeUserResponseDto>> getPictureLikeUsers(@PathVariable Long pictureNo) {
+        log.info("get-picture-like-users");
+        log.info("api = 사진 좋아요 한 유저 전체 조회");
+
+        List<GetPictureLikeUserResponseDto> result = pictureService.getPictureLikeUsers(pictureNo);
+        return CommonResponse.onSuccess(result);
     }
 
 

@@ -2,7 +2,11 @@ package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.picture.response.GetPictureResponseDto;
+import com.curator.oeuvre.dto.user.response.GetPictureLikeUserResponseDto;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface PictureService {
@@ -16,4 +20,6 @@ public interface PictureService {
     Void postPictureScrap(User user, Long pictureNo);
 
     Void deletePictureScrap(User user, Long pictureNo);
+
+    List<GetPictureLikeUserResponseDto> getPictureLikeUsers(Long pictureNo);
 }

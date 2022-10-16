@@ -5,6 +5,7 @@ import com.curator.oeuvre.domain.Picture;
 import com.curator.oeuvre.domain.Scrap;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.picture.response.GetPictureResponseDto;
+import com.curator.oeuvre.dto.user.response.GetPictureLikeUserResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.LikesRepository;
@@ -14,7 +15,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
 import static com.curator.oeuvre.constant.ErrorCode.*;
 
 @Service
@@ -102,5 +107,21 @@ public class PictureServiceImpl implements PictureService{
 
         scrapRepository.deleteByUserNoAndPictureNo(user.getNo(), picture.getNo());
         return null;
+    }
+
+    @Override
+    public List<GetPictureLikeUserResponseDto> getPictureLikeUsers(Long pictureNo) {
+
+        Picture picture = pictureRepository.findByNo(pictureNo).orElseThrow(() ->
+                new NotFoundException(PICTURE_NOT_FOUND));
+
+        List<Likes> likes = likesRepository.findByPictureNoOrderByCreatedAtDesc(pictureNo);
+
+        List<GetPictureLikeUserResponseDto> result = new ArrayList<>();
+        likes.forEach( like -> {
+            User user = like.getUser();
+            result.add(new GetPictureLikeUserResponseDto(user.getNo(), user.getProfileImageUrl(), user.getId(), user.getName()));
+        } );
+        return result;
     }
 }
