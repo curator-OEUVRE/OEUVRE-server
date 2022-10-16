@@ -1,4 +1,4 @@
-package com.curator.oeuvre.dto.user.response;
+package com.curator.oeuvre.dto.picture.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

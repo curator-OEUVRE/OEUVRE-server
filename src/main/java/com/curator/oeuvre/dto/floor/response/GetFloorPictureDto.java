@@ -25,6 +25,9 @@ public class GetFloorPictureDto {
     @ApiModelProperty(notes = "세로 길이", example = "188")
     private final Float height;
 
+    @ApiModelProperty(notes = "세로 길이", example = "70")
+    private final Float width;
+
     @ApiModelProperty(notes = "y축 위치", example = "93")
     private final Float location;
 
@@ -37,6 +40,7 @@ public class GetFloorPictureDto {
             String imageUrl,
             String description,
             Float height,
+            Float width,
             Float location,
             List<String> hashtags
             ) {
@@ -45,6 +49,7 @@ public class GetFloorPictureDto {
         this.imageUrl = imageUrl;
         this.description = description;
         this.height = height;
+        this.width = width;
         this.location = location;
         this.hashtags = hashtags;
     }

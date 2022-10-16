@@ -39,6 +39,9 @@ public class Picture extends AbstractTimestamp {
     private Float height;
 
     @Column(nullable = false)
+    private Float width;
+
+    @Column(nullable = false)
     private Float location;
 
     @Builder
@@ -49,6 +52,7 @@ public class Picture extends AbstractTimestamp {
             Integer queue,
             String description,
             Float height,
+            Float width,
             Float location
     ) {
         this.no = no;
@@ -57,6 +61,7 @@ public class Picture extends AbstractTimestamp {
         this.queue = queue;
         this.description = description;
         this.height = height;
+        this.width = width;
         this.location = location;
     }
 }

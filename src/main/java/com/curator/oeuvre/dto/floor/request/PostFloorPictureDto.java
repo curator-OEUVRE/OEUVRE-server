@@ -29,6 +29,10 @@ public class PostFloorPictureDto {
     @NotNull
     private Float height;
 
+    @ApiModelProperty(notes = "가로 길이", example = "70")
+    @NotNull
+    private Float width;
+
     @ApiModelProperty(notes = "y축 위치", example = "93")
     @NotNull
     private Float location;

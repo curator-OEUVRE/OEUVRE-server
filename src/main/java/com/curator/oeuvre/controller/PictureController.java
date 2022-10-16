@@ -2,9 +2,8 @@ package com.curator.oeuvre.controller;
 
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
-import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
 import com.curator.oeuvre.dto.picture.response.GetPictureResponseDto;
-import com.curator.oeuvre.dto.user.response.GetPictureLikeUserResponseDto;
+import com.curator.oeuvre.dto.picture.response.GetPictureLikeUserResponseDto;
 import com.curator.oeuvre.service.PictureService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -90,6 +89,18 @@ public class PictureController {
         List<GetPictureLikeUserResponseDto> result = pictureService.getPictureLikeUsers(pictureNo);
         return CommonResponse.onSuccess(result);
     }
+
+//    @PatchMapping("/{pictureNo}")
+//    @Operation(summary = "사진 한줄 설명 수정", description = "사진 한줄 설명 수정 API 입니다.")
+//    public CommonResponse<String> patchPictureDescription(@AuthenticationPrincipal User authUser,
+//                                                          @PathVariable Long pictureNo,
+//                                                          @Valid @RequestBody) {
+//        log.info("patch-picture-description");
+//        log.info("api = 사진 한줄 설명 수정, user = {}", authUser.getNo());
+//
+//        pictureService.patchPictureDescription(authUser, pictureNo);
+//        return CommonResponse.onSuccess("사진 한줄 설명 수정 성공");
+//    }
 
 
 }

@@ -5,8 +5,9 @@ import com.curator.oeuvre.domain.Picture;
 import com.curator.oeuvre.domain.Scrap;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.picture.response.GetPictureResponseDto;
-import com.curator.oeuvre.dto.user.response.GetPictureLikeUserResponseDto;
+import com.curator.oeuvre.dto.picture.response.GetPictureLikeUserResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
+import com.curator.oeuvre.exception.ForbiddenException;
 import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.LikesRepository;
 import com.curator.oeuvre.repository.PictureRepository;
@@ -14,12 +15,9 @@ import com.curator.oeuvre.repository.ScrapRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-
 import static com.curator.oeuvre.constant.ErrorCode.*;
 
 @Service
@@ -123,5 +121,15 @@ public class PictureServiceImpl implements PictureService{
             result.add(new GetPictureLikeUserResponseDto(user.getNo(), user.getProfileImageUrl(), user.getId(), user.getName()));
         } );
         return result;
+    }
+
+    @Override
+    public Void patchPictureDescription(User user, Long pictureNo) {
+        Picture picture = pictureRepository.findByNo(pictureNo).orElseThrow(() ->
+                new NotFoundException(PICTURE_NOT_FOUND));
+        if (picture.getFloor().getUser().getNo() != user.getNo()) throw new ForbiddenException(FORBIDDEN_PICTURE);
+
+
+        return null;
     }
 }

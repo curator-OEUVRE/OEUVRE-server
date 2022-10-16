@@ -54,6 +54,7 @@ public class FloorServiceImpl implements FloorService {
                     .queue(pictureDto.getQueue())
                     .description(pictureDto.getDescription())
                     .height(pictureDto.getHeight())
+                    .width((pictureDto.getWidth()))
                     .location(pictureDto.getLocation())
                     .build();
             pictureRepository.save(picture);
@@ -117,6 +118,7 @@ public class FloorServiceImpl implements FloorService {
                             picture.getImageUrl(),
                             picture.getDescription(),
                             picture.getHeight(),
+                            picture.getWidth(),
                             picture.getLocation(),
                             hashtags
                     )

@@ -65,6 +65,7 @@ public enum ErrorCode {
     LIKE_NOT_FOUND(BAD_REQUEST, "P007", "좋아요 한 적 없는 사진입니다."),
     ALREADY_SCRAPED(BAD_REQUEST, "P008", "이미 스크랩한 사진입니다."),
     SCRAP_NOT_FOUND(BAD_REQUEST, "P009", "스크랩 한 적 없는 사진입니다."),
+    FORBIDDEN_PICTURE(FORBIDDEN, "P010", "사진 접근 권한이 없습니다."),
 
 
 
