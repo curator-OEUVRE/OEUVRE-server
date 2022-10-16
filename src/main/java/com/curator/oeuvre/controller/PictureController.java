@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -36,5 +33,51 @@ public class PictureController {
         GetPictureResponseDto result = pictureService.getPicture(authUser, pictureNo);
         return CommonResponse.onSuccess(result);
     }
+
+    @PostMapping("/{pictureNo}/like")
+    @Operation(summary = "사진 좋아요", description = "사진 좋아요 생성 API 입니다.")
+    public CommonResponse<String> postPictureLike(@AuthenticationPrincipal User authUser,
+                                                            @PathVariable Long pictureNo) {
+        log.info("post-picture-like");
+        log.info("api = 사진 좋아요, user = {}", authUser.getNo());
+
+        pictureService.postPictureLike(authUser, pictureNo);
+        return CommonResponse.onSuccess("사진 좋아요 성공");
+    }
+
+    @DeleteMapping("/{pictureNo}/like")
+    @Operation(summary = "사진 좋아요 취소", description = "사진 좋아요 삭제 API 입니다.")
+    public CommonResponse<String> deletePictureLike(@AuthenticationPrincipal User authUser,
+                                                  @PathVariable Long pictureNo) {
+        log.info("delete-picture-like");
+        log.info("api = 사진 좋아요 삭제, user = {}", authUser.getNo());
+
+        pictureService.deletePictureLike(authUser, pictureNo);
+        return CommonResponse.onSuccess("사진 좋아요 취소 성공");
+    }
+
+    @PostMapping("/{pictureNo}/scrap")
+    @Operation(summary = "사진 스크랩", description = "사진 스크랩 생성 API 입니다.")
+    public CommonResponse<String> postPictureScrap(@AuthenticationPrincipal User authUser,
+                                                  @PathVariable Long pictureNo) {
+        log.info("post-picture-scrap");
+        log.info("api = 사진 스크랩, user = {}", authUser.getNo());
+
+        pictureService.postPictureScrap(authUser, pictureNo);
+        return CommonResponse.onSuccess("사진 스크랩 성공");
+    }
+
+    @DeleteMapping("/{pictureNo}/scrap")
+    @Operation(summary = "사진 스크랩 취소", description = "사진 스크랩 삭제 API 입니다.")
+    public CommonResponse<String> deletePictureScrap(@AuthenticationPrincipal User authUser,
+                                                   @PathVariable Long pictureNo) {
+        log.info("delete-picture-scrap");
+        log.info("api = 사진 스크랩 삭제, user = {}", authUser.getNo());
+
+        pictureService.deletePictureScrap(authUser, pictureNo);
+        return CommonResponse.onSuccess("사진 스크랩 취소 성공");
+    }
+
+
 }
 

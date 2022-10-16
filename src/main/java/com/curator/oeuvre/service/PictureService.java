@@ -8,4 +8,12 @@ import org.springframework.stereotype.Service;
 public interface PictureService {
 
     GetPictureResponseDto getPicture(User user, Long pictureNo);
+
+    Void postPictureLike(User user, Long pictureNo);
+
+    Void deletePictureLike(User user, Long pictureNo);
+
+    Void postPictureScrap(User user, Long pictureNo);
+
+    Void deletePictureScrap(User user, Long pictureNo);
 }

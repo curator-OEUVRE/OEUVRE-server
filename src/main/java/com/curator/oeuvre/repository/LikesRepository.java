@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface LikesRepository extends JpaRepository <Likes, Long> {
 
     Boolean existsByUserNoAndPictureNo(Long userNo, Long pictureNo);
+
+    void deleteByUserNoAndPictureNo(Long userNo, Long pictureNo);
 }

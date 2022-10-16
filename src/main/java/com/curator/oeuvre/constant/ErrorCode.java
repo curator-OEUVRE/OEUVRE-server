@@ -61,6 +61,10 @@ public enum ErrorCode {
     EMPTY_HEIGHT(BAD_REQUEST, "P003", "height는 null이 될 수 없습니다."),
     EMPTY_LOCATION(BAD_REQUEST, "P004", "location은 null이 될 수 없습니다."),
     PICTURE_NOT_FOUND(NOT_FOUND, "P005", "존재하지 않는 사진 입니다."),
+    ALREADY_LIKED(BAD_REQUEST, "P006", "이미 좋아요한 사진입니다."),
+    LIKE_NOT_FOUND(BAD_REQUEST, "P007", "좋아요 한 적 없는 사진입니다."),
+    ALREADY_SCRAPED(BAD_REQUEST, "P008", "이미 스크랩한 사진입니다."),
+    SCRAP_NOT_FOUND(BAD_REQUEST, "P009", "스크랩 한 적 없는 사진입니다."),
 
 
 
