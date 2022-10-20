@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface PictureHashtagRepository extends JpaRepository <PictureHashtag, Long> {
 
-    List<PictureHashtag> findAllByPictureNo(Long picureNo);
+    List<PictureHashtag> findAllByPictureNo(Long pictureNo);
+
+    void deleteByNo(Long pictureHashtagNo);
 }

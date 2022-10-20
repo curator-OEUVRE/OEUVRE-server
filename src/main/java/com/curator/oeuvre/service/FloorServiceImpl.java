@@ -107,8 +107,7 @@ public class FloorServiceImpl implements FloorService {
 
             List<String> hashtags = new ArrayList<String>();
             pictureHashtags.forEach( tag -> {
-                Hashtag hashtag = hashtagRepository.findByNo(tag.getHashtag().getNo());
-                hashtags.add(hashtag.getHashtag());
+                hashtags.add(tag.getHashtag().getHashtag());
             });
 
             pictureDtos.add(

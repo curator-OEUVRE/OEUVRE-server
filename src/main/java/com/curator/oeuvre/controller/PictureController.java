@@ -2,6 +2,7 @@ package com.curator.oeuvre.controller;
 
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
+import com.curator.oeuvre.dto.picture.request.PatchPictureRequestDto;
 import com.curator.oeuvre.dto.picture.response.GetPictureResponseDto;
 import com.curator.oeuvre.dto.picture.response.GetPictureLikeUserResponseDto;
 import com.curator.oeuvre.service.PictureService;
@@ -10,9 +11,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -90,17 +94,22 @@ public class PictureController {
         return CommonResponse.onSuccess(result);
     }
 
-//    @PatchMapping("/{pictureNo}")
-//    @Operation(summary = "사진 한줄 설명 수정", description = "사진 한줄 설명 수정 API 입니다.")
-//    public CommonResponse<String> patchPictureDescription(@AuthenticationPrincipal User authUser,
-//                                                          @PathVariable Long pictureNo,
-//                                                          @Valid @RequestBody) {
-//        log.info("patch-picture-description");
-//        log.info("api = 사진 한줄 설명 수정, user = {}", authUser.getNo());
-//
-//        pictureService.patchPictureDescription(authUser, pictureNo);
-//        return CommonResponse.onSuccess("사진 한줄 설명 수정 성공");
-//    }
+    @PatchMapping("/{pictureNo}")
+    @Operation(summary = "사진 설명 수정", description = "사진 설명과 해시태그 수정 API 입니다.")
+    public CommonResponse<String> patchPictureDescription(@AuthenticationPrincipal User authUser,
+                                                          @PathVariable Long pictureNo,
+                                                          @Valid @RequestBody PatchPictureRequestDto patchPictureRequestDto, BindingResult bindingResult) {
+        log.info("patch-picture-description");
+        log.info("api = 사진 설명 수정, user = {}", authUser.getNo());
+
+        if (bindingResult.hasErrors()) {
+            ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
+            return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
+        }
+
+        pictureService.patchPictureDescription(authUser, pictureNo, patchPictureRequestDto);
+        return CommonResponse.onSuccess("사진 설명 수정 성공");
+    }
 
 
 }
