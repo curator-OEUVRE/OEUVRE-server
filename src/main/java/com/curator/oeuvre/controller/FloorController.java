@@ -2,6 +2,7 @@ package com.curator.oeuvre.controller;
 
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
+import com.curator.oeuvre.dto.floor.request.PatchFloorRequestDto;
 import com.curator.oeuvre.dto.floor.request.PostFloorRequestDto;
 import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
 import com.curator.oeuvre.dto.floor.response.PostFloorResponseDto;
@@ -60,6 +61,29 @@ public class FloorController {
 
         GetFloorResponseDto result = floorService.getFloor(authUser, floorNo);
         return CommonResponse.onSuccess(result);
+    }
+
+    @PatchMapping("/{floorNo}")
+    @Operation(summary = "플로어 편집", description = "플로어 편집 API 입니다.\n플로어 정보, 플로어에 포함된 사진들의 정보, 사진에 포함된 해시태그들의 변경 내용을 업데이트 합니다.\n새로 추가된 사진은 no를 0으로 보내주세요.")
+    public CommonResponse<String> patchFloor(@AuthenticationPrincipal User authUser,  @PathVariable Long floorNo,
+                                             @Valid @RequestBody PatchFloorRequestDto patchFloorRequestDto, BindingResult bindingResult) {
+        log.info("patch-floor");
+        log.info("api = 플로어 편집, user = {}", authUser.getNo());
+
+        if (bindingResult.hasErrors()) {
+            ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
+            return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
+        }
+        patchFloorRequestDto.getPictures().forEach( picture -> {
+            if (picture.getPictureNo() == null) throw new BadRequestException(EMPTY_PICTURE_NO);
+            if (picture.getImageUrl() == null) throw new BadRequestException(EMPTY_IMAGE_URL);
+            if (picture.getQueue() == null) throw new BadRequestException(EMPTY_QUEUE);
+            if (picture.getHeight() == null) throw new BadRequestException(EMPTY_HEIGHT);
+            if (picture.getLocation() == null ) throw new BadRequestException(EMPTY_LOCATION);
+        });
+
+        floorService.patchFloor(authUser, floorNo, patchFloorRequestDto);
+        return CommonResponse.onSuccess("플로어 편집 성공");
     }
 
 }

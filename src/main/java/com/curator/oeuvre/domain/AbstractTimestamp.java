@@ -2,6 +2,7 @@ package com.curator.oeuvre.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import java.sql.Timestamp;
 
 
 @Getter
+@Setter
 @MappedSuperclass
 @EntityListeners(value = {AuditingEntityListener.class})
 @DynamicInsert
@@ -29,5 +31,5 @@ public class AbstractTimestamp {
 
     @ColumnDefault(value = "1")
     @Column(nullable = false)
-    private Long status;
+    private Integer status;
 }

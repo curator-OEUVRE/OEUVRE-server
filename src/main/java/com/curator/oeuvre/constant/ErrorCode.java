@@ -53,6 +53,8 @@ public enum ErrorCode {
 
     /* Floor 관련 오류 */
     FLOOR_NOT_FOUND(NOT_FOUND, "F001", "존재하지 않는 플로어 입니다."),
+    FORBIDDEN_FLOOR(FORBIDDEN, "F002", "플로어 접근 권한이 없습니다."),
+
 
 
     /* Picture 관련 오류 */
@@ -66,6 +68,7 @@ public enum ErrorCode {
     ALREADY_SCRAPED(BAD_REQUEST, "P008", "이미 스크랩한 사진입니다."),
     SCRAP_NOT_FOUND(BAD_REQUEST, "P009", "스크랩 한 적 없는 사진입니다."),
     FORBIDDEN_PICTURE(FORBIDDEN, "P010", "사진 접근 권한이 없습니다."),
+    EMPTY_PICTURE_NO(BAD_REQUEST, "P011", "사진 no는 null이 될 수 없습니다."),
 
 
 

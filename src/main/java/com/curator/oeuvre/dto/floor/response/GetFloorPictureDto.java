@@ -10,11 +10,11 @@ import java.util.List;
 @Builder
 public class GetFloorPictureDto {
 
-    @ApiModelProperty(notes = "사진 no", example = "1")
-    private final Long pictureNo;
-
     @ApiModelProperty(notes = "사진 순서", example = "1")
     private final Integer queue;
+
+    @ApiModelProperty(notes = "사진 no", example = "1")
+    private final Long pictureNo;
 
     @ApiModelProperty(notes = "이미지 url", example = "image_url")
     private final String imageUrl;
@@ -35,8 +35,8 @@ public class GetFloorPictureDto {
     private final List<String> hashtags;
 
     public GetFloorPictureDto (
-            Long pictureNo,
             Integer queue,
+            Long pictureNo,
             String imageUrl,
             String description,
             Float height,
@@ -44,8 +44,8 @@ public class GetFloorPictureDto {
             Float location,
             List<String> hashtags
             ) {
-        this.pictureNo = pictureNo;
         this.queue = queue;
+        this.pictureNo = pictureNo;
         this.imageUrl = imageUrl;
         this.description = description;
         this.height = height;

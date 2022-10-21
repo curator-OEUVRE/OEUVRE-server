@@ -10,5 +10,5 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
 
     Integer countFloorByUser(User user);
 
-    Optional<Floor> findByNo(Long floorNo);
+    Optional<Floor> findByNoAndStatus(Long floorNo, Integer status);
 }

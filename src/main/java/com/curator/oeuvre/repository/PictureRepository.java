@@ -8,7 +8,9 @@ import java.util.Optional;
 
 public interface PictureRepository extends JpaRepository<Picture, Long> {
 
-    List<Picture> findAllByFloorNoOrderByQueue(Long floorNo);
+    List<Picture> findAllByFloorNoAndStatusOrderByQueue(Long floorNo, Integer status);
 
-    Optional<Picture> findByNo(Long pictureNo);
+    Optional<Picture> findByNoAndStatus(Long pictureNo, Integer status);
+
+    void deleteByNo(Long pictureNo);
 }
