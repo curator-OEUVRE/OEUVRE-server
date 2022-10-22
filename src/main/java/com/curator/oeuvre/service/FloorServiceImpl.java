@@ -136,7 +136,7 @@ public class FloorServiceImpl implements FloorService {
                 postHashtag(hashtag, picture);
             });
         });
-        return new PostFloorResponseDto(floor.getNo());
+        return new PostFloorResponseDto(floor);
     }
 
     @Override
@@ -156,25 +156,13 @@ public class FloorServiceImpl implements FloorService {
             });
             pictureDtos.add(
                     new GetFloorPictureDto(
-                            picture.getQueue(),
-                            picture.getNo(),
-                            picture.getImageUrl(),
-                            picture.getDescription(),
-                            picture.getHeight(),
-                            picture.getWidth(),
-                            picture.getLocation(),
+                            picture,
                             hashtags
                     )
             );
         });
         return new GetFloorResponseDto(
-                floor.getNo(),
-                floor.getUser().getNo(),
-                floor.getName(),
-                floor.getColor(),
-                floor.getTexture(),
-                floor.getIsPublic(),
-                floor.getIsCommentAvailable(),
+                floor,
                 Objects.equals(user.getNo(), floor.getUser().getNo()),
                 pictureDtos
         );

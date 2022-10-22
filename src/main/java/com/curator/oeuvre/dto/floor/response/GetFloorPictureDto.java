@@ -1,5 +1,6 @@
 package com.curator.oeuvre.dto.floor.response;
 
+import com.curator.oeuvre.domain.Picture;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import java.util.List;
@@ -7,7 +8,6 @@ import java.util.List;
 @Getter
 @ToString
 @EqualsAndHashCode
-@Builder
 public class GetFloorPictureDto {
 
     @ApiModelProperty(notes = "사진 순서", example = "1")
@@ -35,22 +35,16 @@ public class GetFloorPictureDto {
     private final List<String> hashtags;
 
     public GetFloorPictureDto (
-            Integer queue,
-            Long pictureNo,
-            String imageUrl,
-            String description,
-            Float height,
-            Float width,
-            Float location,
+            Picture picture,
             List<String> hashtags
             ) {
-        this.queue = queue;
-        this.pictureNo = pictureNo;
-        this.imageUrl = imageUrl;
-        this.description = description;
-        this.height = height;
-        this.width = width;
-        this.location = location;
+        this.queue = picture.getQueue();
+        this.pictureNo = picture.getNo();
+        this.imageUrl = picture.getImageUrl();
+        this.description = picture.getDescription();
+        this.height = picture.getHeight();
+        this.width = picture.getWidth();
+        this.location = picture.getLocation();
         this.hashtags = hashtags;
     }
 }

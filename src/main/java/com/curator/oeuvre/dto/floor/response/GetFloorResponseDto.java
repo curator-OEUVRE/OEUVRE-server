@@ -1,5 +1,6 @@
 package com.curator.oeuvre.dto.floor.response;
 
+import com.curator.oeuvre.domain.Floor;
 import com.curator.oeuvre.dto.floor.request.PostFloorPictureDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -43,23 +44,17 @@ public class GetFloorResponseDto {
     private final List<GetFloorPictureDto> pictures;
 
     public GetFloorResponseDto(
-            Long floorNo,
-            Long userNo,
-            String name,
-            String color,
-            Integer texture,
-            Boolean isPublic,
-            Boolean isCommentAvailable,
+            Floor floor,
             Boolean isMine,
             List<GetFloorPictureDto> pictures
     ) {
-        this.floorNo = floorNo;
-        this.userNo = userNo;
-        this.name = name;
-        this.color = color;
-        this.texture = texture;
-        this.isPublic = isPublic;
-        this.isCommentAvailable = isCommentAvailable;
+        this.floorNo = floor.getNo();
+        this.userNo = floor.getUser().getNo();
+        this.name = floor.getName();
+        this.color = floor.getColor();
+        this.texture = floor.getTexture();
+        this.isPublic = floor.getIsPublic();
+        this.isCommentAvailable = floor.getIsCommentAvailable();
         this.isMine = isMine;
         this.pictures = pictures;
     }

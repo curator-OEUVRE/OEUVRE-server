@@ -1,5 +1,6 @@
 package com.curator.oeuvre.dto.hashtag.response;
 
+import com.curator.oeuvre.domain.Hashtag;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -10,7 +11,6 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
-@Builder
 @ApiModel(value = "#️⃣ 해시태그 검색 API Response")
 public class GetHashtagResponseDto {
 
@@ -24,13 +24,9 @@ public class GetHashtagResponseDto {
     private final Long tagCount;
 
 
-    public GetHashtagResponseDto (
-            Long hashtagNo,
-            String hashtag,
-            Long tagCount
-    ) {
-        this.hashtagNo = hashtagNo;
-        this.hashtag = hashtag;
-        this.tagCount = tagCount;
+    public GetHashtagResponseDto (Hashtag hashtag) {
+        this.hashtagNo = hashtag.getNo();
+        this.hashtag = hashtag.getHashtag();
+        this.tagCount = hashtag.getTagCount();
     }
 }

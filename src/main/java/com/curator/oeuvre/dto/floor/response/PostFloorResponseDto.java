@@ -1,5 +1,6 @@
 package com.curator.oeuvre.dto.floor.response;
 
+import com.curator.oeuvre.domain.Floor;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
@@ -15,8 +16,8 @@ public class PostFloorResponseDto {
     @ApiModelProperty(notes = "플로어 no", example = "1")
     private final Long floorNo;
 
-    public PostFloorResponseDto(Long floorNo) {
-        this.floorNo = floorNo;
+    public PostFloorResponseDto(Floor floor) {
+        this.floorNo = floor.getNo();
     }
 
 }
