@@ -11,9 +11,12 @@ import com.curator.oeuvre.exception.ForbiddenException;
 import com.curator.oeuvre.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.*;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -28,18 +31,14 @@ import org.springframework.web.client.RestTemplate;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.RSAPublicKeySpec;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -115,25 +114,23 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public LoginResponseDto googleLogin(LoginRequestDto loginRequestDto) throws JsonProcessingException {
+    public LoginResponseDto googleLogin(LoginRequestDto loginRequestDto) {
 
-        String token = loginRequestDto.getToken();
-        String googleReqURL="https://www.googleapis.com/oauth2/v1/userinfo";
-        RestTemplate restTemplate = new RestTemplate();
-        ObjectMapper objectMapper = new ObjectMapper();
+        String email;
+        String GOOGLE_WEB_CLIENT_ID = "760182900541-vtqm5r7hn878rigsq8vnpo4tu9ff7r2u.apps.googleusercontent.com";
 
-        //header에 accessToken을 담는다.
-        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
-        headers.add("Authorization","Bearer "+ token);
+        // 1. 토큰 검증
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+                .setAudience(Collections.singletonList(GOOGLE_WEB_CLIENT_ID))
+                .build();
 
-        //HttpEntity를 하나 생성해 헤더를 담아서 restTemplate으로 구글과 통신하게 된다.
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);
-        ResponseEntity<String> response = restTemplate.exchange(googleReqURL, HttpMethod.GET, request, String.class);
-
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(response.getBody());
-        String email = element.getAsJsonObject().get("email").getAsString();
+        try {
+            GoogleIdToken idToken = verifier.verify(loginRequestDto.getToken());
+            GoogleIdToken.Payload payload = idToken.getPayload();
+            email = payload.getEmail();
+        } catch (Exception e) {
+            throw new BadRequestException(GOOGLE_BAD_REQUEST);
+        }
 
         // 이메일, 타입으로 유저 조회
         // 가입되지 않은 유저 일 경우 에러와 함께 이메일 반환
@@ -164,8 +161,7 @@ public class LoginServiceImpl implements LoginService {
         try {
             RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(n, e);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-            return publicKey;
+            return keyFactory.generatePublic(publicKeySpec);
         } catch (Exception exception) {
             throw new BadRequestException(FAIL_TO_MAKE_APPLE_PUBLIC_KEY);
         }
@@ -278,8 +274,6 @@ public class LoginServiceImpl implements LoginService {
         user.setRefreshToken(newRefreshToken);
         userRepository.save(user);
 
-        LoginResponseDto loginDto  = new LoginResponseDto(newAccessToken, newRefreshToken);
-
-        return loginDto;
+        return new LoginResponseDto(newAccessToken, newRefreshToken);
     }
 }
