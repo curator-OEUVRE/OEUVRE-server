@@ -44,6 +44,8 @@ jobs:
         run: |
           touch ./src/main/resources/application-dev.properties
           echo "$PROPERTIES_DEV" > ./src/main/resources/application-dev.properties
+          touch ./oeuvre-firebase.json
+          echo "$FIREBASE_JSON" > ./oeuvre-firebase.json
         env:
           PROPERTIES_DEV: ${{ secrets.PROPERTIES_DEV }}
 
