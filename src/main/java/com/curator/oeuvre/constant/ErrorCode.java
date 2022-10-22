@@ -72,6 +72,12 @@ public enum ErrorCode {
 
 
 
+    /* Comment 관련 오류 */
+    COMMENT_NOT_FOUND(NOT_FOUND, "CM001", "존재하지 않는 댓글 입니다."),
+    FORBIDDEN_COMMENT(FORBIDDEN, "CM002", "댓글 접근 권한이 없습니다."),
+
+
+
     /* Database 관련 오류 */
     DUPLICATE_RESOURCE(CONFLICT, "D001", "데이터가 이미 존재합니다."),
 

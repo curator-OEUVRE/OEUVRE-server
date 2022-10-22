@@ -24,7 +24,7 @@ public class Comment extends AbstractTimestamp {
     @JoinColumn(name = "floorNo", nullable = false)
     private Floor floor;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userNo", nullable = false)
     private User user;
 

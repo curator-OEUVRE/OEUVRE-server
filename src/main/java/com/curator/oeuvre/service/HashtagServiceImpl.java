@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-
 public class HashtagServiceImpl implements HashtagService {
 
     private final HashtagRepository hashtagRepository;
