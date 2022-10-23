@@ -48,6 +48,10 @@ public class SignUpRequestDto {
     @Nullable
     private String profileImageUrl;
 
+    @ApiModelProperty(notes = "배경 이미지 url", example = "image_url")
+    @Nullable
+    private String backgroundImageUrl;
+
     @ApiModelProperty(notes = "전시회 이름", example = "원진이의 전시회")
     @Length(min = 2, max = 10)
     @NotNull
@@ -58,7 +62,6 @@ public class SignUpRequestDto {
     @Nullable
     private String introduceMessage;
 
-    @Schema
     @ApiModelProperty(notes = "알림 허용 여부", example = "true")
     @BooleanFlag
     private Boolean isAlarmOn;

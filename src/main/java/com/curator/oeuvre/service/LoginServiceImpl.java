@@ -86,7 +86,7 @@ public class LoginServiceImpl implements LoginService {
 
             // 이메일, 타입으로 유저 조회
             // 가입되지 않은 유저 일 경우 에러와 함께 이메일 반환
-            User user = userRepository.findByEmailAndType(email, "KAKAO").orElseThrow(() ->
+            User user = userRepository.findByEmailAndTypeAndStatus(email, "KAKAO", 1).orElseThrow(() ->
                     new BaseException(USER_NOT_FOUND, Map.of("email", finalEmail)));
 
             // 가입된 유저 확인 시 jwt, refreshToken 반환
@@ -125,7 +125,7 @@ public class LoginServiceImpl implements LoginService {
 
         // 이메일, 타입으로 유저 조회
         // 가입되지 않은 유저 일 경우 에러와 함께 이메일 반환
-        User user = userRepository.findByEmailAndType(email, "GOOGLE").orElseThrow(() ->
+        User user = userRepository.findByEmailAndTypeAndStatus(email, "GOOGLE", 1).orElseThrow(() ->
                 new BaseException(USER_NOT_FOUND, Map.of("email", email)));
 
         // 가입된 유저 확인 시 jwt, refreshToken 반환
@@ -242,7 +242,7 @@ public class LoginServiceImpl implements LoginService {
 
         // 이메일, 타입으로 유저 조회
         // 가입되지 않은 유저 일 경우 에러와 함께 이메일 반환
-        User user = userRepository.findByEmailAndType(email, "APPLE").orElseThrow(() ->
+        User user = userRepository.findByEmailAndTypeAndStatus(email, "APPLE", 1).orElseThrow(() ->
                 new BaseException(USER_NOT_FOUND, Map.of("email", email)));
 
         // 가입된 유저 확인 시 jwt, refreshToken 반환

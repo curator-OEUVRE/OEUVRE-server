@@ -46,6 +46,9 @@ public class User extends AbstractTimestamp implements UserDetails {
     @Nullable
     private String profileImageUrl;
 
+    @Nullable
+    private String backgroundImageUrl;
+
     @Length(min = 4, max = 15)
     @Column(nullable = false)
     private String exhibitionName;
@@ -91,6 +94,7 @@ public class User extends AbstractTimestamp implements UserDetails {
             String name,
             String type,
             String profileImageUrl,
+            String backgroundImageUrl,
             String exhibitionName,
             String introduceMessage,
             String birthday,
@@ -108,6 +112,7 @@ public class User extends AbstractTimestamp implements UserDetails {
             this.name = name;
             this.type = type;
             this.profileImageUrl = profileImageUrl;
+            this.backgroundImageUrl = backgroundImageUrl;
             this.exhibitionName = exhibitionName;
             this.introduceMessage = introduceMessage;
             this.birthday = birthday;

@@ -1,11 +1,15 @@
 package com.curator.oeuvre.service;
 
+import com.curator.oeuvre.domain.Floor;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.oauth.TokenDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.CheckIdResponseDto;
+import com.curator.oeuvre.dto.user.response.GetMyProfileResponseDto;
 import com.curator.oeuvre.dto.user.response.SignUpResponseDto;
 import com.curator.oeuvre.exception.BaseException;
+import com.curator.oeuvre.exception.NotFoundException;
+import com.curator.oeuvre.repository.FollowingRepository;
 import com.curator.oeuvre.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final FollowingRepository followingRepository;
 
     @Override
     @Transactional
@@ -28,7 +33,7 @@ public class UserServiceImpl implements UserService{
         if (userRepository.findById(signUpRequestDto.getId()).isPresent()) throw new BaseException(DUPLICATED_ID);
 
         // 이메일 + 타입 중복 검사
-        if (userRepository.findByEmailAndType(signUpRequestDto.getEmail(), signUpRequestDto.getType()).isPresent()) {
+        if (userRepository.findByEmailAndTypeAndStatus(signUpRequestDto.getEmail(), signUpRequestDto.getType(), 1).isPresent()) {
             throw new BaseException(USER_ALREADY_EXIST);
         }
 
@@ -40,6 +45,7 @@ public class UserServiceImpl implements UserService{
                 .name(signUpRequestDto.getName())
                 .birthday(signUpRequestDto.getBirthday())
                 .profileImageUrl(signUpRequestDto.getProfileImageUrl())
+                .backgroundImageUrl(signUpRequestDto.getBackgroundImageUrl())
                 .exhibitionName(signUpRequestDto.getExhibitionName())
                 .introduceMessage(signUpRequestDto.getIntroduceMessage())
                 .isCommentAlarmOn(signUpRequestDto.getIsAlarmOn())
@@ -62,11 +68,22 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public CheckIdResponseDto checkId(String id) {
-        Boolean isPossible;
-        if (userRepository.findById(id).isPresent()) isPossible = false;
-        else isPossible = true;
+        boolean isPossible;
+        isPossible = userRepository.findById(id).isEmpty();
 
         return new CheckIdResponseDto(isPossible);
+    }
+
+    @Override
+    public GetMyProfileResponseDto getMyProfile(User user) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        Long followingCount = followingRepository.countFollowingByFollowUserNo(user.getNo());
+        Long followerCount = followingRepository.countFollowingByFollowedUserNo(user.getNo());
+
+        return new GetMyProfileResponseDto(user, followingCount, followerCount);
     }
 }
 

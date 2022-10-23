@@ -1,8 +1,10 @@
 package com.curator.oeuvre.controller;
 
 import com.curator.oeuvre.config.CommonResponse;
+import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.CheckIdResponseDto;
+import com.curator.oeuvre.dto.user.response.GetMyProfileResponseDto;
 import com.curator.oeuvre.dto.user.response.SignUpResponseDto;
 import com.curator.oeuvre.service.UserService;
 import io.swagger.annotations.Api;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -48,6 +51,14 @@ public class UserController {
                                   @Length(min = 4, max = 15) String id) {
 
         CheckIdResponseDto result = userService.checkId(id);
+        return CommonResponse.onSuccess(result);
+    }
+
+    @GetMapping(value = "/my-profile")
+    @Operation(summary = "내 프로필 정보 조회", description = "내 프로필 정보를 조회하는 API 입니다.")
+    public CommonResponse<GetMyProfileResponseDto> geyMyProfile(@AuthenticationPrincipal User authUser) {
+
+        GetMyProfileResponseDto result = userService.getMyProfile(authUser);
         return CommonResponse.onSuccess(result);
     }
 }

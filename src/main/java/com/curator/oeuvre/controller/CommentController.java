@@ -64,7 +64,7 @@ public class CommentController {
     @GetMapping("/{floorNo}")
     @Operation(summary = "플로어 방명록 조회", description = "플로어 방명록 조회 API 입니다.\n" +
                          "댓글들을 최신순으로 size개씩 페이지네이션 해서 보여줍니다.\n" +
-                         "page는 0부터 시작합니다.")
+                         "page는 0부터 시작합니다. size는 10-50 가능합니다.")
     public CommonResponse<List<GetCommentResponseDto>> getFloorComments(
             @AuthenticationPrincipal User authUser,
             @PathVariable Long floorNo,
