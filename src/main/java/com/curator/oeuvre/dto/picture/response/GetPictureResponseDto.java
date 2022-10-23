@@ -1,5 +1,6 @@
 package com.curator.oeuvre.dto.picture.response;
 
+import com.curator.oeuvre.domain.Picture;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
@@ -24,6 +25,12 @@ public class GetPictureResponseDto {
     @ApiModelProperty(notes = "사진 설명", example = "노을을 보면서 한컷")
     private final String description;
 
+    @ApiModelProperty(notes = "세로 길이", example = "188")
+    private final Float height;
+
+    @ApiModelProperty(notes = "세로 길이", example = "70")
+    private final Float width;
+
     @ApiModelProperty(notes = "본인 사진 여부", example = "true")
     private final Boolean isMine;
 
@@ -34,18 +41,17 @@ public class GetPictureResponseDto {
     private final Boolean isScraped;
 
     public GetPictureResponseDto (
-            Long pictureNo,
-            Long floorNo,
-            String imageUrl,
-            String description,
+            Picture picture,
             Boolean isMine,
             Boolean isLiked,
             Boolean isScraped
     ) {
-        this.pictureNo = pictureNo;
-        this.floorNo = floorNo;
-        this.imageUrl = imageUrl;
-        this.description = description;
+        this.pictureNo = picture.getNo();
+        this.floorNo = picture.getFloor().getNo();
+        this.imageUrl = picture.getImageUrl();
+        this.description = picture.getDescription();
+        this.height = picture.getHeight();
+        this.width = picture.getWidth();
         this.isMine = isMine;
         this.isLiked = isLiked;
         this.isScraped = isScraped;

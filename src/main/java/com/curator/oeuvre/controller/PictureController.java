@@ -30,7 +30,7 @@ public class PictureController {
     private final PictureService pictureService;
 
     @GetMapping("/{pictureNo}")
-    @Operation(summary = "사진 조회", description = "사진 상세 조회 API 입니다.")
+    @Operation(summary = "사진 상세 조회", description = "사진 상세 조회 API 입니다.")
     public CommonResponse<GetPictureResponseDto> getPicture(@AuthenticationPrincipal User authUser,
                                                             @PathVariable Long pictureNo) {
         log.info("get-picture");

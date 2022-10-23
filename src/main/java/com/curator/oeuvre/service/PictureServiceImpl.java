@@ -32,10 +32,7 @@ public class PictureServiceImpl implements PictureService{
                 new NotFoundException(PICTURE_NOT_FOUND));
 
         return new GetPictureResponseDto(
-                picture.getNo(),
-                picture.getFloor().getNo(),
-                picture.getImageUrl(),
-                picture.getDescription(),
+                picture,
                 Objects.equals(user.getNo(), picture.getFloor().getUser().getNo()),
                 likesRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo()),
                 scrapRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo())
