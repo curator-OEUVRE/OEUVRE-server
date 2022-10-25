@@ -16,6 +16,12 @@ public class GetPictureResponseDto {
     @ApiModelProperty(notes = "사진 no", example = "1")
     private final Long pictureNo;
 
+    @ApiModelProperty(notes = "회원 no", example = "1")
+    private final Long userNo;
+
+    @ApiModelProperty(notes = "회원 아이디", example = "one_zzini_")
+    private final String userId;
+
     @ApiModelProperty(notes = "플로어 no", example = "1")
     private final Long floorNo;
 
@@ -47,6 +53,8 @@ public class GetPictureResponseDto {
             Boolean isScraped
     ) {
         this.pictureNo = picture.getNo();
+        this.userNo = picture.getFloor().getUser().getNo();
+        this.userId = picture.getFloor().getUser().getId();
         this.floorNo = picture.getFloor().getNo();
         this.imageUrl = picture.getImageUrl();
         this.description = picture.getDescription();

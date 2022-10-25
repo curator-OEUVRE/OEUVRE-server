@@ -3,6 +3,7 @@ package com.curator.oeuvre.service;
 import com.curator.oeuvre.domain.Floor;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.oauth.TokenDto;
+import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.CheckIdResponseDto;
 import com.curator.oeuvre.dto.user.response.GetMyProfileResponseDto;
@@ -84,6 +85,21 @@ public class UserServiceImpl implements UserService{
         Long followerCount = followingRepository.countFollowingByFollowedUserNo(user.getNo());
 
         return new GetMyProfileResponseDto(user, followingCount, followerCount);
+    }
+
+    @Override
+    public void patchMyProfile(User user, PatchMyProfileRequestDto patchMyProfileRequestDto) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        user.setName(patchMyProfileRequestDto.getName());
+        user.setExhibitionName(patchMyProfileRequestDto.getExhibitionName());
+        user.setIntroduceMessage(patchMyProfileRequestDto.getIntroduceMessage());
+        user.setProfileImageUrl(patchMyProfileRequestDto.getProfileImageUrl());
+        user.setBackgroundImageUrl(patchMyProfileRequestDto.getBackgroundImageUrl());
+        userRepository.save(user);
+
     }
 }
 

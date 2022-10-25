@@ -57,8 +57,8 @@ public class SignUpRequestDto {
     @NotNull
     private String exhibitionName;
 
-    @ApiModelProperty(notes = "자기 소개", example = "안녕하세요 사진찍기를 좋아하는 김원진입니덩")
-    @Length(max = 50)
+    @ApiModelProperty(notes = "자기 소개", example = "사진찍기를 좋아하는 김원진입니덩")
+    @Length(max = 20)
     @Nullable
     private String introduceMessage;
 

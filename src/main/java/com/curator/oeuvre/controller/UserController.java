@@ -2,6 +2,7 @@ package com.curator.oeuvre.controller;
 
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
+import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.CheckIdResponseDto;
 import com.curator.oeuvre.dto.user.response.GetMyProfileResponseDto;
@@ -58,8 +59,27 @@ public class UserController {
     @Operation(summary = "내 프로필 정보 조회", description = "내 프로필 정보를 조회하는 API 입니다.")
     public CommonResponse<GetMyProfileResponseDto> geyMyProfile(@AuthenticationPrincipal User authUser) {
 
+        log.info("get-myprofile");
+        log.info("api = 내프로필 조회, user = {}", authUser.getNo());
+
         GetMyProfileResponseDto result = userService.getMyProfile(authUser);
         return CommonResponse.onSuccess(result);
+    }
+
+    @PatchMapping(value = "/my-profile")
+    @Operation(summary = "내 프로필 편집", description = "내 프로필 편집 내용을 업데이트하는 API 입니다.")
+    public CommonResponse<String> patchMyProfile(@AuthenticationPrincipal User authUser,
+                                                 @Valid @RequestBody PatchMyProfileRequestDto patchMyProfileRequestDto, BindingResult bindingResult) {
+        log.info("patch-myprofile");
+        log.info("api = 내 프로필 편집, user = {}", authUser.getNo());
+
+        if (bindingResult.hasErrors()) {
+            ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
+            return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
+        }
+
+        userService.patchMyProfile(authUser, patchMyProfileRequestDto);
+        return CommonResponse.onSuccess("프로필 편집 성공");
     }
 }
 

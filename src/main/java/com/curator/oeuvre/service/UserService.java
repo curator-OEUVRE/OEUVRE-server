@@ -1,6 +1,7 @@
 package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.domain.User;
+import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.GetMyProfileResponseDto;
 import com.curator.oeuvre.dto.user.response.SignUpResponseDto;
@@ -16,4 +17,6 @@ public interface UserService {
     CheckIdResponseDto checkId(String id);
 
     GetMyProfileResponseDto getMyProfile(User user);
+
+    void patchMyProfile(User user, PatchMyProfileRequestDto patchMyProfileRequestDto);
 }
