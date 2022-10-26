@@ -4,9 +4,7 @@ import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
-import com.curator.oeuvre.dto.user.response.CheckIdResponseDto;
-import com.curator.oeuvre.dto.user.response.GetMyProfileResponseDto;
-import com.curator.oeuvre.dto.user.response.SignUpResponseDto;
+import com.curator.oeuvre.dto.user.response.*;
 import com.curator.oeuvre.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +19,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -59,8 +60,8 @@ public class UserController {
     @Operation(summary = "내 프로필 정보 조회", description = "내 프로필 정보를 조회하는 API 입니다.")
     public CommonResponse<GetMyProfileResponseDto> geyMyProfile(@AuthenticationPrincipal User authUser) {
 
-        log.info("get-myprofile");
-        log.info("api = 내프로필 조회, user = {}", authUser.getNo());
+        log.info("get-my-profile");
+        log.info("api = 내 프로필 조회, user = {}", authUser.getNo());
 
         GetMyProfileResponseDto result = userService.getMyProfile(authUser);
         return CommonResponse.onSuccess(result);
@@ -70,7 +71,7 @@ public class UserController {
     @Operation(summary = "내 프로필 편집", description = "내 프로필 편집 내용을 업데이트하는 API 입니다.")
     public CommonResponse<String> patchMyProfile(@AuthenticationPrincipal User authUser,
                                                  @Valid @RequestBody PatchMyProfileRequestDto patchMyProfileRequestDto, BindingResult bindingResult) {
-        log.info("patch-myprofile");
+        log.info("patch-my-profile");
         log.info("api = 내 프로필 편집, user = {}", authUser.getNo());
 
         if (bindingResult.hasErrors()) {
@@ -81,5 +82,33 @@ public class UserController {
         userService.patchMyProfile(authUser, patchMyProfileRequestDto);
         return CommonResponse.onSuccess("프로필 편집 성공");
     }
+
+
+    @GetMapping(value = "/floors")
+    @Operation(summary = "내 플로어 전체 조회", description = "내 플로어를 전체 조회하는 API 입니다.")
+    public CommonResponse<List<GetMyFloorResponseDto>> geyMyFloors(@AuthenticationPrincipal User authUser,
+                                                                   @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
+                                                                   @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
+
+        log.info("get-my-floor");
+        log.info("api = 내 플로어 전체 조회, user = {}", authUser.getNo());
+
+        List<GetMyFloorResponseDto> result = userService.getMyFloors(authUser, page, size);
+        return CommonResponse.onSuccess(result);
+    }
+
+    @GetMapping(value = "/collection")
+    @Operation(summary = "내 컬렉션 전체 조회", description = "내가 스크랩한 사진을 전체 조회하는 API 입니다.")
+    public CommonResponse<List<GetMyCollectionResponseDto>> geyMyCollection(@AuthenticationPrincipal User authUser,
+                                                                            @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
+                                                                            @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
+
+        log.info("get-my-collection");
+        log.info("api = 내 컬렉션 조회, user = {}", authUser.getNo());
+
+        List<GetMyCollectionResponseDto> result = userService.getMyCollection(authUser, page, size);
+        return CommonResponse.onSuccess(result);
+    }
+
 }
 

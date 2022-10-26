@@ -1,20 +1,28 @@
 package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.domain.Floor;
+import com.curator.oeuvre.domain.Scrap;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.oauth.TokenDto;
+import com.curator.oeuvre.dto.picture.response.GetPictureLikeUserResponseDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
-import com.curator.oeuvre.dto.user.response.CheckIdResponseDto;
-import com.curator.oeuvre.dto.user.response.GetMyProfileResponseDto;
-import com.curator.oeuvre.dto.user.response.SignUpResponseDto;
+import com.curator.oeuvre.dto.user.response.*;
 import com.curator.oeuvre.exception.BaseException;
 import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.FollowingRepository;
+import com.curator.oeuvre.repository.PictureRepository;
+import com.curator.oeuvre.repository.ScrapRepository;
 import com.curator.oeuvre.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.curator.oeuvre.constant.ErrorCode.*;
 
@@ -25,6 +33,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final FollowingRepository followingRepository;
+    private final ScrapRepository scrapRepository;
 
     @Override
     @Transactional
@@ -100,6 +109,30 @@ public class UserServiceImpl implements UserService{
         user.setBackgroundImageUrl(patchMyProfileRequestDto.getBackgroundImageUrl());
         userRepository.save(user);
 
+    }
+
+    @Override
+    public List<GetMyFloorResponseDto> getMyFloors(User user, Integer page, Integer size) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+        return null;
+    }
+
+    @Override
+    public List<GetMyCollectionResponseDto> getMyCollection(User user, Integer page, Integer size) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        Pageable pageRequest = PageRequest.of(page, size);
+        Page<Scrap> collection = scrapRepository.findAllByUserNoAndPicture_statusOrderByCreatedAtDesc(user.getNo(), 1, pageRequest);
+
+        List<GetMyCollectionResponseDto> result = new ArrayList<>();
+        collection.forEach( scrap -> {
+            result.add (new GetMyCollectionResponseDto(scrap.getPicture()));
+        });
+        return result;
     }
 }
 
