@@ -239,7 +239,6 @@ public class FloorServiceImpl implements FloorService {
 
                 originalPicture.setDescription(picture.getDescription());
                 originalPicture.setQueue(picture.getQueue());
-                originalPicture.setImageUrl(picture.getImageUrl());
                 originalPicture.setHeight(picture.getHeight());
                 originalPicture.setLocation(picture.getLocation());
                 originalPicture.setWidth(picture.getWidth());
