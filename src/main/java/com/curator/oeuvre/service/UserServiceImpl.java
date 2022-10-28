@@ -1,6 +1,7 @@
 package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.domain.Floor;
+import com.curator.oeuvre.domain.Picture;
 import com.curator.oeuvre.domain.Scrap;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.oauth.TokenDto;
@@ -10,10 +11,7 @@ import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.*;
 import com.curator.oeuvre.exception.BaseException;
 import com.curator.oeuvre.exception.NotFoundException;
-import com.curator.oeuvre.repository.FollowingRepository;
-import com.curator.oeuvre.repository.PictureRepository;
-import com.curator.oeuvre.repository.ScrapRepository;
-import com.curator.oeuvre.repository.UserRepository;
+import com.curator.oeuvre.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.curator.oeuvre.constant.ErrorCode.*;
 
@@ -34,6 +33,8 @@ public class UserServiceImpl implements UserService{
     private final JwtService jwtService;
     private final FollowingRepository followingRepository;
     private final ScrapRepository scrapRepository;
+    private final FloorRepository floorRepository;
+    private final PictureRepository pictureRepository;
 
     @Override
     @Transactional
@@ -116,7 +117,16 @@ public class UserServiceImpl implements UserService{
 
         userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
                 new NotFoundException(USER_NOT_FOUND));
-        return null;
+
+        Pageable pageRequest = PageRequest.of(page, size);
+        Page<Floor> floors = floorRepository.findAllByUserNoAndStatusAndIsGroupExhibitionOrderByQueueDesc(user.getNo(), 1, false, pageRequest);
+
+        List<GetMyFloorResponseDto> result = new ArrayList<>();
+        floors.forEach( floor -> {
+            List<String> imageUrls = pictureRepository.findTop7ByFloorNoAndStatusOrderByQueue(floor.getNo(), 1).stream().map(Picture::getImageUrl).collect(Collectors.toList());
+            result.add(new GetMyFloorResponseDto(floor, imageUrls));
+        });
+        return result;
     }
 
     @Override
@@ -130,7 +140,7 @@ public class UserServiceImpl implements UserService{
 
         List<GetMyCollectionResponseDto> result = new ArrayList<>();
         collection.forEach( scrap -> {
-            result.add (new GetMyCollectionResponseDto(scrap.getPicture()));
+            result.add(new GetMyCollectionResponseDto(scrap.getPicture()));
         });
         return result;
     }

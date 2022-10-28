@@ -10,6 +10,8 @@ public interface PictureRepository extends JpaRepository<Picture, Long> {
 
     List<Picture> findAllByFloorNoAndStatusOrderByQueue(Long floorNo, Integer status);
 
+    List<Picture> findTop7ByFloorNoAndStatusOrderByQueue(Long floorNo, Integer status);
+
     Optional<Picture> findByNoAndStatus(Long pictureNo, Integer status);
 
     void deleteByNo(Long pictureNo);

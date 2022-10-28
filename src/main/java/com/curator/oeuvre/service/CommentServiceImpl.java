@@ -21,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-
 import static com.curator.oeuvre.constant.ErrorCode.*;
 
 @Service
@@ -37,6 +35,8 @@ public class CommentServiceImpl implements CommentService {
 
         Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
                 new NotFoundException(FLOOR_NOT_FOUND));
+
+        if (!floor.getIsCommentAvailable()) throw new ForbiddenException(COMMENT_NOT_AVAILABLE);
 
         Comment comment = Comment.builder()
                 .floor(floor)
@@ -66,8 +66,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<GetCommentResponseDto> getFloorComments(User user, Long floorNo, Integer page, Integer size) {
 
-        floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
+        Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
                 new NotFoundException(FLOOR_NOT_FOUND));
+
+        if (!floor.getIsCommentAvailable()) throw new ForbiddenException(COMMENT_NOT_AVAILABLE);
 
         Pageable pageRequest = PageRequest.of(page, size);
         Page<Comment> comments = commentRepository.findAllByFloorNoAndStatusOrderByCreatedAtDesc(floorNo, 1, pageRequest);

@@ -7,12 +7,17 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @ToString
 @EqualsAndHashCode
 @ApiModel(value = "👤 내 플로어 전체 조회 API Response")
 
 public class GetMyFloorResponseDto {
+
+    @ApiModelProperty(notes = "플로어 순서", example = "1")
+    private final Integer queue;
 
     @ApiModelProperty(notes = "플로어 no", example = "1")
     private final Long floorNo;
@@ -26,13 +31,17 @@ public class GetMyFloorResponseDto {
     @ApiModelProperty(notes = "배경 질감", example = "0")
     private final Integer texture;
 
+    @ApiModelProperty(notes = "이미지 url 리스트", example = "[image_url, image_url, image_url...]")
+    private final List<String> imageUrls;
 
 
-    public GetMyFloorResponseDto(Floor floor) {
+    public GetMyFloorResponseDto(Floor floor, List<String> imageUrls) {
+        this.queue = floor.getQueue();
         this.floorNo = floor.getNo();
         this.name = floor.getName();
         this.color = floor.getColor();
         this.texture = floor.getTexture();
+        this.imageUrls = imageUrls;
     }
 }
 
