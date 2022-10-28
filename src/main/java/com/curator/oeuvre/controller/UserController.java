@@ -110,5 +110,16 @@ public class UserController {
         return CommonResponse.onSuccess(result);
     }
 
+    @GetMapping(value = "/{userNo}/profile")
+    @Operation(summary = "타 유저 프로필 정보 조회", description = "타 유저 프로필 정보를 조회하는 API 입니다.")
+    public CommonResponse<GetUserProfileResponseDto> geyUserProfile(@AuthenticationPrincipal User authUser,  @PathVariable Long userNo) {
+
+        log.info("get-user-profile");
+        log.info("api = 타 유저 프로필 조회, user = {}", authUser.getNo());
+
+        GetUserProfileResponseDto result = userService.getUserProfile(authUser, userNo);
+        return CommonResponse.onSuccess(result);
+    }
+
 }
 

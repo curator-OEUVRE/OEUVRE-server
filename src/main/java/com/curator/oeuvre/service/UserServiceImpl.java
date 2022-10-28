@@ -144,5 +144,20 @@ public class UserServiceImpl implements UserService{
         });
         return result;
     }
+
+    @Override
+    public GetUserProfileResponseDto getUserProfile(User me, Long userNo) {
+
+        User user = userRepository.findByNoAndStatus(userNo, 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        Long followingCount = followingRepository.countFollowingByFollowUserNo(userNo);
+        Long followerCount = followingRepository.countFollowingByFollowedUserNo(userNo);
+
+        Boolean isFollower = followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(userNo, me.getNo(), 1);
+        Boolean isFollowing = followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), userNo, 1);
+
+        return new GetUserProfileResponseDto(user, followingCount, followerCount, isFollower, isFollowing);
+    }
 }
 

@@ -23,4 +23,7 @@ public interface UserService {
     List<GetMyFloorResponseDto> getMyFloors(User user, Integer page, Integer size);
 
     List<GetMyCollectionResponseDto> getMyCollection(User user, Integer page, Integer size);
+
+    GetUserProfileResponseDto getUserProfile(User me, Long userNo);
+
 }

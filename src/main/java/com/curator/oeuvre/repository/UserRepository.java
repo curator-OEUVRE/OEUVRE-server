@@ -14,4 +14,5 @@ public interface UserRepository extends JpaRepository <User, Long> {
     Optional<User> findByNo(Long no);
 
     Optional<User> findByNoAndStatus(Long userNo, Integer status);
+
 }
