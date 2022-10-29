@@ -15,4 +15,7 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
     Optional<Floor> findByNoAndStatus(Long floorNo, Integer status);
 
     Page<Floor> findAllByUserNoAndStatusAndIsGroupExhibitionOrderByQueueDesc(Long userNo, Integer status, Boolean isGroupExhibition, Pageable pageable);
+
+    Page<Floor> findAllByUserNoAndStatusAndIsPublicAndIsGroupExhibitionOrderByQueueDesc(Long userNo, Integer status, Boolean isPublic, Boolean isGroupExhibition, Pageable pageable);
+
 }

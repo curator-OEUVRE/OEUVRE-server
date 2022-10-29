@@ -2,6 +2,7 @@ package com.curator.oeuvre.controller;
 
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
+import com.curator.oeuvre.dto.user.response.GetUserFloorResponseDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.*;
@@ -83,17 +84,16 @@ public class UserController {
         return CommonResponse.onSuccess("프로필 편집 성공");
     }
 
+    @GetMapping(value = "/{userNo}/floors")
+    @Operation(summary = "유저 플로어 전체 조회", description = "해당 유저의 플로어를 전체 조회하는 API 입니다.")
+    public CommonResponse<List<GetUserFloorResponseDto>> getUserFloors(@AuthenticationPrincipal User authUser, @PathVariable Long userNo,
+                                                                       @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
+                                                                       @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
 
-    @GetMapping(value = "/floors")
-    @Operation(summary = "내 플로어 전체 조회", description = "내 플로어를 전체 조회하는 API 입니다.")
-    public CommonResponse<List<GetMyFloorResponseDto>> geyMyFloors(@AuthenticationPrincipal User authUser,
-                                                                   @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
-                                                                   @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
+        log.info("get-user-floor");
+        log.info("api = 유저 플로어 전체 조회, user = {}", authUser.getNo());
 
-        log.info("get-my-floor");
-        log.info("api = 내 플로어 전체 조회, user = {}", authUser.getNo());
-
-        List<GetMyFloorResponseDto> result = userService.getMyFloors(authUser, page, size);
+        List<GetUserFloorResponseDto> result = userService.getUserFloors(authUser, userNo, page, size);
         return CommonResponse.onSuccess(result);
     }
 

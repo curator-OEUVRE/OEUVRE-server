@@ -5,7 +5,6 @@ import com.curator.oeuvre.domain.Picture;
 import com.curator.oeuvre.domain.Scrap;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.oauth.TokenDto;
-import com.curator.oeuvre.dto.picture.response.GetPictureLikeUserResponseDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.*;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.curator.oeuvre.constant.ErrorCode.*;
@@ -113,18 +113,22 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<GetMyFloorResponseDto> getMyFloors(User user, Integer page, Integer size) {
+    public List<GetUserFloorResponseDto> getUserFloors(User me, Long userNo, Integer page, Integer size) {
 
-        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+        userRepository.findByNoAndStatus(userNo, 1).orElseThrow(() ->
                 new NotFoundException(USER_NOT_FOUND));
 
-        Pageable pageRequest = PageRequest.of(page, size);
-        Page<Floor> floors = floorRepository.findAllByUserNoAndStatusAndIsGroupExhibitionOrderByQueueDesc(user.getNo(), 1, false, pageRequest);
+        boolean isMine = Objects.equals(me.getNo(), userNo);
 
-        List<GetMyFloorResponseDto> result = new ArrayList<>();
+        Pageable pageRequest = PageRequest.of(page, size);
+        Page<Floor> floors;
+        if (isMine) floors = floorRepository.findAllByUserNoAndStatusAndIsGroupExhibitionOrderByQueueDesc(userNo, 1, false, pageRequest);
+        else floors = floorRepository.findAllByUserNoAndStatusAndIsPublicAndIsGroupExhibitionOrderByQueueDesc(userNo, 1, true, false, pageRequest);
+
+        List<GetUserFloorResponseDto> result = new ArrayList<>();
         floors.forEach( floor -> {
             List<String> imageUrls = pictureRepository.findTop7ByFloorNoAndStatusOrderByQueue(floor.getNo(), 1).stream().map(Picture::getImageUrl).collect(Collectors.toList());
-            result.add(new GetMyFloorResponseDto(floor, imageUrls));
+            result.add(new GetUserFloorResponseDto(floor, imageUrls));
         });
         return result;
     }

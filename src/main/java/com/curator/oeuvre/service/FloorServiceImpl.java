@@ -1,20 +1,14 @@
 package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.domain.*;
-import com.curator.oeuvre.dto.floor.request.PatchFloorPictureDto;
-import com.curator.oeuvre.dto.floor.request.PatchFloorRequestDto;
-import com.curator.oeuvre.dto.floor.request.PostFloorPictureDto;
-import com.curator.oeuvre.dto.floor.request.PostFloorRequestDto;
+import com.curator.oeuvre.dto.floor.request.*;
 import com.curator.oeuvre.dto.floor.response.GetFloorPictureDto;
 import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
 import com.curator.oeuvre.dto.floor.response.PostFloorResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.ForbiddenException;
 import com.curator.oeuvre.exception.NotFoundException;
-import com.curator.oeuvre.repository.FloorRepository;
-import com.curator.oeuvre.repository.HashtagRepository;
-import com.curator.oeuvre.repository.PictureHashtagRepository;
-import com.curator.oeuvre.repository.PictureRepository;
+import com.curator.oeuvre.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -247,7 +241,20 @@ public class FloorServiceImpl implements FloorService {
             }
         });
         pictureRepository.saveAll(originalPictures);
-
-
     }
+
+    @Override
+    @Transactional
+    public void patchFloorQueue(User user, List<PatchFloorQueueRequestDto> patchFloorQueueRequestDto) {
+
+        patchFloorQueueRequestDto.forEach( dto -> {
+            Floor floor = floorRepository.findByNoAndStatus(dto.getFloorNo(), 1).orElseThrow(() ->
+                    new NotFoundException(FLOOR_NOT_FOUND));
+            if (!Objects.equals(floor.getUser().getNo(), user.getNo())) throw new ForbiddenException(FORBIDDEN_FLOOR);
+
+            floor.setQueue(dto.getQueue());
+            floorRepository.save(floor);
+        });
+    }
+
 }

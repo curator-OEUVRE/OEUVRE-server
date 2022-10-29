@@ -5,7 +5,6 @@ import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public interface UserService {
 
     void patchMyProfile(User user, PatchMyProfileRequestDto patchMyProfileRequestDto);
 
-    List<GetMyFloorResponseDto> getMyFloors(User user, Integer page, Integer size);
+    List<GetUserFloorResponseDto> getUserFloors(User me, Long userNo, Integer page, Integer size);
 
     List<GetMyCollectionResponseDto> getMyCollection(User user, Integer page, Integer size);
 

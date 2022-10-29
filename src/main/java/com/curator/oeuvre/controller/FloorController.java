@@ -2,6 +2,7 @@ package com.curator.oeuvre.controller;
 
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
+import com.curator.oeuvre.dto.floor.request.PatchFloorQueueRequestDto;
 import com.curator.oeuvre.dto.floor.request.PatchFloorRequestDto;
 import com.curator.oeuvre.dto.floor.request.PostFloorRequestDto;
 import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
@@ -18,6 +19,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+
+import java.util.List;
+
 import static com.curator.oeuvre.constant.ErrorCode.*;
 
 @RestController
@@ -73,16 +77,32 @@ public class FloorController {
             ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
             return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
         }
-        patchFloorRequestDto.getPictures().forEach( picture -> {
+        patchFloorRequestDto.getPictures().forEach(picture -> {
             if (picture.getPictureNo() == null) throw new BadRequestException(EMPTY_PICTURE_NO);
-            if (picture.getPictureNo() == 0 && picture.getImageUrl() == null) throw new BadRequestException(EMPTY_IMAGE_URL);
+            if (picture.getPictureNo() == 0 && picture.getImageUrl() == null)
+                throw new BadRequestException(EMPTY_IMAGE_URL);
             if (picture.getQueue() == null) throw new BadRequestException(EMPTY_QUEUE);
             if (picture.getHeight() == null) throw new BadRequestException(EMPTY_HEIGHT);
-            if (picture.getLocation() == null ) throw new BadRequestException(EMPTY_LOCATION);
+            if (picture.getLocation() == null) throw new BadRequestException(EMPTY_LOCATION);
         });
 
         floorService.patchFloor(authUser, floorNo, patchFloorRequestDto);
         return CommonResponse.onSuccess("플로어 편집 성공");
     }
 
+    @PatchMapping
+    @Operation(summary = "플로어 순서 편집", description = "플로어 순서 편집 API 입니다.")
+    public CommonResponse<String> patchFloorQueue(@AuthenticationPrincipal User authUser,
+                                                  @Valid @RequestBody List<PatchFloorQueueRequestDto> patchFloorQueueRequestDtos, BindingResult bindingResult) {
+        log.info("patch-floor-queue");
+        log.info("api = 플로어 순서 편집, user = {}", authUser.getNo());
+
+        if (bindingResult.hasErrors()) {
+            ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
+            return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
+        }
+
+        floorService.patchFloorQueue(authUser, patchFloorQueueRequestDtos);
+        return CommonResponse.onSuccess("플로어 순서 편집 성공");
+    }
 }

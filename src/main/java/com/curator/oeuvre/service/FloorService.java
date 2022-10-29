@@ -2,9 +2,11 @@ package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.domain.Picture;
 import com.curator.oeuvre.domain.User;
+import com.curator.oeuvre.dto.floor.request.PatchFloorQueueRequestDto;
 import com.curator.oeuvre.dto.floor.request.PatchFloorRequestDto;
 import com.curator.oeuvre.dto.floor.request.PostFloorRequestDto;
 import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
+import com.curator.oeuvre.dto.user.response.GetUserFloorResponseDto;
 import com.curator.oeuvre.dto.floor.response.PostFloorResponseDto;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +24,6 @@ public interface FloorService {
     GetFloorResponseDto getFloor(User user, Long floorNo);
 
     void patchFloor(User user, Long floorNo, PatchFloorRequestDto patchFloorRequestDto);
+
+    void patchFloorQueue(User user, List<PatchFloorQueueRequestDto> patchFloorQueueRequestDto);
 }

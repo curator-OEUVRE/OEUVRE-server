@@ -6,15 +6,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-
 import java.util.List;
 
 @Getter
 @ToString
 @EqualsAndHashCode
-@ApiModel(value = "👤 내 플로어 전체 조회 API Response")
+@ApiModel(value = "🎞 유저 플로어 전체 조회 API Response")
 
-public class GetMyFloorResponseDto {
+public class GetUserFloorResponseDto {
 
     @ApiModelProperty(notes = "플로어 순서", example = "1")
     private final Integer queue;
@@ -31,11 +30,11 @@ public class GetMyFloorResponseDto {
     @ApiModelProperty(notes = "배경 질감", example = "0")
     private final Integer texture;
 
-    @ApiModelProperty(notes = "이미지 url 리스트", example = "[image_url, image_url, image_url...]")
+    @ApiModelProperty(notes = "이미지 url 리스트", example = "[image_url, image_url, image_url]")
     private final List<String> imageUrls;
 
 
-    public GetMyFloorResponseDto(Floor floor, List<String> imageUrls) {
+    public GetUserFloorResponseDto(Floor floor, List<String> imageUrls) {
         this.queue = floor.getQueue();
         this.floorNo = floor.getNo();
         this.name = floor.getName();
