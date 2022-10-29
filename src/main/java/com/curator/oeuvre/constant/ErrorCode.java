@@ -47,6 +47,9 @@ public enum ErrorCode {
     USER_ALREADY_EXIST(BAD_REQUEST, "U002", "이미 가입된 유저입니다."),
     USER_NOT_FOUND(NOT_FOUND, "U003", "가입되지 않은 유저입니다."),
     DUPLICATED_ID(BAD_REQUEST, "U004", "중복된 ID 입니다."),
+    ALREADY_FOLLOWED(BAD_REQUEST, "U005", "이미 팔로우한 유저입니다."),
+    FOLLOW_NOTE_FOUND(BAD_REQUEST, "U006", "팔로우 한 적 없는 유저입니다."),
+
 
 
 

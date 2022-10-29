@@ -25,4 +25,8 @@ public interface UserService {
 
     GetUserProfileResponseDto getUserProfile(User me, Long userNo);
 
+    void postFollow(User me, Long userNo);
+
+    void deleteFollow(User me, Long userNo);
+
 }

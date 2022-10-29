@@ -1,13 +1,11 @@
 package com.curator.oeuvre.service;
 
-import com.curator.oeuvre.domain.Floor;
-import com.curator.oeuvre.domain.Picture;
-import com.curator.oeuvre.domain.Scrap;
-import com.curator.oeuvre.domain.User;
+import com.curator.oeuvre.domain.*;
 import com.curator.oeuvre.dto.oauth.TokenDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.*;
+import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.BaseException;
 import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.*;
@@ -162,6 +160,35 @@ public class UserServiceImpl implements UserService{
         Boolean isFollowing = followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), userNo, 1);
 
         return new GetUserProfileResponseDto(user, followingCount, followerCount, isFollower, isFollowing);
+    }
+
+    @Override
+    public void postFollow(User me, Long userNo) {
+
+        User user = userRepository.findByNoAndStatus(userNo, 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        if (followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), userNo, 1))
+            throw new BadRequestException(ALREADY_FOLLOWED);
+
+        Following following = Following.builder()
+                .followUser(me)
+                .followedUser(user)
+                .build();
+        followingRepository.save(following);
+    }
+
+    @Override
+    @Transactional
+    public void deleteFollow(User me, Long userNo) {
+
+        User user = userRepository.findByNoAndStatus(userNo, 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        if (!followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), userNo, 1))
+            throw new BadRequestException(FOLLOW_NOTE_FOUND);
+
+        followingRepository.deleteByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), userNo, 1);
     }
 }
 

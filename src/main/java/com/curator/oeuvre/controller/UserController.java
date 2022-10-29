@@ -112,13 +112,35 @@ public class UserController {
 
     @GetMapping(value = "/{userNo}/profile")
     @Operation(summary = "타 유저 프로필 정보 조회", description = "타 유저 프로필 정보를 조회하는 API 입니다.")
-    public CommonResponse<GetUserProfileResponseDto> geyUserProfile(@AuthenticationPrincipal User authUser,  @PathVariable Long userNo) {
+    public CommonResponse<GetUserProfileResponseDto> getUserProfile(@AuthenticationPrincipal User authUser, @PathVariable Long userNo) {
 
         log.info("get-user-profile");
         log.info("api = 타 유저 프로필 조회, user = {}", authUser.getNo());
 
         GetUserProfileResponseDto result = userService.getUserProfile(authUser, userNo);
         return CommonResponse.onSuccess(result);
+    }
+
+    @PostMapping(value = "/{userNo}/follow")
+    @Operation(summary = "유저 팔로우", description = "해당 유저를 팔로우하는 API 입니다.")
+    public CommonResponse<String> postFollow(@AuthenticationPrincipal User authUser, @PathVariable Long userNo) {
+
+        log.info("post-follow");
+        log.info("api = 유저 팔로우, user = {}", authUser.getNo());
+
+        userService.postFollow(authUser, userNo);
+        return CommonResponse.onSuccess("유저 팔로우 성공");
+    }
+
+    @DeleteMapping(value = "/{userNo}/follow")
+    @Operation(summary = "유저 팔로우 취소", description = "해당 유저 팔로우를 취소하는 API 입니다.")
+    public CommonResponse<String> deleteFollow(@AuthenticationPrincipal User authUser, @PathVariable Long userNo) {
+
+        log.info("delete-follow");
+        log.info("api = 유저 팔로우 취소, user = {}", authUser.getNo());
+
+        userService.deleteFollow(authUser, userNo);
+        return CommonResponse.onSuccess("유저 팔로우 취소 성공");
     }
 
 }
