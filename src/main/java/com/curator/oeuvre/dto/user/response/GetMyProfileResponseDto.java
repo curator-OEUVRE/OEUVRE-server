@@ -48,7 +48,7 @@ public class GetMyProfileResponseDto {
     private final Boolean isLikeAlarmOn;
 
     @ApiModelProperty(notes = "팔로우 알림 허용 여부", example = "true")
-    private final Boolean isfollowAlarmOn;
+    private final Boolean isFollowAlarmOn;
 
     @ApiModelProperty(notes = "그룹전시 알림 허용 여부", example = "true")
     private final Boolean isGroupExhibitionAlarmOn;
@@ -65,7 +65,7 @@ public class GetMyProfileResponseDto {
         this.isCommentAlarmOn = user.getIsCommentAlarmOn();
         this.isMessageAlarmOn = user.getIsMessageAlarmOn();
         this.isLikeAlarmOn = user.getIsLikeAlarmOn();
-        this.isfollowAlarmOn = user.getIsFollowAlarmOn();
+        this.isFollowAlarmOn = user.getIsFollowAlarmOn();
         this.isGroupExhibitionAlarmOn = user.getIsGroupRequestAlarmOn();
     }
 }
