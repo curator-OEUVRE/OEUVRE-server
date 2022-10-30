@@ -125,8 +125,12 @@ public class UserServiceImpl implements UserService{
 
         List<GetUserFloorResponseDto> result = new ArrayList<>();
         floors.forEach( floor -> {
-            List<String> imageUrls = pictureRepository.findTop7ByFloorNoAndStatusOrderByQueue(floor.getNo(), 1).stream().map(Picture::getImageUrl).collect(Collectors.toList());
-            result.add(new GetUserFloorResponseDto(floor, imageUrls));
+            List<Picture> pictures = pictureRepository.findTop7ByFloorNoAndStatusOrderByQueue(floor.getNo(), 1);
+            List<GetUserFloorThumbnailDto> thumbnails = new ArrayList<>();
+            pictures.forEach( picture -> {
+                thumbnails.add(new GetUserFloorThumbnailDto(picture));
+            });
+            result.add(new GetUserFloorResponseDto(floor, thumbnails));
         });
         return result;
     }
@@ -202,7 +206,7 @@ public class UserServiceImpl implements UserService{
         List<GetUserFollowingResponseDto> result = new ArrayList<>();
         followingUsers.forEach( followingUser -> {
             boolean isFollowing = followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), followingUser.getNo(), 1);
-            result.add(new GetUserFollowingResponseDto(followingUser, isFollowing));
+            result.add(new GetUserFollowingResponseDto(followingUser, isFollowing, Objects.equals(me.getNo(), followingUser.getNo())));
         });
         return result;
     }
@@ -218,7 +222,7 @@ public class UserServiceImpl implements UserService{
         List<GetUserFollowerResponseDto> result = new ArrayList<>();
         followers.forEach( follower -> {
             boolean isFollowing = followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), follower.getNo(), 1);
-            result.add(new GetUserFollowerResponseDto(follower, isFollowing));
+            result.add(new GetUserFollowerResponseDto(follower, isFollowing, Objects.equals(me.getNo(), follower.getNo())));
         });
         return result;
     }

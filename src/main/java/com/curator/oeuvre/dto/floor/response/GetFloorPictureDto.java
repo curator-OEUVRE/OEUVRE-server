@@ -25,7 +25,7 @@ public class GetFloorPictureDto {
     @ApiModelProperty(notes = "세로 길이", example = "188")
     private final Float height;
 
-    @ApiModelProperty(notes = "세로 길이", example = "70")
+    @ApiModelProperty(notes = "가로 길이", example = "70")
     private final Float width;
 
     @ApiModelProperty(notes = "y축 위치", example = "93")

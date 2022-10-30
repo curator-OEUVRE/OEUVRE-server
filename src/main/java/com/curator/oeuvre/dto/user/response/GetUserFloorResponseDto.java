@@ -30,17 +30,17 @@ public class GetUserFloorResponseDto {
     @ApiModelProperty(notes = "배경 질감", example = "0")
     private final Integer texture;
 
-    @ApiModelProperty(notes = "이미지 url 리스트", example = "[image_url, image_url, image_url]")
-    private final List<String> imageUrls;
+    @ApiModelProperty(notes = "썸네일 목록")
+    private final List<GetUserFloorThumbnailDto> thumbnails;
 
 
-    public GetUserFloorResponseDto(Floor floor, List<String> imageUrls) {
+    public GetUserFloorResponseDto(Floor floor, List<GetUserFloorThumbnailDto> thumbnails) {
         this.queue = floor.getQueue();
         this.floorNo = floor.getNo();
         this.name = floor.getName();
         this.color = floor.getColor();
         this.texture = floor.getTexture();
-        this.imageUrls = imageUrls;
+        this.thumbnails = thumbnails;
     }
 }
 
