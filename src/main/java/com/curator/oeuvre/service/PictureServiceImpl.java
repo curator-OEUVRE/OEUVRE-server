@@ -108,7 +108,7 @@ public class PictureServiceImpl implements PictureService{
         List<GetPictureLikeUserResponseDto> result = new ArrayList<>();
         likes.forEach( like -> {
             User user = like.getUser();
-            result.add(new GetPictureLikeUserResponseDto(user.getNo(), user.getProfileImageUrl(), user.getId(), user.getName()));
+            result.add(new GetPictureLikeUserResponseDto(user));
         } );
         return result;
     }

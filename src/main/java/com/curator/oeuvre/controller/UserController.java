@@ -143,5 +143,27 @@ public class UserController {
         return CommonResponse.onSuccess("유저 팔로우 취소 성공");
     }
 
+    @GetMapping(value = "/{userNo}/following")
+    @Operation(summary = "유저 팔로잉 전체 조회", description = "해당 유저가 팔로우하는 유저를 전체 조회하는 API 입니다.")
+    public CommonResponse<List<GetUserFollowingResponseDto>> getUserFollowings(@AuthenticationPrincipal User authUser, @PathVariable Long userNo) {
+
+        log.info("get-user-followings");
+        log.info("api = 유저 팔로잉 전체 조회, user = {}", authUser.getNo());
+
+        List<GetUserFollowingResponseDto> result = userService.getUserFollowings(authUser, userNo);
+        return CommonResponse.onSuccess(result);
+    }
+
+    @GetMapping(value = "/{userNo}/follower")
+    @Operation(summary = "유저 팔로워 전체 조회", description = "해당 유저를 팔로우하는 유저를 전체 조회하는 API 입니다.")
+    public CommonResponse<List<GetUserFollowerResponseDto>> getUserFollowers(@AuthenticationPrincipal User authUser, @PathVariable Long userNo) {
+
+        log.info("get-user-followers");
+        log.info("api = 유저 팔로워 전체 조회, user = {}", authUser.getNo());
+
+        List<GetUserFollowerResponseDto> result = userService.getUserFollowers(authUser, userNo);
+        return CommonResponse.onSuccess(result);
+    }
+
 }
 

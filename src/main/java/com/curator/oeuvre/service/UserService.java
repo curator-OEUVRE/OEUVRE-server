@@ -29,4 +29,8 @@ public interface UserService {
 
     void deleteFollow(User me, Long userNo);
 
+    List<GetUserFollowingResponseDto> getUserFollowings(User me, Long userNo);
+
+    List<GetUserFollowerResponseDto> getUserFollowers(User me, Long userNo);
+
 }

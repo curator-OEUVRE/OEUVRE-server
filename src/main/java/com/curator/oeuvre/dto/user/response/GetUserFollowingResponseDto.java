@@ -1,4 +1,4 @@
-package com.curator.oeuvre.dto.picture.response;
+package com.curator.oeuvre.dto.user.response;
 
 import com.curator.oeuvre.domain.User;
 import io.swagger.annotations.ApiModel;
@@ -10,8 +10,8 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
-@ApiModel(value = "🌃 사진 좋아요 한 유저 전체 조회 API Response")
-public class GetPictureLikeUserResponseDto {
+@ApiModel(value = "👤 유저 팔로잉 전체 조회 API Response")
+public class GetUserFollowingResponseDto {
 
     @ApiModelProperty(notes = "회원 no", example = "1")
     private final Long userNo;
@@ -25,14 +25,16 @@ public class GetPictureLikeUserResponseDto {
     @ApiModelProperty(notes = "이름", example = "김원진")
     private final String name;
 
+    private final Boolean isFollowing;
 
-    public GetPictureLikeUserResponseDto (
-            User user
+    public GetUserFollowingResponseDto (
+            User user,
+            Boolean isFollowing
     ) {
         this.userNo = user.getNo();
         this.profileImageUrl = user.getProfileImageUrl();
         this.id = user.getId();
         this.name = user.getName();
+        this.isFollowing = isFollowing;
     }
 }
-

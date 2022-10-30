@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @ToString
 @EqualsAndHashCode
-@ApiModel(value = "🎞 유저 플로어 전체 조회 API Response")
+@ApiModel(value = "👤 유저 플로어 전체 조회 API Response")
 
 public class GetUserFloorResponseDto {
 

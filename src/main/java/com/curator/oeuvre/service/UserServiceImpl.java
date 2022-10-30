@@ -190,5 +190,37 @@ public class UserServiceImpl implements UserService{
 
         followingRepository.deleteByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), userNo, 1);
     }
+
+    @Override
+    public List<GetUserFollowingResponseDto> getUserFollowings(User me, Long userNo) {
+
+        userRepository.findByNoAndStatus(userNo, 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        List<User> followingUsers = followingRepository.findAllByFollowUserNoAndStatus(userNo, 1).stream().map(Following::getFollowedUser).collect(Collectors.toList());
+
+        List<GetUserFollowingResponseDto> result = new ArrayList<>();
+        followingUsers.forEach( followingUser -> {
+            boolean isFollowing = followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), followingUser.getNo(), 1);
+            result.add(new GetUserFollowingResponseDto(followingUser, isFollowing));
+        });
+        return result;
+    }
+
+    @Override
+    public List<GetUserFollowerResponseDto> getUserFollowers(User me, Long userNo) {
+
+        userRepository.findByNoAndStatus(userNo, 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        List<User> followers = followingRepository.findAllByFollowedUserNoAndStatus(userNo, 1).stream().map(Following::getFollowUser).collect(Collectors.toList());
+
+        List<GetUserFollowerResponseDto> result = new ArrayList<>();
+        followers.forEach( follower -> {
+            boolean isFollowing = followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), follower.getNo(), 1);
+            result.add(new GetUserFollowerResponseDto(follower, isFollowing));
+        });
+        return result;
+    }
 }
 
