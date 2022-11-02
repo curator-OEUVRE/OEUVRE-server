@@ -1,6 +1,7 @@
 package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.dto.oauth.TokenDto;
+import com.curator.oeuvre.exception.UnauthorizedException;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
+
+import static com.curator.oeuvre.constant.ErrorCode.EXPIRED_TOKEN;
 
 @Component
 @Service
@@ -83,8 +86,8 @@ public class JwtServiceImpl implements JwtService {
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(Base64.getEncoder().encodeToString(("" + JWT_SECRET).getBytes(
                             StandardCharsets.UTF_8))).parseClaimsJws(token);
-
-            return !claims.getBody().getExpiration().before(new Date());
+            if (claims.getBody().getExpiration().before(new Date())) throw new UnauthorizedException(EXPIRED_TOKEN);
+            return true;
         } catch (Exception e) {
             return false;
         }

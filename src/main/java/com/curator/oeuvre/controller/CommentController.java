@@ -5,8 +5,6 @@ import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.comment.reqeust.PostCommentRequestDto;
 import com.curator.oeuvre.dto.comment.response.GetCommentResponseDto;
 import com.curator.oeuvre.dto.comment.response.PostCommentResponseDto;
-import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
-import com.curator.oeuvre.dto.floor.response.PostFloorResponseDto;
 import com.curator.oeuvre.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;

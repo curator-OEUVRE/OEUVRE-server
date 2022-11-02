@@ -20,7 +20,7 @@ public enum ErrorCode {
 
 
     /* Auth 관련 오류 */
-    EXPIRED_TOKEN(BAD_REQUEST, "AUTH001", "만료된 엑세스 토큰입니다."),
+    EXPIRED_TOKEN(UNAUTHORIZED, "AUTH001", "만료된 엑세스 토큰입니다."),
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "AUTH002", "리프레시 토큰이 유효하지 않습니다."),
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "AUTH003", "리프레시 토큰의 유저 정보가 일치하지 않습니다."),
     INVALID_AUTH_TOKEN(UNAUTHORIZED, "AUTH004", "유효하지 않은 토큰입니다."),

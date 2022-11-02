@@ -12,7 +12,6 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @ApiModel(value = "👤 유저 플로어 전체 조회 API Response")
-
 public class GetUserFloorResponseDto {
 
     @ApiModelProperty(notes = "플로어 순서", example = "1")
