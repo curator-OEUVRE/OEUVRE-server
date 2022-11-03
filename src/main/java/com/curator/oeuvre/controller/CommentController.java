@@ -4,6 +4,7 @@ import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.comment.reqeust.PostCommentRequestDto;
 import com.curator.oeuvre.dto.comment.response.GetCommentResponseDto;
+import com.curator.oeuvre.dto.comment.response.GetFloorToMoveResponseDto;
 import com.curator.oeuvre.dto.comment.response.PostCommentResponseDto;
 import com.curator.oeuvre.service.CommentService;
 import io.swagger.annotations.Api;
@@ -72,6 +73,17 @@ public class CommentController {
         log.info("api = 플로어 방명록 조회, user = {}", authUser.getNo());
 
         List<GetCommentResponseDto> result = commentService.getFloorComments(authUser, floorNo, page, size);
+        return CommonResponse.onSuccess(result);
+    }
+
+    @GetMapping("/{floorNo}/other-floors")
+    @Operation(summary = "방명록 이동 플로어 전체 조회", description = "현재 플로어 방명록에서 이동할 수 있는 플로어 목록을 조회 하는 API 입니다.\n" +
+                                                                "방명록이 허용된 플로어만 보여지며, 타인일 경우 공개 플로어만 보여집니다.")
+    public CommonResponse<List<GetFloorToMoveResponseDto>> getFloorsToMove(@AuthenticationPrincipal User authUser, @PathVariable Long floorNo) {
+        log.info("get-floors-to-move");
+        log.info("api = 방명록 이동 플로어 전체 조회, user = {}", authUser.getNo());
+
+        List<GetFloorToMoveResponseDto> result = commentService.getFloorsToMove(authUser, floorNo);
         return CommonResponse.onSuccess(result);
     }
 }

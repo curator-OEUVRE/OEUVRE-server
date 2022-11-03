@@ -5,8 +5,8 @@ import com.curator.oeuvre.domain.Floor;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.comment.reqeust.PostCommentRequestDto;
 import com.curator.oeuvre.dto.comment.response.GetCommentResponseDto;
+import com.curator.oeuvre.dto.comment.response.GetFloorToMoveResponseDto;
 import com.curator.oeuvre.dto.comment.response.PostCommentResponseDto;
-import com.curator.oeuvre.dto.hashtag.response.GetHashtagResponseDto;
 import com.curator.oeuvre.exception.ForbiddenException;
 import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.CommentRepository;
@@ -78,6 +78,27 @@ public class CommentServiceImpl implements CommentService {
         comments.forEach( comment -> {
             result.add(new GetCommentResponseDto(comment, Objects.equals(user.getNo(), comment.getUser().getNo())));
         });
+        return result;
+    }
+
+    @Override
+    public List<GetFloorToMoveResponseDto> getFloorsToMove(User user, Long floorNo) {
+
+        Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
+                new NotFoundException(FLOOR_NOT_FOUND));
+
+        List<Floor> otherFloors;
+        if (!Objects.equals(floor.getUser().getNo(), user.getNo())) {
+            otherFloors = floorRepository.findAllByUserNoAndStatusAndIsCommentAvailableAndIsPublicAndIsGroupExhibitionOrderByQueueDesc(
+                    floor.getUser().getNo(), 1, true, true, false);
+        } else {
+            otherFloors = floorRepository.findAllByUserNoAndStatusAndIsCommentAvailableAndIsGroupExhibitionOrderByQueueDesc(
+                    floor.getUser().getNo(), 1, true,false);
+        }
+
+        List<GetFloorToMoveResponseDto> result = new ArrayList<>();
+        otherFloors.forEach(otherFloor -> { result.add(new GetFloorToMoveResponseDto(otherFloor));} );
+
         return result;
     }
 }
