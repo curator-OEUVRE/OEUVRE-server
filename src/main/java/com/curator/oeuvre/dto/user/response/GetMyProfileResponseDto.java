@@ -14,6 +14,9 @@ import lombok.ToString;
 
 public class GetMyProfileResponseDto {
 
+    @ApiModelProperty(notes = "회원 no", example = "1")
+    private final Long userNo;
+
     @ApiModelProperty(notes = "아이디", example = "one_zzini_")
     private final String id;
 
@@ -54,6 +57,7 @@ public class GetMyProfileResponseDto {
     private final Boolean isGroupExhibitionAlarmOn;
 
     public GetMyProfileResponseDto(User user, Long followingCount, Long followerCount) {
+        this.userNo = user.getNo();
         this.id = user.getId();
         this.name = user.getName();
         this.profileImageUrl = user.getProfileImageUrl();
