@@ -48,9 +48,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(NOT_FOUND, "U003", "가입되지 않은 유저입니다."),
     DUPLICATED_ID(BAD_REQUEST, "U004", "중복된 ID 입니다."),
     ALREADY_FOLLOWED(BAD_REQUEST, "U005", "이미 팔로우한 유저입니다."),
-    FOLLOW_NOTE_FOUND(BAD_REQUEST, "U006", "팔로우 한 적 없는 유저입니다."),
-
-
+    FOLLOW_NOT_FOUND(BAD_REQUEST, "U006", "팔로우 한 적 없는 유저입니다."),
 
 
 
@@ -80,6 +78,11 @@ public enum ErrorCode {
     FORBIDDEN_COMMENT(FORBIDDEN, "CM002", "댓글 접근 권한이 없습니다."),
     COMMENT_NOT_AVAILABLE(FORBIDDEN, "CM003", "방명록이 허용되지 않은 플로어 입니다."),
 
+
+    /* Block 관련 오류 */
+    CANNOT_BLOCK_MYSELF(NOT_FOUND, "B001", "자기 자신은 차단할 수 없습니다."),
+    ALREADY_BLOCKED(BAD_REQUEST, "B002", "이미 차단한 유저입니다."),
+    BLOCK_NOT_FOUND(BAD_REQUEST, "B003", "차단 한 적 없는 유저입니다."),
 
 
     /* Database 관련 오류 */

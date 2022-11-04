@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService{
                 new NotFoundException(USER_NOT_FOUND));
 
         if (!followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), userNo, 1))
-            throw new BadRequestException(FOLLOW_NOTE_FOUND);
+            throw new BadRequestException(FOLLOW_NOT_FOUND);
 
         followingRepository.deleteByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), userNo, 1);
     }
