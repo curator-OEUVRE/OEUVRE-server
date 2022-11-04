@@ -7,6 +7,7 @@ import com.curator.oeuvre.dto.comment.reqeust.PostCommentRequestDto;
 import com.curator.oeuvre.dto.comment.response.GetCommentResponseDto;
 import com.curator.oeuvre.dto.comment.response.GetFloorToMoveResponseDto;
 import com.curator.oeuvre.dto.comment.response.PostCommentResponseDto;
+import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.exception.ForbiddenException;
 import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.CommentRepository;
@@ -64,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<GetCommentResponseDto> getFloorComments(User user, Long floorNo, Integer page, Integer size) {
+    public PageResponseDto<List<GetCommentResponseDto>> getFloorComments(User user, Long floorNo, Integer page, Integer size) {
 
         Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
                 new NotFoundException(FLOOR_NOT_FOUND));
@@ -78,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
         comments.forEach( comment -> {
             result.add(new GetCommentResponseDto(comment, Objects.equals(user.getNo(), comment.getUser().getNo())));
         });
-        return result;
+        return new PageResponseDto<>(comments.isLast(), result);
     }
 
     @Override

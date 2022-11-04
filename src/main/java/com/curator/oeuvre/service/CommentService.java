@@ -5,6 +5,7 @@ import com.curator.oeuvre.dto.comment.reqeust.PostCommentRequestDto;
 import com.curator.oeuvre.dto.comment.response.GetCommentResponseDto;
 import com.curator.oeuvre.dto.comment.response.GetFloorToMoveResponseDto;
 import com.curator.oeuvre.dto.comment.response.PostCommentResponseDto;
+import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface CommentService {
 
     void deleteComment(User user, Long commentNo);
 
-    List<GetCommentResponseDto> getFloorComments(User user, Long floorNo, Integer page, Integer size);
+    PageResponseDto<List<GetCommentResponseDto>> getFloorComments(User user, Long floorNo, Integer page, Integer size);
 
     List<GetFloorToMoveResponseDto> getFloorsToMove(User user, Long floorNo);
 }

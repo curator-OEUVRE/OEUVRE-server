@@ -1,6 +1,7 @@
 package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.domain.*;
+import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.oauth.TokenDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
@@ -111,7 +112,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<GetUserFloorResponseDto> getUserFloors(User me, Long userNo, Integer page, Integer size) {
+    public PageResponseDto<List<GetUserFloorResponseDto>> getUserFloors(User me, Long userNo, Integer page, Integer size) {
 
         userRepository.findByNoAndStatus(userNo, 1).orElseThrow(() ->
                 new NotFoundException(USER_NOT_FOUND));
@@ -132,11 +133,11 @@ public class UserServiceImpl implements UserService{
             });
             result.add(new GetUserFloorResponseDto(floor, thumbnails));
         });
-        return result;
+        return new PageResponseDto<>(floors.isLast(), result);
     }
 
     @Override
-    public List<GetMyCollectionResponseDto> getMyCollection(User user, Integer page, Integer size) {
+    public PageResponseDto<List<GetMyCollectionResponseDto>> getMyCollection(User user, Integer page, Integer size) {
 
         userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
                 new NotFoundException(USER_NOT_FOUND));
@@ -148,7 +149,7 @@ public class UserServiceImpl implements UserService{
         collection.forEach( scrap -> {
             result.add(new GetMyCollectionResponseDto(scrap.getPicture()));
         });
-        return result;
+        return new PageResponseDto<>(collection.isLast(), result);
     }
 
     @Override

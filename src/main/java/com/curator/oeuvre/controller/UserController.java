@@ -2,6 +2,7 @@ package com.curator.oeuvre.controller;
 
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
+import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.user.response.GetUserFloorResponseDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
@@ -86,27 +87,27 @@ public class UserController {
 
     @GetMapping(value = "/{userNo}/floors")
     @Operation(summary = "유저 플로어 전체 조회", description = "해당 유저의 플로어를 전체 조회하는 API 입니다.")
-    public CommonResponse<List<GetUserFloorResponseDto>> getUserFloors(@AuthenticationPrincipal User authUser, @PathVariable Long userNo,
+    public CommonResponse<PageResponseDto<List<GetUserFloorResponseDto>>> getUserFloors(@AuthenticationPrincipal User authUser, @PathVariable Long userNo,
                                                                        @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
                                                                        @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
 
         log.info("get-user-floor");
         log.info("api = 유저 플로어 전체 조회, user = {}", authUser.getNo());
 
-        List<GetUserFloorResponseDto> result = userService.getUserFloors(authUser, userNo, page, size);
+        PageResponseDto<List<GetUserFloorResponseDto>> result = userService.getUserFloors(authUser, userNo, page, size);
         return CommonResponse.onSuccess(result);
     }
 
     @GetMapping(value = "/collection")
     @Operation(summary = "내 컬렉션 전체 조회", description = "내가 스크랩한 사진을 전체 조회하는 API 입니다.")
-    public CommonResponse<List<GetMyCollectionResponseDto>> geyMyCollection(@AuthenticationPrincipal User authUser,
-                                                                            @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
-                                                                            @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
+    public CommonResponse<PageResponseDto<List<GetMyCollectionResponseDto>>> geyMyCollection(@AuthenticationPrincipal User authUser,
+                                                                                            @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
+                                                                                            @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
 
         log.info("get-my-collection");
-        log.info("api = 내 컬렉션 조회, user = {}", authUser.getNo());
+        log.info("api = 내 컬렉션 전체 조회, user = {}", authUser.getNo());
 
-        List<GetMyCollectionResponseDto> result = userService.getMyCollection(authUser, page, size);
+        PageResponseDto<List<GetMyCollectionResponseDto>> result = userService.getMyCollection(authUser, page, size);
         return CommonResponse.onSuccess(result);
     }
 
