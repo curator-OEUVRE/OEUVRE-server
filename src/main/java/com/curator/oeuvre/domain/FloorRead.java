@@ -1,6 +1,5 @@
 package com.curator.oeuvre.domain;
 
-import io.swagger.models.auth.In;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -35,6 +34,11 @@ public class FloorRead extends AbstractTimestamp {
     private Boolean isNew;
 
     @Column(nullable = false)
+    @ColumnDefault("false")
+    private Boolean isUpdated;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
     private Integer updateCount;
 
     @Builder
@@ -43,12 +47,14 @@ public class FloorRead extends AbstractTimestamp {
             Floor floor,
             User user,
             Boolean isNew,
+            Boolean isUpdated,
             Integer updateCount
     ) {
         this.no = no;
         this.floor = floor;
         this.user = user;
         this.isNew = isNew;
+        this.isUpdated = isUpdated;
         this.updateCount = updateCount;
     }
 }

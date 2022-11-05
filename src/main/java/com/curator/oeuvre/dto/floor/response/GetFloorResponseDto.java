@@ -58,5 +58,4 @@ public class GetFloorResponseDto {
         this.isMine = isMine;
         this.pictures = pictures;
     }
-
 }

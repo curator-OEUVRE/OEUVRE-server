@@ -2,15 +2,18 @@ package com.curator.oeuvre.controller;
 
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
+import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.floor.request.PatchFloorQueueRequestDto;
 import com.curator.oeuvre.dto.floor.request.PatchFloorRequestDto;
 import com.curator.oeuvre.dto.floor.request.PostFloorRequestDto;
 import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
+import com.curator.oeuvre.dto.floor.response.GetHomeFloorResponseDto;
 import com.curator.oeuvre.dto.floor.response.PostFloorResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.service.FloorService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +22,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import java.util.List;
 
@@ -104,5 +109,18 @@ public class FloorController {
 
         floorService.patchFloorQueue(authUser, patchFloorQueueRequestDtos);
         return CommonResponse.onSuccess("플로어 순서 편집 성공");
+    }
+
+    @GetMapping("/home")
+    @Operation(summary = "홈탭 플로어 전체 조회", description = "홈탭 플로어 전체 조회 API 입니다. \n접근 유저에 따라 업데이트 여부가 다르게 조회 됩니다.")
+    public CommonResponse<PageResponseDto<List<GetHomeFloorResponseDto>>> getHomeFloors(
+            @AuthenticationPrincipal User authUser,
+            @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
+            @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
+        log.info("get-home-floors");
+        log.info("api = 홈탭 플로어 전체 조회, user = {}", authUser.getNo());
+
+        PageResponseDto<List<GetHomeFloorResponseDto>> result = floorService.getHomeFloors(authUser, page, size);
+        return CommonResponse.onSuccess(result);
     }
 }

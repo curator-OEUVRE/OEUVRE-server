@@ -1,18 +1,26 @@
 package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.domain.*;
+import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.floor.request.*;
 import com.curator.oeuvre.dto.floor.response.GetFloorPictureDto;
 import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
+import com.curator.oeuvre.dto.floor.response.GetHomeFloorResponseDto;
 import com.curator.oeuvre.dto.floor.response.PostFloorResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.ForbiddenException;
 import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static com.curator.oeuvre.constant.ErrorCode.*;
 
 @Service
@@ -23,6 +31,8 @@ public class FloorServiceImpl implements FloorService {
     private final PictureRepository pictureRepository;
     private final HashtagRepository hashtagRepository;
     private final PictureHashtagRepository pictureHashtagRepository;
+    private final FloorReadRepository floorReadRepository;
+    private final FollowingRepository followingRepository;
 
     @Override
     @Transactional
@@ -130,15 +140,39 @@ public class FloorServiceImpl implements FloorService {
                 postHashtag(hashtag, picture);
             });
         });
+
+        // 모든 팔로워 읽음 데이터 추가
+        List<Following> followers = followingRepository.findAllByFollowedUserNoAndStatus(user.getNo(), 1);
+        followers.forEach( follower -> {
+            FloorRead floorRead = FloorRead.builder()
+                    .floor(floor)
+                    .user(follower.getFollowUser())
+                    .isNew(true)
+                    .isUpdated(false)
+                    .updateCount(0)
+                    .build();
+            floorReadRepository.save(floorRead);
+        });
+
         return new PostFloorResponseDto(floor);
     }
 
     @Override
+    @Transactional
     public GetFloorResponseDto getFloor(User user, Long floorNo) {
 
         Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
                 new NotFoundException(FLOOR_NOT_FOUND));
         List<Picture> pictures = pictureRepository.findAllByFloorNoAndStatusOrderByQueue(floorNo, 1);
+
+        // 플로어 읽음 처리
+        FloorRead floorRead = floorReadRepository.findByFloorNoAndUserNoAndStatus(floorNo, user.getNo(), 1);
+        if (floorRead != null) {
+            floorRead.setIsNew(false);
+            floorRead.setIsUpdated(false);
+            floorRead.setUpdateCount(0);
+            floorReadRepository.save(floorRead);
+        }
 
         List<GetFloorPictureDto> pictureDtos = new ArrayList<GetFloorPictureDto>();
         pictures.forEach( picture -> {
@@ -202,6 +236,7 @@ public class FloorServiceImpl implements FloorService {
             }
         });
 
+        AtomicInteger newPictureCount = new AtomicInteger();
         List<PatchFloorPictureDto> pictures = patchFloorRequestDto.getPictures();
         pictures.forEach( picture -> {
             // 새로 추가 된 사진
@@ -217,6 +252,7 @@ public class FloorServiceImpl implements FloorService {
                         .location(picture.getLocation())
                         .build();
                 pictureRepository.save(newPicture);
+                newPictureCount.getAndIncrement();
 
                 // 사진 마다 해시태그 생성
                 picture.getHashtags().forEach( hashtag -> {
@@ -241,6 +277,28 @@ public class FloorServiceImpl implements FloorService {
             }
         });
         pictureRepository.saveAll(originalPictures);
+
+        // 모든 팔로워 읽음 데이터 업데이트
+        List<Following> followers = followingRepository.findAllByFollowedUserNoAndStatus(user.getNo(), 1);
+        followers.forEach( follower -> {
+            FloorRead floorRead = floorReadRepository.findByFloorNoAndUserNoAndStatus(floorNo, follower.getFollowUser().getNo(), 1);
+
+            if (floorRead == null) {
+                FloorRead newFloorRead = FloorRead.builder()
+                        .floor(floor)
+                        .user(follower.getFollowUser())
+                        .isNew(false)
+                        .isUpdated(true)
+                        .updateCount(newPictureCount.get())
+                        .build();
+                floorReadRepository.save(newFloorRead);
+
+            } else if (!floorRead.getIsNew()) {
+                floorRead.setIsUpdated(true);
+                floorRead.setUpdateCount(floorRead.getUpdateCount() + newPictureCount.get());
+                floorReadRepository.save(floorRead);
+            }
+        });
     }
 
     @Override
@@ -255,6 +313,35 @@ public class FloorServiceImpl implements FloorService {
             floor.setQueue(dto.getQueue());
             floorRepository.save(floor);
         });
+    }
+
+    @Override
+    @Transactional
+    public PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloors(User user, Integer page, Integer size) {
+
+        Pageable pageRequest = PageRequest.of(page, size);
+
+        Page<FloorRepository.GetHomeFloor> floors = floorRepository.findHomeFloors(user.getNo(), pageRequest);
+
+        List<GetHomeFloorResponseDto> result = new ArrayList<>();
+        floors.forEach( floor -> {
+            result.add(new GetHomeFloorResponseDto(
+                    floor.getFloorNo(),
+                    floor.getFloorName(),
+                    floor.getQueue(),
+                    floor.getExhibitionName(),
+                    floor.getThumbnailUrl(),
+                    floor.getUserNo(),
+                    floor.getId(),
+                    floor.getProfileImageUrl(),
+                    floor.getIsNew() == 1,
+                    floor.getIsUpdated() == 1,
+                    floor.getUpdateCount(),
+                    floor.getIsMine() == 1,
+                    floor.getUpdatedAt()
+            ));
+        });
+        return new PageResponseDto<>(floors.isLast(), result);
     }
 
 }
