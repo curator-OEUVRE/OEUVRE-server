@@ -37,7 +37,7 @@ public class User extends AbstractTimestamp implements UserDetails {
     @Column(nullable = false)
     private String id;
 
-    @Length(min = 2, max = 12)
+    @Length(min = 2, max = 10)
     @Column(nullable = false)
     private String name;
 
@@ -50,11 +50,11 @@ public class User extends AbstractTimestamp implements UserDetails {
     @Nullable
     private String backgroundImageUrl;
 
-    @Length(min = 4, max = 15)
+    @Length(min = 2, max = 10)
     @Column(nullable = false)
     private String exhibitionName;
 
-    @Length(max = 50)
+    @Length(max = 20)
     @Nullable
     private String introduceMessage;
 

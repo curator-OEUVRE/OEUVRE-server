@@ -97,6 +97,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void patchMyProfile(User user, PatchMyProfileRequestDto patchMyProfileRequestDto) {
 
         userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
