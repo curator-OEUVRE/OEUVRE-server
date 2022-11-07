@@ -1,5 +1,6 @@
 package com.curator.oeuvre.dto.floor.response;
 
+import com.curator.oeuvre.domain.Floor;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -25,6 +26,12 @@ public class GetHomeFloorResponseDto {
 
     @ApiModelProperty(notes = "썸네일 사진 url", example = "image_url")
     private final String thumbnailUrl;
+
+    @ApiModelProperty(notes = "세로 길이", example = "188")
+    private final Float height;
+
+    @ApiModelProperty(notes = "가로 길이", example = "70")
+    private final Float width;
 
     @ApiModelProperty(notes = "회원 no", example = "1")
     private final Long userNo;
@@ -56,6 +63,8 @@ public class GetHomeFloorResponseDto {
             Integer queue,
             String exhibitionName,
             String thumbnailUrl,
+            Float height,
+            Float width,
             Long userNo,
             String id,
             String profileImageUrl,
@@ -70,6 +79,8 @@ public class GetHomeFloorResponseDto {
         this.queue = queue;
         this.exhibitionName = exhibitionName;
         this.thumbnailUrl = thumbnailUrl;
+        this.height = height;
+        this.width = width;
         this.userNo = userNo;
         this.id = id;
         this.profileImageUrl = profileImageUrl;

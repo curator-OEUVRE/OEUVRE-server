@@ -27,6 +27,8 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
 
     @Query(value = "(SELECT distinct floor.no as floorNo, floor.name as floorName, floor.queue, user.exhibition_name, " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue desc LIMIT 1) as thumbnailUrl, " +
+            "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue desc LIMIT 1) as height, " +
+            "(SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue desc LIMIT 1) as width, " +
             "user.no as userNo, user.id, user.profile_image_url, " +
             "ifnull(floor_read.is_new, false) as isNew, ifnull(floor_read.is_updated, false) as isUpdated, " +
             "ifnull(floor_read.update_count, 0) as updateCount, false as isMine, floor.updated_at as updatedAt " +
@@ -39,6 +41,8 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
             "UNION " +
             "(SELECT distinct floor.no as floorNo, floor.name as floorName, floor.queue, user.exhibition_name, " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue desc LIMIT 1) as thumbnailUrl, " +
+            "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue desc LIMIT 1) as height, " +
+            "(SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue desc LIMIT 1) as width, " +
             "user.no as userNo, user.id, user.profile_image_url, " +
             "false as isNew, false as isUpdated, 0 as updateCount, true as isMine, floor.updated_at as updatedAt " +
             "FROM oeuvre.floor JOIN oeuvre.user on floor.user_no = user.no " +
@@ -64,6 +68,8 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
         Integer getQueue();
         String getExhibitionName();
         String getThumbnailUrl();
+        Float getHeight();
+        Float getWidth();
         Long getUserNo();
         String getId();
         String getProfileImageUrl();

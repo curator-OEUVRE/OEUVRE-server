@@ -331,6 +331,8 @@ public class FloorServiceImpl implements FloorService {
                     floor.getQueue(),
                     floor.getExhibitionName(),
                     floor.getThumbnailUrl(),
+                    floor.getHeight(),
+                    floor.getWidth(),
                     floor.getUserNo(),
                     floor.getId(),
                     floor.getProfileImageUrl(),
