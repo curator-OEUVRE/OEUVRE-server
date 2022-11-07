@@ -4,6 +4,7 @@ import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.hashtag.response.GetHashtagResponseDto;
+import com.curator.oeuvre.dto.hashtag.response.GetPopularHashtagResponseDto;
 import com.curator.oeuvre.dto.picture.response.GetPictureResponseDto;
 import com.curator.oeuvre.service.HashtagService;
 import io.swagger.annotations.Api;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +42,18 @@ public class HashtagController {
         log.info("api = 해시태그 검색");
 
         PageResponseDto<List<GetHashtagResponseDto>> result = hashtagService.searchHashtags(keyword, page, size);
+        return CommonResponse.onSuccess(result);
+    }
+
+    @GetMapping("/popular")
+    @Operation(summary = "인기 해시태그 조회", description = "탐색 탭 인기 해시태그 조회 API 입니다.\n" +
+            "최근 2주간 가장 많이 태그된 해시태그 최대 10개가 보여집니다. 각 해시태그는 사진 최대 7장을 포함합니다.\n" +
+            "차단한 유저의 사진은 보이지 않습니다.")
+    public CommonResponse<List<GetPopularHashtagResponseDto>> getPopularHashtags(@AuthenticationPrincipal User authUser) {
+        log.info("get-popular-hashtags");
+        log.info("api = 인기 해시태그 조회");
+
+        List<GetPopularHashtagResponseDto> result = hashtagService.getPopularHashtags(authUser);
         return CommonResponse.onSuccess(result);
     }
 }

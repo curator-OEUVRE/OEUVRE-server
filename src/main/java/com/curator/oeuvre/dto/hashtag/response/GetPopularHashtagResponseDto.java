@@ -6,12 +6,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import java.util.List;
 
 @Getter
 @ToString
 @EqualsAndHashCode
-@ApiModel(value = "#️⃣ 해시태그 검색 API Response")
-public class GetHashtagResponseDto {
+@ApiModel(value = "#️⃣ 인기 해시태그 조회 API Response")
+public class GetPopularHashtagResponseDto {
 
     @ApiModelProperty(notes = "해시태그 no", example = "1")
     private final Long hashtagNo;
@@ -19,13 +20,16 @@ public class GetHashtagResponseDto {
     @ApiModelProperty(notes = "해시태그", example = "#노을")
     private final String hashtag;
 
-    @ApiModelProperty(notes = "태그 수", example = "32")
-    private final Long tagCount;
+    @ApiModelProperty(notes = "사진 목록")
+    private final List<GetHashtagPictureDto> pictures;
 
-
-    public GetHashtagResponseDto (Hashtag hashtag) {
-        this.hashtagNo = hashtag.getNo();
-        this.hashtag = hashtag.getHashtag();
-        this.tagCount = hashtag.getTagCount();
+    public GetPopularHashtagResponseDto (
+            Long hashtagNo,
+            String hashtag,
+            List<GetHashtagPictureDto> pictures
+    ) {
+        this.hashtagNo = hashtagNo;
+        this.hashtag = hashtag;
+        this.pictures = pictures;
     }
 }
