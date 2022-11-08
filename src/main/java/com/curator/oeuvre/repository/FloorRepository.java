@@ -44,7 +44,7 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
             "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue desc LIMIT 1) as height, " +
             "(SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue desc LIMIT 1) as width, " +
             "user.no as userNo, user.id, user.profile_image_url as profileImageUrl, " +
-            "false as isNew, false as isUpdated, 0 as updateCount, true as isMine, floor.updated_at as updatedAt " +
+            "false as isNew, false as isUpdated, 0 as updateCount, true as isMine, floor.updated_at as updatedAt, floor.created_at as createdAt " +
             "FROM oeuvre.floor JOIN oeuvre.user on floor.user_no = user.no " +
             "WHERE user.no = :userNo and floor.status = 1) " +
             "ORDER BY isNew desc, isUpdated desc, updateCount desc, createdAt desc ",
