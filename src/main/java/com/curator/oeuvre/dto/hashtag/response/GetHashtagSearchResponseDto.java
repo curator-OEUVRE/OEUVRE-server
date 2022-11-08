@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @ApiModel(value = "#️⃣ 해시태그 검색 API Response")
-public class GetHashtagResponseDto {
+public class GetHashtagSearchResponseDto {
 
     @ApiModelProperty(notes = "해시태그 no", example = "1")
     private final Long hashtagNo;
@@ -23,7 +23,7 @@ public class GetHashtagResponseDto {
     private final Long tagCount;
 
 
-    public GetHashtagResponseDto (Hashtag hashtag) {
+    public GetHashtagSearchResponseDto(Hashtag hashtag) {
         this.hashtagNo = hashtag.getNo();
         this.hashtag = hashtag.getHashtag();
         this.tagCount = hashtag.getTagCount();

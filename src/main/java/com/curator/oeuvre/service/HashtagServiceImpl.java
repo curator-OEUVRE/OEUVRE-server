@@ -4,7 +4,7 @@ import com.curator.oeuvre.domain.Hashtag;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.hashtag.response.GetHashtagPictureDto;
-import com.curator.oeuvre.dto.hashtag.response.GetHashtagResponseDto;
+import com.curator.oeuvre.dto.hashtag.response.GetHashtagSearchResponseDto;
 import com.curator.oeuvre.dto.hashtag.response.GetPopularHashtagResponseDto;
 import com.curator.oeuvre.repository.HashtagRepository;
 import com.curator.oeuvre.repository.PictureHashtagRepository;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,15 +25,15 @@ public class HashtagServiceImpl implements HashtagService {
     private final PictureHashtagRepository pictureHashtagRepository;
 
     @Override
-    public PageResponseDto<List<GetHashtagResponseDto>> searchHashtags(String keyword, Integer page, Integer size) {
+    public PageResponseDto<List<GetHashtagSearchResponseDto>> searchHashtags(String keyword, Integer page, Integer size) {
 
         Pageable pageRequest = PageRequest.of(page, size);
 
         Page<Hashtag> hashtags = hashtagRepository.findAllByHashtagStartsWithOrderByTagCountDesc(keyword, pageRequest);
-        List<GetHashtagResponseDto> result = new ArrayList<>();
+        List<GetHashtagSearchResponseDto> result = new ArrayList<>();
 
         hashtags.forEach( hashtag -> {
-            result.add(new GetHashtagResponseDto(hashtag));
+            result.add(new GetHashtagSearchResponseDto(hashtag));
         });
         return new PageResponseDto<>(hashtags.isLast(), result);
     }

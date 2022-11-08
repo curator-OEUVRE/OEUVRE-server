@@ -7,8 +7,10 @@ import com.curator.oeuvre.dto.floor.request.PatchFloorQueueRequestDto;
 import com.curator.oeuvre.dto.floor.request.PatchFloorRequestDto;
 import com.curator.oeuvre.dto.floor.request.PostFloorRequestDto;
 import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
+import com.curator.oeuvre.dto.floor.response.GetFloorSearchResponseDto;
 import com.curator.oeuvre.dto.floor.response.GetHomeFloorResponseDto;
 import com.curator.oeuvre.dto.floor.response.PostFloorResponseDto;
+import com.curator.oeuvre.dto.user.response.GetUserSearchResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.service.FloorService;
 import io.swagger.annotations.Api;
@@ -121,6 +123,22 @@ public class FloorController {
         log.info("api = 홈탭 플로어 전체 조회, user = {}", authUser.getNo());
 
         PageResponseDto<List<GetHomeFloorResponseDto>> result = floorService.getHomeFloors(authUser, page, size);
+        return CommonResponse.onSuccess(result);
+    }
+
+    @GetMapping
+    @Operation(summary = "플로어 검색", description = "탐색탭 플로어 검색 API 입니다.\n" +
+            "keyword를 포함하는 전시회 이름, 플로어 이름을 가진 플로어들을 size개씩 페이지네이션 해서 보여줍니다.\n" +
+            "page는 0부터 시작합니다. size는 10-50 가능합니다.")
+    public CommonResponse<PageResponseDto<List<GetFloorSearchResponseDto>>> searchFloors(
+            @AuthenticationPrincipal User authUser,
+            @Parameter(description = "검색어", example = "미국") @RequestParam(required = true) String keyword,
+            @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
+            @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
+        log.info("search-floors");
+        log.info("api = 플로어 검색");
+
+        PageResponseDto<List<GetFloorSearchResponseDto>> result = floorService.searchFloors(authUser, keyword, page, size);
         return CommonResponse.onSuccess(result);
     }
 }

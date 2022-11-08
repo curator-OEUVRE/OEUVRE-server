@@ -19,7 +19,9 @@ public interface HashtagRepository extends JpaRepository <Hashtag, Long> {
 
     @Query(value = "SELECT count(*) as count, hashtag.no as hashtagNo, hashtag.hashtag " +
             "FROM oeuvre.hashtag LEFT JOIN oeuvre.picture_hashtag p on hashtag.no = p.hashtag_no " +
-            "WHERE p.status = 1 " +
+            "LEFT JOIN oeuvre.picture on p.picture_no = picture.no " +
+            "LEFT JOIN oeuvre.floor on picture.floor_no = floor.no " +
+            "WHERE p.status = 1 and floor.is_public = true " +
             "GROUP BY hashtag.no " +
             "ORDER BY count desc " +
             "LIMIT 10", nativeQuery = true)

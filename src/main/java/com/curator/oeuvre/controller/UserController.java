@@ -3,6 +3,7 @@ package com.curator.oeuvre.controller;
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
+import com.curator.oeuvre.dto.hashtag.response.GetHashtagSearchResponseDto;
 import com.curator.oeuvre.dto.user.response.GetUserFloorResponseDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
@@ -166,5 +167,19 @@ public class UserController {
         return CommonResponse.onSuccess(result);
     }
 
+    @GetMapping
+    @Operation(summary = "유저(계정) 검색", description = "탐색탭 계정 검색 API 입니다.\n" +
+            "keyword를 포함하는 이름, keyword로 시작하는 id을 가진 유저들을 size개씩 페이지네이션 해서 보여줍니다.\n" +
+            "page는 0부터 시작합니다. size는 10-50 가능합니다.")
+    public CommonResponse<PageResponseDto<List<GetUserSearchResponseDto>>> searchUsers(
+            @Parameter(description = "검색어", example = "one") @RequestParam(required = true) String keyword,
+            @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
+            @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
+        log.info("search-users");
+        log.info("api = 유저 검색");
+
+        PageResponseDto<List<GetUserSearchResponseDto>> result = userService.searchUsers(keyword, page, size);
+        return CommonResponse.onSuccess(result);
+    }
 }
 

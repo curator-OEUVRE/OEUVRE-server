@@ -34,4 +34,6 @@ public interface UserService {
 
     List<GetUserFollowerResponseDto> getUserFollowers(User me, Long userNo);
 
+    PageResponseDto<List<GetUserSearchResponseDto>> searchUsers(String keyword, Integer page, Integer size);
+
 }

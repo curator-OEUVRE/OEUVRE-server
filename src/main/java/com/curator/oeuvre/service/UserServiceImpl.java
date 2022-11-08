@@ -228,5 +228,19 @@ public class UserServiceImpl implements UserService{
         });
         return result;
     }
+
+    @Override
+    public PageResponseDto<List<GetUserSearchResponseDto>> searchUsers(String keyword, Integer page, Integer size) {
+
+        Pageable pageRequest = PageRequest.of(page, size);
+
+        Page<User> users = userRepository.findAllByIdStartsWithOrNameContainingAndStatus(keyword, keyword, 1, pageRequest);
+        List<GetUserSearchResponseDto> result = new ArrayList<>();
+
+        users.forEach( user -> {
+            result.add(new GetUserSearchResponseDto(user));
+        });
+        return new PageResponseDto<>(users.isLast(), result);
+    }
 }
 

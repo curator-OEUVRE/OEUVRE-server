@@ -3,10 +3,7 @@ package com.curator.oeuvre.service;
 import com.curator.oeuvre.domain.*;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.floor.request.*;
-import com.curator.oeuvre.dto.floor.response.GetFloorPictureDto;
-import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
-import com.curator.oeuvre.dto.floor.response.GetHomeFloorResponseDto;
-import com.curator.oeuvre.dto.floor.response.PostFloorResponseDto;
+import com.curator.oeuvre.dto.floor.response.*;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.ForbiddenException;
 import com.curator.oeuvre.exception.NotFoundException;
@@ -17,10 +14,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import static com.curator.oeuvre.constant.ErrorCode.*;
 
 @Service
@@ -341,6 +336,27 @@ public class FloorServiceImpl implements FloorService {
                     floor.getUpdateCount(),
                     floor.getIsMine() == 1,
                     floor.getUpdatedAt()
+            ));
+        });
+        return new PageResponseDto<>(floors.isLast(), result);
+    }
+
+    @Override
+    public PageResponseDto<List<GetFloorSearchResponseDto>> searchFloors(User user, String keyword, Integer page, Integer size) {
+
+        Pageable pageRequest = PageRequest.of(page, size);
+
+        Page<FloorRepository.SearchFloor> floors = floorRepository.searchFloors(user.getNo(), keyword, pageRequest);
+
+        List<GetFloorSearchResponseDto> result = new ArrayList<>();
+        floors.forEach(floor -> {
+            result.add(new GetFloorSearchResponseDto(
+                    floor.getFloorNo(),
+                    floor.getFloorName(),
+                    floor.getExhibitionName(),
+                    floor.getThumbnailUrl(),
+                    floor.getHeight(),
+                    floor.getWidth()
             ));
         });
         return new PageResponseDto<>(floors.isLast(), result);
