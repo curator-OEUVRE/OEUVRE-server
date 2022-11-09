@@ -53,7 +53,7 @@ public class FloorController {
             return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
         }
         postFloorRequestDto.getPictures().forEach( picture -> {
-            if (picture.getImageUrl() == null) throw new BadRequestException(EMPTY_IMAGE_URL);
+            if (picture.getImageUrl().isEmpty() || picture.getImageUrl() == null) throw new BadRequestException(EMPTY_IMAGE_URL);
             if (picture.getQueue() == null) throw new BadRequestException(EMPTY_QUEUE);
             if (picture.getHeight() == null) throw new BadRequestException(EMPTY_HEIGHT);
             if (picture.getLocation() == null ) throw new BadRequestException(EMPTY_LOCATION);
@@ -86,7 +86,7 @@ public class FloorController {
         }
         patchFloorRequestDto.getPictures().forEach(picture -> {
             if (picture.getPictureNo() == null) throw new BadRequestException(EMPTY_PICTURE_NO);
-            if (picture.getPictureNo() == 0 && picture.getImageUrl() == null)
+            if (picture.getPictureNo() == 0 && (picture.getImageUrl().isEmpty() || picture.getImageUrl() == null))
                 throw new BadRequestException(EMPTY_IMAGE_URL);
             if (picture.getQueue() == null) throw new BadRequestException(EMPTY_QUEUE);
             if (picture.getHeight() == null) throw new BadRequestException(EMPTY_HEIGHT);

@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
+
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -19,11 +21,13 @@ public class PatchMyProfileRequestDto {
     @ApiModelProperty(notes = "이름", example = "김원진")
     @Length(min = 2, max = 10)
     @NotNull
+    @NotEmpty
     private String name;
 
     @ApiModelProperty(notes = "전시회 이름", example = "원진이의 전시회")
     @Length(min = 2, max = 10)
     @NotNull
+    @NotEmpty
     private String exhibitionName;
 
     @ApiModelProperty(notes = "자기 소개", example = "사진찍기를 좋아하는 김원진입니덩")
