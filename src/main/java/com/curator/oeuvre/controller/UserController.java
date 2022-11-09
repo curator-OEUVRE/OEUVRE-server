@@ -40,6 +40,7 @@ public class UserController {
     @Operation(summary = "회원가입", description = "회원가입 API 입니다.\n로그인 실패시 반환된 소셜 이메일 + 필요한 정보들을 입력받아 유저를 생성합니다.")
     public CommonResponse<SignUpResponseDto> signUp(@Valid @RequestBody SignUpRequestDto signUpRequestDto, BindingResult bindingResult) {
         log.info("sign-up");
+        log.info("api = 회원 가입");
 
         if (bindingResult.hasErrors()) {
             ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();

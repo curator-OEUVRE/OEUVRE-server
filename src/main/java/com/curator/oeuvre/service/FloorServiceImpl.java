@@ -274,26 +274,28 @@ public class FloorServiceImpl implements FloorService {
         pictureRepository.saveAll(originalPictures);
 
         // 모든 팔로워 읽음 데이터 업데이트
-        List<Following> followers = followingRepository.findAllByFollowedUserNoAndStatus(user.getNo(), 1);
-        followers.forEach( follower -> {
-            FloorRead floorRead = floorReadRepository.findByFloorNoAndUserNoAndStatus(floorNo, follower.getFollowUser().getNo(), 1);
+        if (newPictureCount.get() > 0) {
+            List<Following> followers = followingRepository.findAllByFollowedUserNoAndStatus(user.getNo(), 1);
+            followers.forEach( follower -> {
+                FloorRead floorRead = floorReadRepository.findByFloorNoAndUserNoAndStatus(floorNo, follower.getFollowUser().getNo(), 1);
 
-            if (floorRead == null) {
-                FloorRead newFloorRead = FloorRead.builder()
-                        .floor(floor)
-                        .user(follower.getFollowUser())
-                        .isNew(false)
-                        .isUpdated(true)
-                        .updateCount(newPictureCount.get())
-                        .build();
-                floorReadRepository.save(newFloorRead);
+                if (floorRead == null) {
+                    FloorRead newFloorRead = FloorRead.builder()
+                            .floor(floor)
+                            .user(follower.getFollowUser())
+                            .isNew(false)
+                            .isUpdated(true)
+                            .updateCount(newPictureCount.get())
+                            .build();
+                    floorReadRepository.save(newFloorRead);
 
-            } else if (!floorRead.getIsNew()) {
-                floorRead.setIsUpdated(true);
-                floorRead.setUpdateCount(floorRead.getUpdateCount() + newPictureCount.get());
-                floorReadRepository.save(floorRead);
-            }
-        });
+                } else if (!floorRead.getIsNew()) {
+                    floorRead.setIsUpdated(true);
+                    floorRead.setUpdateCount(floorRead.getUpdateCount() + newPictureCount.get());
+                    floorReadRepository.save(floorRead);
+                }
+            });
+        }
     }
 
     @Override
