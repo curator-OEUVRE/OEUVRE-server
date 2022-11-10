@@ -11,4 +11,7 @@ public interface LikesRepository extends JpaRepository <Likes, Long> {
     void deleteByUserNoAndPictureNo(Long userNo, Long pictureNo);
 
     List<Likes> findByPictureNoOrderByCreatedAtDesc(Long pictureNo);
+
+    void deleteAllByPictureNo(Long pictureNo);
+
 }

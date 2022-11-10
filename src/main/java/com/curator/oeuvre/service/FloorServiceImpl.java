@@ -365,6 +365,7 @@ public class FloorServiceImpl implements FloorService {
     }
 
     @Override
+    @Transactional
     public void deleteFloor(User user, Long floorNo) {
 
         Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
@@ -388,5 +389,4 @@ public class FloorServiceImpl implements FloorService {
         floor.setStatus(0);
         floorRepository.save(floor);
     }
-
 }

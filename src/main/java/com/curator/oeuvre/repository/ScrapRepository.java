@@ -13,4 +13,6 @@ public interface ScrapRepository extends JpaRepository <Scrap, Long> {
 
     Page<Scrap> findAllByUserNoAndPicture_statusOrderByCreatedAtDesc(Long userNo, Integer status, Pageable pageable);
 
+    void deleteAllByPictureNo(Long pictureNo);
+
 }
