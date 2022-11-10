@@ -12,6 +12,8 @@ public interface PictureHashtagRepository extends JpaRepository <PictureHashtag,
 
     List<PictureHashtag> findAllByPictureNo(Long pictureNo);
 
+    void deleteAllByPictureNo(Long pictureNo);
+
     void deleteByNo(Long pictureHashtagNo);
 
     @Query(value = "SELECT count(l.no) as count, p.no as pictureNo, p.image_url as imageUrl, p.height, p.width, u.no as userNo, u.id, u.profile_image_url as profileImageUrl " +

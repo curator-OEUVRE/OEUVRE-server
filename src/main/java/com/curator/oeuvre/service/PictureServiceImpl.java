@@ -24,6 +24,7 @@ public class PictureServiceImpl implements PictureService{
     private final LikesRepository likesRepository;
     private final ScrapRepository scrapRepository;
     private final FloorService floorService;
+    private final PictureHashtagRepository pictureHashtagRepository;
 
     @Override
     public GetPictureResponseDto getPicture(User user, Long pictureNo) {
@@ -129,5 +130,29 @@ public class PictureServiceImpl implements PictureService{
 
         floorService.updateHashtag(picture, patchPictureRequestDto.getHashtags());
 
+    }
+
+    @Override
+    @Transactional
+    public void deletePicture(User user, Long pictureNo) {
+
+        Picture picture = pictureRepository.findByNoAndStatus(pictureNo, 1).orElseThrow(() ->
+                new NotFoundException(PICTURE_NOT_FOUND));
+
+        // 접근 권한 확인
+        if (!Objects.equals(picture.getFloor().getUser().getNo(), user.getNo())) throw new ForbiddenException(FORBIDDEN_PICTURE);
+
+        pictureHashtagRepository.deleteAllByPictureNo(pictureNo);
+        likesRepository.deleteAllByPictureNo(pictureNo);
+        scrapRepository.deleteAllByPictureNo(pictureNo);
+
+        List<Picture> otherPictures = pictureRepository.findAllByFloorNoAndStatusAndQueueGreaterThan(picture.getFloor().getNo(), 1, picture.getQueue());
+        otherPictures.forEach( otherPicture -> {
+            otherPicture.setQueue(otherPicture.getQueue() - 1);
+        });
+        pictureRepository.saveAll(otherPictures);
+
+        picture.setStatus(0);
+        pictureRepository.save(picture);
     }
 }

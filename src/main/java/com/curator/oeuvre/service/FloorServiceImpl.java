@@ -364,4 +364,29 @@ public class FloorServiceImpl implements FloorService {
         return new PageResponseDto<>(floors.isLast(), result);
     }
 
+    @Override
+    @Transactional
+    public void deleteFloor(User user, Long floorNo) {
+
+        Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
+                new NotFoundException(FLOOR_NOT_FOUND));
+
+        // 접근 권한 확인
+        if (!Objects.equals(floor.getUser().getNo(), user.getNo())) throw new ForbiddenException(FORBIDDEN_FLOOR);
+
+        List<Picture> pictures = pictureRepository.findAllByFloorNoAndStatusOrderByQueue(floorNo, 1);
+        pictures.forEach( picture -> {
+            picture.setStatus(0);
+        });
+        pictureRepository.saveAll(pictures);
+
+        List<Floor> otherFloors = floorRepository.findAllByUserNoAndStatusAndQueueGreaterThan(user.getNo(), 1, floor.getQueue());
+        otherFloors.forEach( otherFloor -> {
+            otherFloor.setQueue(otherFloor.getQueue() - 1);
+        });
+        floorRepository.saveAll(otherFloors);
+
+        floor.setStatus(0);
+        floorRepository.save(floor);
+    }
 }

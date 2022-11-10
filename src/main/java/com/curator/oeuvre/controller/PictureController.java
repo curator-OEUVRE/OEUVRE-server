@@ -111,6 +111,14 @@ public class PictureController {
         return CommonResponse.onSuccess("사진 설명 수정 성공");
     }
 
+    @DeleteMapping("/{pictureNo}")
+    @Operation(summary = "사진 삭제", description = "사진 삭제 API 입니다.\n 사진을 삭제하면 해당 사진보다 뒷 순서의 사진들이 순서가 땡겨집니다.")
+    public CommonResponse<String> deletePicture(@AuthenticationPrincipal User authUser,  @PathVariable Long pictureNo) {
+        log.info("delete-picture");
+        log.info("api = 사진 삭제, user = {}", authUser.getNo());
 
+        pictureService.deletePicture(authUser, pictureNo);
+        return CommonResponse.onSuccess("사진 삭제 성공");
+    }
 }
 

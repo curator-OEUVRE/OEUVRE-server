@@ -24,4 +24,7 @@ public interface PictureService {
     List<GetPictureLikeUserResponseDto> getPictureLikeUsers(Long pictureNo);
 
     void patchPictureDescription(User user, Long pictureNo, PatchPictureRequestDto patchPictureRequestDto);
+
+    void deletePicture(User user, Long pictureNo);
+
 }

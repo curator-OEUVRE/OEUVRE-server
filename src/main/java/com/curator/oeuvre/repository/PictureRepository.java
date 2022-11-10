@@ -14,5 +14,5 @@ public interface PictureRepository extends JpaRepository<Picture, Long> {
 
     Optional<Picture> findByNoAndStatus(Long pictureNo, Integer status);
 
-    void deleteByNo(Long pictureNo);
+    List<Picture> findAllByFloorNoAndStatusAndQueueGreaterThan(Long floorNo, Integer status, Integer queue);
 }
