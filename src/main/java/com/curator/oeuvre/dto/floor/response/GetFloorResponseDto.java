@@ -19,11 +19,20 @@ public class GetFloorResponseDto {
     @ApiModelProperty(notes = "플로어 no", example = "1")
     private final Long floorNo;
 
+    @ApiModelProperty(notes = "플로어 이름", example = "제주 여행 기록")
+    private final String name;
+
+    @ApiModelProperty(notes = "플로어 층", example = "5")
+    private final Integer queue;
+
+    @ApiModelProperty(notes = "전시회 이름", example = "원진이의 전시회")
+    private final String exhibitionName;
+
     @ApiModelProperty(notes = "회원 no", example = "1")
     private final Long userNo;
 
-    @ApiModelProperty(notes = "플로어 이름", example = "제주 여행 기록")
-    private final String name;
+    @ApiModelProperty(notes = "아이디", example = "one_zzini_")
+    private final String userId;
 
     @ApiModelProperty(notes = "배경 색상코드", example = "#FFFFFF")
     private final String color;
@@ -49,8 +58,11 @@ public class GetFloorResponseDto {
             List<GetFloorPictureDto> pictures
     ) {
         this.floorNo = floor.getNo();
-        this.userNo = floor.getUser().getNo();
         this.name = floor.getName();
+        this.queue = floor.getQueue();
+        this.exhibitionName = floor.getUser().getExhibitionName();
+        this.userNo = floor.getUser().getNo();
+        this.userId = floor.getUser().getId();
         this.color = floor.getColor();
         this.texture = floor.getTexture();
         this.isPublic = floor.getIsPublic();
