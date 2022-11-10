@@ -32,4 +32,6 @@ public interface FloorService {
     PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloors(User user, Integer page, Integer size);
 
     PageResponseDto<List<GetFloorSearchResponseDto>> searchFloors(User user, String keyword, Integer page, Integer size);
+
+    void deleteFloor(User user, Long floorNo);
 }

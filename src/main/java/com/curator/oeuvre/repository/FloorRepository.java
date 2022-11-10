@@ -25,6 +25,8 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
 
     List<Floor> findAllByUserNoAndStatusAndIsCommentAvailableAndIsPublicAndIsGroupExhibitionOrderByQueueDesc(Long userNo, Integer status, Boolean isCommentAvailable, Boolean isPublic, Boolean isGroupExhibition);
 
+    List<Floor> findAllByUserNoAndStatusAndQueueGreaterThan(Long userNo, Integer status, Integer queue);
+
     @Query(value = "(SELECT distinct floor.no as floorNo, floor.name as floorName, floor.queue, user.exhibition_name as exhibitionName, " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as thumbnailUrl, " +
             "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +

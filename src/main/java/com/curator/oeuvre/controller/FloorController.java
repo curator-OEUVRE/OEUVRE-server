@@ -141,4 +141,14 @@ public class FloorController {
         PageResponseDto<List<GetFloorSearchResponseDto>> result = floorService.searchFloors(authUser, keyword, page, size);
         return CommonResponse.onSuccess(result);
     }
+
+    @DeleteMapping("/{floorNo}")
+    @Operation(summary = "플로어 삭제", description = "플로어 삭제 API 입니다.\n 플로어를 삭제하면 해당 플로어 보다 위에 층의 존재하던 플로어들이 한층씩 내려옵니다.")
+    public CommonResponse<String> deleteFloor(@AuthenticationPrincipal User authUser,  @PathVariable Long floorNo) {
+        log.info("delete-floor");
+        log.info("api = 플로어 삭제, user = {}", authUser.getNo());
+
+        floorService.deleteFloor(authUser, floorNo);
+        return CommonResponse.onSuccess("플로어 삭제 성공");
+    }
 }
