@@ -70,4 +70,4 @@ public class SwaggerConfig {
         return produces;
     }
 }
-//swagger: http://localhost:9090/swagger-ui/index.html
+//swagger: http://localhost:8080/swagger-ui/index.html

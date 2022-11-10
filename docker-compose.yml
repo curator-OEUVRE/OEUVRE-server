@@ -6,7 +6,7 @@ services:
     container_name: backend-dev
     hostname: backend-dev
     expose:
-      - "9090"
+      - "8080"
 
   nginx:
     depends_on:
@@ -17,4 +17,4 @@ services:
       dockerfile: Dockerfile
       context: ./config/nginx/dev
     ports:
-      - "81:81"
+      - "80:80"

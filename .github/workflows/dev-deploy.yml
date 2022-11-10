@@ -44,6 +44,7 @@ jobs:
         run: |
           touch ./src/main/resources/application-dev.properties
           echo "$PROPERTIES_DEV" > ./src/main/resources/application-dev.properties
+
         env:
           PROPERTIES_DEV: ${{ secrets.PROPERTIES_DEV }}
 
