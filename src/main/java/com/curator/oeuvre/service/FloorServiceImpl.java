@@ -101,7 +101,7 @@ public class FloorServiceImpl implements FloorService {
     @Transactional
     public PostFloorResponseDto postFloor(User user, PostFloorRequestDto postFloorRequestDto) {
         // 1. 회원 플로어 개수 조회
-        Integer count = floorRepository.countFloorByUser(user);
+        Integer count = floorRepository.countFloorByUserNoAndIsGroupExhibitionAndStatus(user.getNo(), false, 1);
 
         // 2. 플로어 생성
         Floor floor = Floor.builder()
