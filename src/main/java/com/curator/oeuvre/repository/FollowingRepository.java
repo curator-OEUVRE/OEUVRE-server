@@ -19,4 +19,8 @@ public interface FollowingRepository extends JpaRepository <Following, Long> {
     List<Following> findAllByFollowUserNoAndStatus(Long userNo, Integer status);
 
     List<Following> findAllByFollowedUserNoAndStatus(Long userNo, Integer status);
+
+    void deleteAllByFollowUserNo(Long userNo);
+
+    void deleteAllByFollowedUserNo(Long userNo);
 }

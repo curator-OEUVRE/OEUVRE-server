@@ -182,5 +182,15 @@ public class UserController {
         PageResponseDto<List<GetUserSearchResponseDto>> result = userService.searchUsers(keyword, page, size);
         return CommonResponse.onSuccess(result);
     }
+
+    @DeleteMapping
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 API 입니다.\n 회원 상태값을 변경하고 유저와 관련된 데이터를 삭제합니다.")
+    public CommonResponse<String> deleteUser(@AuthenticationPrincipal User authUser) {
+        log.info("delete-user");
+        log.info("api = 회원 탈퇴, user = {}", authUser.getNo());
+
+        userService.deleteUser(authUser);
+        return CommonResponse.onSuccess("회원 탈퇴 성공");
+    }
 }
 

@@ -36,4 +36,6 @@ public interface UserService {
 
     PageResponseDto<List<GetUserSearchResponseDto>> searchUsers(String keyword, Integer page, Integer size);
 
+    void deleteUser(User user);
+
 }

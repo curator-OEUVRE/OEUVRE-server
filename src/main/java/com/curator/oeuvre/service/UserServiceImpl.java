@@ -34,6 +34,8 @@ public class UserServiceImpl implements UserService{
     private final ScrapRepository scrapRepository;
     private final FloorRepository floorRepository;
     private final PictureRepository pictureRepository;
+    private final PictureHashtagRepository pictureHashtagRepository;
+    private final LikesRepository likesRepository;
 
     @Override
     @Transactional
@@ -241,6 +243,33 @@ public class UserServiceImpl implements UserService{
             result.add(new GetUserSearchResponseDto(user));
         });
         return new PageResponseDto<>(users.isLast(), result);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(User user) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        List<Floor> floors = floorRepository.findAllByUserNoAndStatus(user.getNo(), 1);
+        floors.forEach( floor -> {
+            List<Picture> pictures = pictureRepository.findAllByFloorNoAndStatusOrderByQueue(floor.getNo(), 1);
+            pictures.forEach( picture -> {
+                picture.setStatus(0);
+                pictureHashtagRepository.deleteAllByPictureNo(picture.getNo());
+                likesRepository.deleteAllByPictureNo(picture.getNo());
+                scrapRepository.deleteAllByPictureNo(picture.getNo());
+            });
+            pictureRepository.saveAll(pictures);
+            floor.setStatus(0);
+        });
+        floorRepository.saveAll(floors);
+
+        followingRepository.deleteAllByFollowUserNo(user.getNo());
+        followingRepository.deleteAllByFollowedUserNo(user.getNo());
+        user.setStatus(0);
+        userRepository.save(user);
     }
 }
 
