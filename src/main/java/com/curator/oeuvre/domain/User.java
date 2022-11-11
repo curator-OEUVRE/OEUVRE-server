@@ -58,7 +58,8 @@ public class User extends AbstractTimestamp implements UserDetails {
     @Nullable
     private String introduceMessage;
 
-    @Column(length = 10, nullable = false)
+    @Length(max = 10)
+    @Nullable
     private String birthday;
 
     @ColumnDefault("true")

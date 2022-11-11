@@ -11,6 +11,7 @@ import org.springframework.lang.Nullable;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @Getter
 @Setter
@@ -44,9 +45,8 @@ public class SignUpRequestDto {
     private String name;
 
     @ApiModelProperty(notes = "생일", example = "2000-06-21")
-    @Length(min = 10, max = 10)
-    @NotNull
-    @NotEmpty
+    @Length(max = 10)
+    @Nullable
     private String birthday;
 
     @ApiModelProperty(notes = "프로필 이미지 url", example = "image_url")
