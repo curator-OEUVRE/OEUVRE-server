@@ -79,6 +79,12 @@ public enum ErrorCode {
     COMMENT_NOT_AVAILABLE(FORBIDDEN, "CM003", "방명록이 허용되지 않은 플로어 입니다."),
 
 
+    /* Hashtag 관련 오류 */
+    HASHTAG_NOT_FOUND(NOT_FOUND, "H001", "존재하지 않는 해시태그 입니다."),
+    INVALID_SORT_BY(BAD_REQUEST, "H002", "잘못된 정렬 기준 입니다."),
+
+
+
     /* Block 관련 오류 */
     CANNOT_BLOCK_MYSELF(NOT_FOUND, "B001", "자기 자신은 차단할 수 없습니다."),
     ALREADY_BLOCKED(BAD_REQUEST, "B002", "이미 차단한 유저입니다."),

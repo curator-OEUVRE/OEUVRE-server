@@ -10,7 +10,6 @@ import com.curator.oeuvre.dto.floor.response.GetFloorResponseDto;
 import com.curator.oeuvre.dto.floor.response.GetFloorSearchResponseDto;
 import com.curator.oeuvre.dto.floor.response.GetHomeFloorResponseDto;
 import com.curator.oeuvre.dto.floor.response.PostFloorResponseDto;
-import com.curator.oeuvre.dto.user.response.GetUserSearchResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.service.FloorService;
 import io.swagger.annotations.Api;

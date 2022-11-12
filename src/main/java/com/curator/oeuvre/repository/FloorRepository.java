@@ -1,7 +1,6 @@
 package com.curator.oeuvre.repository;
 
 import com.curator.oeuvre.domain.Floor;
-import com.curator.oeuvre.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +12,7 @@ import java.util.Optional;
 
 public interface FloorRepository extends JpaRepository <Floor, Long> {
 
-    Integer countFloorByUser(User user);
+    Integer countFloorByUserNoAndIsGroupExhibitionAndStatus(Long userNo, Boolean isGroupExhibition, Integer status);
 
     Optional<Floor> findByNoAndStatus(Long floorNo, Integer status);
 
@@ -84,13 +83,16 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
         String getUpdatedAt();
     }
 
-    @Query(value = "SELECT floor.no as floorNo, floor.name as floorName, user.exhibition_name as exhibitionName,\n" +
+    @Query(value = "SELECT floor.no as floorNo, floor.name as floorName, user.exhibition_name as exhibitionName, " +
             "       (SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as thumbnailUrl, " +
             "       (SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
             "       (SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as width " +
             "FROM oeuvre.floor LEFT JOIN oeuvre.user on floor.user_no = user.no " +
             "WHERE floor.status = 1 and floor.is_public is true and (floor.name LIKE concat('%', :keyword, '%') or user.exhibition_name LIKE concat('%', :keyword, '%')) " +
-            "and user.no not in (SELECT blocked_user_no FROM oeuvre.block WHERE block_user_no = :userNo)", nativeQuery = true)
+            "and user.no not in (SELECT blocked_user_no FROM oeuvre.block WHERE block_user_no = :userNo)",
+            countQuery = "SELECT count(*) FROM (SELECT floor.no FROM oeuvre.floor LEFT JOIN oeuvre.user on floor.user_no = user.no " +
+                    "WHERE floor.status = 1 and floor.is_public is true and (floor.name LIKE concat('%', :keyword, '%') or user.exhibition_name LIKE concat('%', :keyword, '%')) " +
+                    "and user.no not in (SELECT blocked_user_no FROM oeuvre.block WHERE block_user_no = :userNo)) as c", nativeQuery = true)
     Page<SearchFloor> searchFloors(@Param("userNo")Long userNo, @Param("keyword")String keyword, Pageable pageable);
 
     interface SearchFloor{
