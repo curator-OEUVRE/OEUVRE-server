@@ -1,6 +1,5 @@
 package com.curator.oeuvre.dto.hashtag.response;
 
-import com.curator.oeuvre.domain.Hashtag;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;

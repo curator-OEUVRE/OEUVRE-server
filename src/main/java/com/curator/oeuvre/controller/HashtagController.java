@@ -3,6 +3,7 @@ package com.curator.oeuvre.controller;
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
+import com.curator.oeuvre.dto.hashtag.response.GetHashtagPictureDto;
 import com.curator.oeuvre.dto.hashtag.response.GetHashtagSearchResponseDto;
 import com.curator.oeuvre.dto.hashtag.response.GetPopularHashtagResponseDto;
 import com.curator.oeuvre.service.HashtagService;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +55,23 @@ public class HashtagController {
         log.info("api = 인기 해시태그 조회");
 
         List<GetPopularHashtagResponseDto> result = hashtagService.getPopularHashtags(authUser);
+        return CommonResponse.onSuccess(result);
+    }
+
+    @GetMapping("/{hashtagNo}/pictures")
+    @Operation(summary = "해시태그 사진 전체 조회", description = "해당 해시태그의 사진을 전체 조회 하는 API 입니다.\n" +
+            "인기순(popular) 조회 시 최대 30개가 보여지며, 최신순(recent) 조회 시 모든 사진이 보여집니다.\n" +
+            "page는 0부터 시작합니다. size는 10-50 가능합니다. 차단한 유저의 사진은 보이지 않습니다.")
+    public CommonResponse<PageResponseDto<List<GetHashtagPictureDto>>> getHashtagPictures(
+            @AuthenticationPrincipal User authUser,
+            @PathVariable Long hashtagNo,
+            @Parameter(description = "정렬 기준", example = "popular") @RequestParam(required = true) String sortBy,
+            @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
+            @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
+        log.info("get-hashtag-pictures");
+        log.info("api = 해시태그 사진 전체 조회");
+
+        PageResponseDto<List<GetHashtagPictureDto>> result = hashtagService.getHashtagPictures(authUser, hashtagNo, sortBy, page, size);
         return CommonResponse.onSuccess(result);
     }
 }
