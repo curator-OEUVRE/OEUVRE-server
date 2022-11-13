@@ -3,10 +3,12 @@ package com.curator.oeuvre.dto.hashtag.response;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @ToString
+@Setter
 @EqualsAndHashCode
 public class GetHashtagPictureDto {
 
