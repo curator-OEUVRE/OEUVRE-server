@@ -33,6 +33,9 @@ public class GetHashtagPictureDto {
     @ApiModelProperty(notes = "프로필 이미지 url", example = "image_url")
     private final String profileImageUrl;
 
+    @ApiModelProperty(notes = "내 사진 여부", example = "false")
+    private final Boolean isMine;
+
     public GetHashtagPictureDto (
             Long pictureNo,
             String imageUrl,
@@ -40,7 +43,8 @@ public class GetHashtagPictureDto {
             Float width,
             Long userNo,
             String id,
-            String profileImageUrl
+            String profileImageUrl,
+            Boolean isMine
     ) {
         this.pictureNo = pictureNo;
         this.imageUrl = imageUrl;
@@ -49,5 +53,6 @@ public class GetHashtagPictureDto {
         this.userNo = userNo;
         this.id = id;
         this.profileImageUrl = profileImageUrl;
+        this.isMine = isMine;
     }
 }

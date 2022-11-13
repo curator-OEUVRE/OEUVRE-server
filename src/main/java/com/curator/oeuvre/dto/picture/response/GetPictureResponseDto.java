@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @ToString
 @EqualsAndHashCode
@@ -46,11 +48,15 @@ public class GetPictureResponseDto {
     @ApiModelProperty(notes = "스크랩 여부", example = "true")
     private final Boolean isScraped;
 
+    @ApiModelProperty(notes = "해시태그 목록", example = "[\"#노을\", \"#바다\", \"#제주\"]")
+    private final List<String> hashtags;
+
     public GetPictureResponseDto (
             Picture picture,
             Boolean isMine,
             Boolean isLiked,
-            Boolean isScraped
+            Boolean isScraped,
+            List<String> hashtags
     ) {
         this.pictureNo = picture.getNo();
         this.userNo = picture.getFloor().getUser().getNo();
@@ -63,5 +69,6 @@ public class GetPictureResponseDto {
         this.isMine = isMine;
         this.isLiked = isLiked;
         this.isScraped = isScraped;
+        this.hashtags = hashtags;
     }
 }

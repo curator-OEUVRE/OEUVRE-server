@@ -32,11 +32,18 @@ public class PictureServiceImpl implements PictureService{
         Picture picture = pictureRepository.findByNoAndStatus(pictureNo, 1).orElseThrow(() ->
                 new NotFoundException(PICTURE_NOT_FOUND));
 
+        List<PictureHashtag> pictureHashtags = pictureHashtagRepository.findAllByPictureNo(picture.getNo());
+        List<String> hashtags = new ArrayList<String>();
+        pictureHashtags.forEach( tag -> {
+            hashtags.add(tag.getHashtag().getHashtag());
+        });
+
         return new GetPictureResponseDto(
                 picture,
                 Objects.equals(user.getNo(), picture.getFloor().getUser().getNo()),
                 likesRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo()),
-                scrapRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo())
+                scrapRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo()),
+                hashtags
         );
     }
 

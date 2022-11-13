@@ -8,6 +8,7 @@ import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.*;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.BaseException;
+import com.curator.oeuvre.exception.ForbiddenException;
 import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -176,6 +177,8 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findByNoAndStatus(userNo, 1).orElseThrow(() ->
                 new NotFoundException(USER_NOT_FOUND));
 
+        if (Objects.equals(user.getNo(), me.getNo())) throw new ForbiddenException(CANNOT_FOLLOW_MYSELF);
+
         if (followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), userNo, 1))
             throw new BadRequestException(ALREADY_FOLLOWED);
 
@@ -232,7 +235,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public PageResponseDto<List<GetUserSearchResponseDto>> searchUsers(String keyword, Integer page, Integer size) {
+    public PageResponseDto<List<GetUserSearchResponseDto>> searchUsers(User me, String keyword, Integer page, Integer size) {
 
         Pageable pageRequest = PageRequest.of(page, size);
 
@@ -240,7 +243,7 @@ public class UserServiceImpl implements UserService{
         List<GetUserSearchResponseDto> result = new ArrayList<>();
 
         users.forEach( user -> {
-            result.add(new GetUserSearchResponseDto(user));
+            result.add(new GetUserSearchResponseDto(user, Objects.equals(user.getNo(), me.getNo())));
         });
         return new PageResponseDto<>(users.isLast(), result);
     }
