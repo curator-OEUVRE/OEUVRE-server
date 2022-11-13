@@ -25,6 +25,8 @@ public class PictureServiceImpl implements PictureService{
     private final ScrapRepository scrapRepository;
     private final FloorService floorService;
     private final PictureHashtagRepository pictureHashtagRepository;
+    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public GetPictureResponseDto getPicture(User user, Long pictureNo) {
@@ -32,11 +34,18 @@ public class PictureServiceImpl implements PictureService{
         Picture picture = pictureRepository.findByNoAndStatus(pictureNo, 1).orElseThrow(() ->
                 new NotFoundException(PICTURE_NOT_FOUND));
 
+        List<PictureHashtag> pictureHashtags = pictureHashtagRepository.findAllByPictureNo(picture.getNo());
+        List<String> hashtags = new ArrayList<String>();
+        pictureHashtags.forEach( tag -> {
+            hashtags.add(tag.getHashtag().getHashtag());
+        });
+
         return new GetPictureResponseDto(
                 picture,
                 Objects.equals(user.getNo(), picture.getFloor().getUser().getNo()),
                 likesRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo()),
-                scrapRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo())
+                scrapRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo()),
+                hashtags
         );
     }
 
@@ -54,6 +63,9 @@ public class PictureServiceImpl implements PictureService{
                 .user(user)
                 .build();
         likesRepository.save(like);
+
+        if (!Objects.equals(user.getNo(), like.getPicture().getFloor().getUser().getNo()))
+            notificationService.postNotification(like.getPicture().getFloor().getUser(), "LIKES", user, null, like, false);
     }
 
     @Override
@@ -63,9 +75,10 @@ public class PictureServiceImpl implements PictureService{
         Picture picture = pictureRepository.findByNoAndStatus(pictureNo, 1).orElseThrow(() ->
                 new NotFoundException(PICTURE_NOT_FOUND));
 
-        if (!likesRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo()))
-            throw new BadRequestException(LIKE_NOT_FOUND);
+        Likes likes = likesRepository.findByUserNoAndPictureNo(user.getNo(), picture.getNo()).orElseThrow(() ->
+                new BadRequestException(LIKE_NOT_FOUND));
 
+        notificationRepository.deleteAllByTypeAndUserNoAndSendUserNoAndLikesNoAndStatus("LIKES", picture.getFloor().getUser().getNo(), user.getNo(), likes.getNo(),1);
         likesRepository.deleteByUserNoAndPictureNo(user.getNo(), picture.getNo());
     }
 

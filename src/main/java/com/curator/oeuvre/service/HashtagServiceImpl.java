@@ -61,7 +61,9 @@ public class HashtagServiceImpl implements HashtagService {
                     picture.getWidth(),
                     picture.getUserNo(),
                     picture.getId(),
-                    picture.getProfileImageUrl()));
+                    picture.getProfileImageUrl(),
+                    Objects.equals(picture.getUserNo(), user.getNo())
+            ));
         });
         result.add(new GetPopularHashtagResponseDto(hashtag.getHashtagNo(), hashtag.getHashtag(), pictureResult));
     });
@@ -92,7 +94,8 @@ public class HashtagServiceImpl implements HashtagService {
                     picture.getWidth(),
                     picture.getUserNo(),
                     picture.getId(),
-                    picture.getProfileImageUrl()
+                    picture.getProfileImageUrl(),
+                    Objects.equals(picture.getUserNo(), user.getNo())
             ));
         });
         return new PageResponseDto<>(pictures.isLast(), result);

@@ -1,16 +1,16 @@
 package com.curator.oeuvre.dto.hashtag.response;
 
 import com.curator.oeuvre.domain.Hashtag;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @ToString
 @EqualsAndHashCode
-@ApiModel(value = "#️⃣ 해시태그 검색 API Response")
 public class GetHashtagSearchResponseDto {
 
     @ApiModelProperty(notes = "해시태그 no", example = "1")

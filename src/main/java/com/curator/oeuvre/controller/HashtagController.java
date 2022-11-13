@@ -60,7 +60,7 @@ public class HashtagController {
 
     @GetMapping("/{hashtagNo}/pictures")
     @Operation(summary = "해시태그 사진 전체 조회", description = "해당 해시태그의 사진을 전체 조회 하는 API 입니다.\n" +
-            "인기순(popular) 조회 시 최대 30개가 보여지며, 최신순(recent) 조회 시 모든 사진이 보여집니다.\n" +
+            "인기순(popular), 최신순(recent)\n" +
             "page는 0부터 시작합니다. size는 10-50 가능합니다. 차단한 유저의 사진은 보이지 않습니다.")
     public CommonResponse<PageResponseDto<List<GetHashtagPictureDto>>> getHashtagPictures(
             @AuthenticationPrincipal User authUser,

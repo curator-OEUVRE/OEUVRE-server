@@ -1,16 +1,16 @@
 package com.curator.oeuvre.dto.hashtag.response;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import java.util.List;
 
 @Getter
 @ToString
+@Setter
 @EqualsAndHashCode
-@ApiModel(value = "#️⃣ 인기 해시태그 조회 API Response")
 public class GetPopularHashtagResponseDto {
 
     @ApiModelProperty(notes = "해시태그 no", example = "1")

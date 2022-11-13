@@ -31,7 +31,7 @@ public class GetCommentResponseDto {
     @ApiModelProperty(notes = "내 댓글 여부", example = "false")
     private final Boolean isMine;
 
-    @ApiModelProperty(notes = "생성 날짜", example = "2022-10-22 16:44:48")
+    @ApiModelProperty(notes = "생성 일시", example = "2022-10-22 16:44:48")
     private final String createdAt;
 
     public GetCommentResponseDto(Comment comment, Boolean isMine) {

@@ -18,5 +18,5 @@ public interface UserRepository extends JpaRepository <User, Long> {
 
     Optional<User> findByNoAndStatus(Long userNo, Integer status);
 
-    Page<User> findAllByIdStartsWithOrNameContainingAndStatus(String idKeyword, String nameKeyword, Integer status, Pageable pageable);
+    Page<User> findAllByStatusAndIdStartsWithOrNameContaining( Integer status,String idKeyword, String nameKeyword, Pageable pageable);
 }
