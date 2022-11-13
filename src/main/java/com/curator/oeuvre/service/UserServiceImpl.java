@@ -37,6 +37,8 @@ public class UserServiceImpl implements UserService{
     private final PictureRepository pictureRepository;
     private final PictureHashtagRepository pictureHashtagRepository;
     private final LikesRepository likesRepository;
+    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     @Override
     @Transactional
@@ -187,6 +189,8 @@ public class UserServiceImpl implements UserService{
                 .followedUser(user)
                 .build();
         followingRepository.save(following);
+
+        notificationService.postNotification(user, "FOLLOWING", me, null, null, true);
     }
 
     @Override
@@ -200,6 +204,8 @@ public class UserServiceImpl implements UserService{
             throw new BadRequestException(FOLLOW_NOT_FOUND);
 
         followingRepository.deleteByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), userNo, 1);
+
+        notificationRepository.deleteAllByTypeAndUserNoAndSendUserNoAndStatus("FOLLOWING", user.getNo(), me.getNo(), 1);
     }
 
     @Override
@@ -239,7 +245,7 @@ public class UserServiceImpl implements UserService{
 
         Pageable pageRequest = PageRequest.of(page, size);
 
-        Page<User> users = userRepository.findAllByIdStartsWithOrNameContainingAndStatus(keyword, keyword, 1, pageRequest);
+        Page<User> users = userRepository.findAllByStatusAndIdStartsWithOrNameContaining(1, keyword, keyword, pageRequest);
         List<GetUserSearchResponseDto> result = new ArrayList<>();
 
         users.forEach( user -> {

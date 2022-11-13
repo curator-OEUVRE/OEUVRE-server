@@ -12,6 +12,7 @@ import com.curator.oeuvre.exception.ForbiddenException;
 import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.CommentRepository;
 import com.curator.oeuvre.repository.FloorRepository;
+import com.curator.oeuvre.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,8 @@ public class CommentServiceImpl implements CommentService {
 
     private final FloorRepository floorRepository;
     private final CommentRepository commentRepository;
+    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public PostCommentResponseDto postComment(User user, Long floorNo, PostCommentRequestDto postCommentRequestDto) {
@@ -46,6 +49,9 @@ public class CommentServiceImpl implements CommentService {
                 .build();
         commentRepository.save(comment);
 
+        if (!Objects.equals(user.getNo(), comment.getFloor().getUser().getNo()))
+            notificationService.postNotification(comment.getFloor().getUser(), "COMMENT", user, comment, null, false);
+
         return new PostCommentResponseDto(comment);
     }
 
@@ -61,6 +67,7 @@ public class CommentServiceImpl implements CommentService {
                 && !Objects.equals(comment.getFloor().getUser().getNo(), user.getNo()))
             throw new ForbiddenException(FORBIDDEN_COMMENT);
 
+        notificationRepository.deleteAllByTypeAndCommentNoAndStatus("COMMENT", comment.getNo(), 1);
         commentRepository.deleteByNo(commentNo);
     }
 
