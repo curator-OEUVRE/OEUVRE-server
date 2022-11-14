@@ -49,12 +49,16 @@ public class GetFloorResponseDto {
     @ApiModelProperty(notes = "본인 플로어 여부", example = "true")
     private final Boolean isMine;
 
+    @ApiModelProperty(notes = "댓글 업데이트 여부", example = "true")
+    private final Boolean hasNewComment;
+
     @ApiModelProperty(notes = "사진 목록")
     private final List<GetFloorPictureDto> pictures;
 
     public GetFloorResponseDto(
             Floor floor,
             Boolean isMine,
+            Boolean hasNewComment,
             List<GetFloorPictureDto> pictures
     ) {
         this.floorNo = floor.getNo();
@@ -68,6 +72,7 @@ public class GetFloorResponseDto {
         this.isPublic = floor.getIsPublic();
         this.isCommentAvailable = floor.getIsCommentAvailable();
         this.isMine = isMine;
+        this.hasNewComment = hasNewComment;
         this.pictures = pictures;
     }
 }

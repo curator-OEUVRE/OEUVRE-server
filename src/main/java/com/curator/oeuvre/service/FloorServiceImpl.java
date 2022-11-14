@@ -28,6 +28,7 @@ public class FloorServiceImpl implements FloorService {
     private final PictureHashtagRepository pictureHashtagRepository;
     private final FloorReadRepository floorReadRepository;
     private final FollowingRepository followingRepository;
+    private final NotificationRepository notificationRepository;
 
     @Override
     @Transactional
@@ -184,9 +185,15 @@ public class FloorServiceImpl implements FloorService {
                     )
             );
         });
+        Boolean hasNewComment;
+        if (Objects.equals(user.getNo(), floor.getUser().getNo()))
+            hasNewComment = notificationRepository.existsByUserNoAndTypeAndComment_FloorNoAndIsReadAndStatus(user.getNo(), "COMMENT", floor.getNo(), false, 1);
+        else hasNewComment = false;
+
         return new GetFloorResponseDto(
                 floor,
                 Objects.equals(user.getNo(), floor.getUser().getNo()),
+                hasNewComment,
                 pictureDtos
         );
     }

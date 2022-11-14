@@ -82,6 +82,10 @@ public class User extends AbstractTimestamp implements UserDetails {
     @Column(nullable = false)
     private Boolean isGroupRequestAlarmOn;
 
+    @ColumnDefault("false")
+    @Column(nullable = false)
+    private Boolean isNotificationUpdated;
+
     @Nullable
     private String fcmToken;
 
@@ -105,6 +109,7 @@ public class User extends AbstractTimestamp implements UserDetails {
             Boolean isCommentAlarmOn,
             Boolean isFollowAlarmOn,
             Boolean isGroupRequestAlarmOn,
+            Boolean isNotificationUpdated,
             String fcmToken,
             String refreshToken
     ) {
@@ -123,6 +128,7 @@ public class User extends AbstractTimestamp implements UserDetails {
             this.isCommentAlarmOn = isCommentAlarmOn;
             this.isFollowAlarmOn = isFollowAlarmOn;
             this.isGroupRequestAlarmOn = isGroupRequestAlarmOn;
+            this.isNotificationUpdated = isNotificationUpdated;
             this.fcmToken = fcmToken;
             this.refreshToken = refreshToken;
     }

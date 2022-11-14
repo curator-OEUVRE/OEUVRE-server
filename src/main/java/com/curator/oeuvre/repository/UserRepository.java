@@ -12,11 +12,11 @@ public interface UserRepository extends JpaRepository <User, Long> {
 
     Optional<User> findByEmailAndTypeAndStatus(String email, String type, Integer status);
 
-    Optional<User> findById(String id);
+    Optional<User> findByIdAndStatus(String id, Integer status);
 
     Optional<User> findByNo(Long no);
 
     Optional<User> findByNoAndStatus(Long userNo, Integer status);
 
-    Page<User> findAllByStatusAndIdStartsWithOrNameContaining( Integer status,String idKeyword, String nameKeyword, Pageable pageable);
+    Page<User> findAllByIdStartsWithAndStatusOrNameContainingAndStatus(String idKeyword, Integer status1, String nameKeyword, Integer status2, Pageable pageable);
 }

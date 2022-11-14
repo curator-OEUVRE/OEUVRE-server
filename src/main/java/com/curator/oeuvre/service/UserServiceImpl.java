@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService{
     public SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto) {
 
         // id 중복 검사
-        if (userRepository.findById(signUpRequestDto.getId()).isPresent()) throw new BaseException(DUPLICATED_ID);
+        if (userRepository.findByIdAndStatus(signUpRequestDto.getId(), 1).isPresent()) throw new BaseException(DUPLICATED_ID);
 
         // 이메일 + 타입 중복 검사
         if (userRepository.findByEmailAndTypeAndStatus(signUpRequestDto.getEmail(), signUpRequestDto.getType(), 1).isPresent()) {
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public CheckIdResponseDto checkId(String id) {
         boolean isPossible;
-        isPossible = userRepository.findById(id).isEmpty();
+        isPossible = userRepository.findByIdAndStatus(id, 1).isEmpty();
 
         return new CheckIdResponseDto(isPossible);
     }
@@ -245,7 +245,7 @@ public class UserServiceImpl implements UserService{
 
         Pageable pageRequest = PageRequest.of(page, size);
 
-        Page<User> users = userRepository.findAllByStatusAndIdStartsWithOrNameContaining(1, keyword, keyword, pageRequest);
+        Page<User> users = userRepository.findAllByIdStartsWithAndStatusOrNameContainingAndStatus(keyword, 1, keyword, 1, pageRequest);
         List<GetUserSearchResponseDto> result = new ArrayList<>();
 
         users.forEach( user -> {
