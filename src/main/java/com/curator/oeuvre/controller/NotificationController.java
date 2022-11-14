@@ -4,6 +4,7 @@ import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.notification.response.GetNotificationResponseDto;
+import com.curator.oeuvre.dto.notification.response.GetNotificationUpdateResponseDto;
 import com.curator.oeuvre.service.NotificationService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,6 +39,16 @@ public class NotificationController {
         log.info("api = 알림 전체 조회, user = {}", authUser.getNo());
 
         PageResponseDto<List<GetNotificationResponseDto>> result = notificationService.getNotifications(authUser, page, size);
+        return CommonResponse.onSuccess(result);
+    }
+
+    @GetMapping("/update-check")
+    @Operation(summary = "알림탭 업데이트 여부 조회", description = "접근 유저의 알림탭 업데이트 여부를 조회하는 API 입니다.")
+    public CommonResponse<GetNotificationUpdateResponseDto> getNotifications(@AuthenticationPrincipal User authUser) {
+        log.info("get-notifications-update-check");
+        log.info("api = 알림탭 업데이트 여부 조회, user = {}", authUser.getNo());
+
+        GetNotificationUpdateResponseDto result = new GetNotificationUpdateResponseDto(authUser.getIsNotificationUpdated());
         return CommonResponse.onSuccess(result);
     }
 

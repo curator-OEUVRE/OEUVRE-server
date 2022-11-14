@@ -29,10 +29,20 @@ public class PictureServiceImpl implements PictureService{
     private final NotificationRepository notificationRepository;
 
     @Override
+    @Transactional
     public GetPictureResponseDto getPicture(User user, Long pictureNo) {
 
         Picture picture = pictureRepository.findByNoAndStatus(pictureNo, 1).orElseThrow(() ->
                 new NotFoundException(PICTURE_NOT_FOUND));
+
+        if (Objects.equals(user.getNo(), picture.getFloor().getUser().getNo())) {
+            List<Notification> notifications = notificationRepository.findAllByUserNoAndTypeAndLikes_PictureNoAndIsReadAndStatus(
+                    user.getNo(), "LIKES", picture.getNo(), false, 1);
+            notifications.forEach( notification -> {
+                notification.setIsRead(true);
+            });
+            notificationRepository.saveAll(notifications);
+        }
 
         List<PictureHashtag> pictureHashtags = pictureHashtagRepository.findAllByPictureNo(picture.getNo());
         List<String> hashtags = new ArrayList<String>();

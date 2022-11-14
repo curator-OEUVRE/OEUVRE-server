@@ -2,6 +2,7 @@ package com.curator.oeuvre.service;
 
 import com.curator.oeuvre.domain.Comment;
 import com.curator.oeuvre.domain.Floor;
+import com.curator.oeuvre.domain.Notification;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.comment.reqeust.PostCommentRequestDto;
 import com.curator.oeuvre.dto.comment.response.GetCommentResponseDto;
@@ -72,6 +73,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public PageResponseDto<List<GetCommentResponseDto>> getFloorComments(User user, Long floorNo, Integer page, Integer size) {
 
         Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
@@ -86,6 +88,16 @@ public class CommentServiceImpl implements CommentService {
         comments.forEach( comment -> {
             result.add(new GetCommentResponseDto(comment, Objects.equals(user.getNo(), comment.getUser().getNo())));
         });
+
+        if (Objects.equals(user.getNo(), floor.getUser().getNo())) {
+            List<Notification> notifications = notificationRepository.findAllByUserNoAndTypeAndComment_FloorNoAndIsReadAndStatus(
+                    user.getNo(), "COMMENT", floor.getNo(), false, 1);
+            notifications.forEach( notification -> {
+                notification.setIsRead(true);
+            });
+            notificationRepository.saveAll(notifications);
+        }
+
         return new PageResponseDto<>(comments.isLast(), result);
     }
 

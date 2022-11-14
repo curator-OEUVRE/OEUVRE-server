@@ -5,6 +5,7 @@ import com.curator.oeuvre.domain.Likes;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.notification.response.GetNotificationResponseDto;
+import com.curator.oeuvre.dto.notification.response.GetNotificationUpdateResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

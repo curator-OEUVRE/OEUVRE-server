@@ -3,15 +3,20 @@ package com.curator.oeuvre.service;
 import com.curator.oeuvre.domain.*;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.notification.response.GetNotificationResponseDto;
+import com.curator.oeuvre.dto.notification.response.GetNotificationUpdateResponseDto;
 import com.curator.oeuvre.repository.BlockRepository;
 import com.curator.oeuvre.repository.FollowingRepository;
 import com.curator.oeuvre.repository.NotificationRepository;
+import com.curator.oeuvre.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +29,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
     private final BlockRepository blockRepository;
     private final FollowingRepository followingRepository;
+    private final UserRepository userRepository;
 
     @Override
     public PageResponseDto<List<GetNotificationResponseDto>> getNotifications(User user, Integer page, Integer size) {
@@ -31,9 +37,8 @@ public class NotificationServiceImpl implements NotificationService {
         Pageable pageRequest = PageRequest.of(page, size);
 
         Page<Notification> notifications = notificationRepository.
-                findAllByUserNoAndStatusOrderByCreatedAtDesc(user.getNo(), 1, pageRequest);
+                findAllByUserNoAndStatusAndCreatedAtAfterOrderByCreatedAtDesc(user.getNo(), 1, Timestamp.valueOf(LocalDateTime.now().minusMonths(1)), pageRequest);
         List<Long> blockedUserNos = blockRepository.findAllByBlockUserNoAndStatus(user.getNo(), 1).stream().map(no -> no.getBlockedUser().getNo()).collect(Collectors.toList());
-
         List<GetNotificationResponseDto> result = new ArrayList<>();
         notifications.forEach( notification -> {
             if(!blockedUserNos.contains(notification.getSendUser().getNo()) && notification.getSendUser().getStatus() == 1) {
@@ -51,10 +56,14 @@ public class NotificationServiceImpl implements NotificationService {
                 }
             }
         });
+        user.setIsNotificationUpdated(false);
+        userRepository.save(user);
+
         return new PageResponseDto<>(notifications.isLast(), result);
     }
 
     @Override
+    @Transactional
     public void postNotification(User user, String type, User sendUser, Comment comment, Likes likes, Boolean isRead) {
 
         Notification notification = Notification.builder()
@@ -66,5 +75,8 @@ public class NotificationServiceImpl implements NotificationService {
                 .isRead(isRead)
                 .build();
         notificationRepository.save(notification);
+
+        user.setIsNotificationUpdated(true);
+        userRepository.save(user);
     }
 }
