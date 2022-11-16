@@ -28,14 +28,20 @@ public class Hashtag extends AbstractTimestamp {
     @Column(nullable = false)
     private Long tagCount;
 
+    @ColumnDefault(value = "false")
+    @Column(nullable = false)
+    private Boolean isHead;
+
     @Builder
     public Hashtag(
             Long no,
             String hashtag,
-            Long tagCount
+            Long tagCount,
+            Boolean isHead
     ) {
         this.no = no;
         this.hashtag = hashtag;
         this.tagCount = tagCount;
+        this.isHead = isHead;
     }
 }

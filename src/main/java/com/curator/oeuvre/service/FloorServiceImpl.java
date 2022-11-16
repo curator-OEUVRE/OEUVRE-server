@@ -52,6 +52,7 @@ public class FloorServiceImpl implements FloorService {
             Hashtag newHashtag = Hashtag.builder()
                     .hashtag(hashtag)
                     .tagCount(1L)
+                    .isHead(false)
                     .build();
             hashtagRepository.save(newHashtag);
 
