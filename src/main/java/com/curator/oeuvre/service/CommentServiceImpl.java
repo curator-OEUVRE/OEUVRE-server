@@ -82,7 +82,7 @@ public class CommentServiceImpl implements CommentService {
         if (!floor.getIsCommentAvailable()) throw new ForbiddenException(COMMENT_NOT_AVAILABLE);
 
         Pageable pageRequest = PageRequest.of(page, size);
-        Page<Comment> comments = commentRepository.findAllByFloorNoAndStatusOrderByCreatedAtDesc(floorNo, 1, pageRequest);
+        Page<Comment> comments = commentRepository.findAllByFloorNoAndStatusOrderByCreatedAtAsc(floorNo, 1, pageRequest);
 
         List<GetCommentResponseDto> result = new ArrayList<>();
         comments.forEach( comment -> {

@@ -13,5 +13,5 @@ public interface CommentRepository extends JpaRepository <Comment, Long> {
 
     void deleteByNo(Long commentNo);
 
-    Page<Comment> findAllByFloorNoAndStatusOrderByCreatedAtDesc(Long floorNo, Integer status, Pageable pageable);
+    Page<Comment> findAllByFloorNoAndStatusOrderByCreatedAtAsc(Long floorNo, Integer status, Pageable pageable);
 }
