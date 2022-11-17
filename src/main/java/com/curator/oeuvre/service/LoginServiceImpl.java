@@ -75,6 +75,8 @@ public class LoginServiceImpl implements LoginService {
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
+            System.out.println("element = " + element);
+
             // 카카오 토큰 정보 가져오기
             Long id = element.getAsJsonObject().get("id").getAsLong();
             boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
@@ -83,7 +85,7 @@ public class LoginServiceImpl implements LoginService {
                 email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
             } else throw new BadRequestException(KAKAO_USER_EMAIL_NOT_FOUND);
 
-            //System.out.println(email);
+            System.out.println(email);
             br.close();
             String finalEmail = email;
 
