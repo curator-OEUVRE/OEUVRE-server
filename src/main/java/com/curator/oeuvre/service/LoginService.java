@@ -17,4 +17,7 @@ public interface LoginService {
 
     LoginResponseDto updateUserToken(User user);
 
+    Boolean getIsGuestLoginAvailable();
+
+    LoginResponseDto guestLogin();
 }

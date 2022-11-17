@@ -1,6 +1,8 @@
 package com.curator.oeuvre.service;
 
 import static com.curator.oeuvre.constant.ErrorCode.*;
+
+import com.curator.oeuvre.domain.SystemConstant;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.oauth.TokenDto;
 import com.curator.oeuvre.dto.oauth.request.LoginRequestDto;
@@ -8,6 +10,7 @@ import com.curator.oeuvre.dto.oauth.response.LoginResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.BaseException;
 import com.curator.oeuvre.exception.ForbiddenException;
+import com.curator.oeuvre.repository.SystemRepository;
 import com.curator.oeuvre.repository.UserRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -37,6 +40,7 @@ public class LoginServiceImpl implements LoginService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final SystemRepository systemRepository;
 
     @Override
     public LoginResponseDto kakaoLogin(LoginRequestDto loginRequestDto) {
@@ -45,7 +49,6 @@ public class LoginServiceImpl implements LoginService {
         try {
             URL url = new URL(kakaoReqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            System.out.println(token);
             // 1. POST 요청을 위해 기본값이 false인 DoOutput을 true로
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
@@ -170,12 +173,10 @@ public class LoginServiceImpl implements LoginService {
         try {
             URL url = new URL(appleReqUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            System.out.println(token);
             conn.setRequestMethod("GET");
             conn.setRequestProperty("charset", "utf-8");
 
             int responseCode = conn.getResponseCode();
-            System.out.println(responseCode);
             if (responseCode != HttpStatus.OK.value()) throw new ForbiddenException(APPLE_SERVER_ERROR);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -266,5 +267,31 @@ public class LoginServiceImpl implements LoginService {
         userRepository.save(user);
 
         return new LoginResponseDto(newAccessToken, newRefreshToken);
+    }
+
+    @Override
+    public Boolean getIsGuestLoginAvailable() {
+
+        SystemConstant system = systemRepository.findByNo(1L);
+        return system.getIsGuestLoginAvailable();
+    }
+
+    @Override
+    public LoginResponseDto guestLogin() {
+        // 이메일, 타입으로 유저 조회
+        // 가입되지 않은 유저 일 경우 에러와 함께 이메일 반환
+        User user = userRepository.findByEmailAndTypeAndStatus("guest@guest.com", "GUEST", 1).orElseThrow(() ->
+                new BaseException(USER_NOT_FOUND, Map.of("email", "guest@guest.com")));
+
+        // 가입된 유저 확인 시 jwt, refreshToken 반환
+        String newAccessToken = jwtService.encodeJwtToken(new TokenDto(user));
+        String newRefreshToken = jwtService.encodeJwtRefreshToken(user.getNo());
+
+        // 유저 리프레시 토큰 업데이트
+        user.setRefreshToken(newRefreshToken);
+        userRepository.save(user);
+
+        return new LoginResponseDto(newAccessToken, newRefreshToken);
+
     }
 }
