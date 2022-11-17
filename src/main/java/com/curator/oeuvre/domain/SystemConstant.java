@@ -11,37 +11,28 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "Hashtag")
+@Table(name = "SystemConstant")
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
-public class Hashtag extends AbstractTimestamp {
+public class SystemConstant extends AbstractTimestamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long no;
 
     @Column(nullable = false)
-    private String hashtag;
-
-    @ColumnDefault(value = "1")
-    @Column(nullable = false)
-    private Long tagCount;
-
-    @ColumnDefault(value = "false")
-    @Column(nullable = false)
-    private Boolean isHead;
+    @ColumnDefault("false")
+    private Boolean isGuestLoginAvailable;
 
     @Builder
-    public Hashtag(
+    public SystemConstant(
             Long no,
-            String hashtag,
-            Long tagCount,
-            Boolean isHead
+            Boolean isGuestLoginAvailable
     ) {
         this.no = no;
-        this.hashtag = hashtag;
-        this.tagCount = tagCount;
-        this.isHead = isHead;
+        this.isGuestLoginAvailable = isGuestLoginAvailable;
     }
 }
+
+

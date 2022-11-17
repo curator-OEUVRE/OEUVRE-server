@@ -21,9 +21,9 @@ public interface HashtagRepository extends JpaRepository <Hashtag, Long> {
             "FROM oeuvre.hashtag LEFT JOIN oeuvre.picture_hashtag p on hashtag.no = p.hashtag_no " +
             "LEFT JOIN oeuvre.picture on p.picture_no = picture.no " +
             "LEFT JOIN oeuvre.floor on picture.floor_no = floor.no " +
-            "WHERE p.status = 1 and floor.status = 1 and floor.is_public = true " +
+            "WHERE p.status = 1 and floor.status = 1 and floor.is_public = true and picture.status = 1 and p.created_at > DATE_SUB(now(), INTERVAL 2 WEEK) " +
             "GROUP BY hashtag.no " +
-            "ORDER BY count desc " +
+            "ORDER BY hashtag.is_head desc, count desc " +
             "LIMIT 10", nativeQuery = true)
     List<GetPopularHashtag> getPopularHashtags();
     interface GetPopularHashtag {

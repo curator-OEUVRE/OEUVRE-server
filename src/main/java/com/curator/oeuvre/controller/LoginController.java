@@ -4,6 +4,7 @@ import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.oauth.request.LoginRequestDto;
 import com.curator.oeuvre.dto.oauth.response.LoginResponseDto;
+import com.curator.oeuvre.dto.user.response.GetUserProfileResponseDto;
 import com.curator.oeuvre.exception.BaseException;
 import com.curator.oeuvre.service.JwtServiceImpl;
 import com.curator.oeuvre.service.LoginService;
@@ -29,7 +30,6 @@ import static com.curator.oeuvre.constant.ErrorCode.GOOGLE_BAD_REQUEST;
 public class LoginController {
 
     private final LoginService loginService;
-    private final JwtServiceImpl jwtService;
 
     @PostMapping(value = "/kakao")
     @Operation(summary = "카카오 로그인", description = "카카오 로그인 API 입니다.\n가입되지 않은 유저일 경우 에러와 함께 카카오 이메일을 반환합니다.")
@@ -89,6 +89,26 @@ public class LoginController {
         log.info("api = 토큰 리프레시, user = {}", authUser.getNo());
 
         LoginResponseDto result= loginService.updateUserToken(authUser);
+        return CommonResponse.onSuccess(result);
+    }
+
+    @GetMapping(value = "/check/guest")
+    @Operation(summary = "게스트 로그인 가능 여부 조회", description = "게스트 로그인 가능 여부를 조회하는 API 입니다.")
+    public CommonResponse<Boolean> getIsGuestLoginAvailable() {
+
+        log.info("get-is-guest-login-available");
+        log.info("api = 게스트 로그인 가능 여부 조회");
+
+        Boolean result = loginService.getIsGuestLoginAvailable();
+        return CommonResponse.onSuccess(result);
+    }
+
+    @PostMapping(value = "/guest")
+    @Operation(summary = "게스트 로그인", description = "게스트 로그인 API 입니다.")
+    public CommonResponse<LoginResponseDto> guestLogin() {
+        log.info("guest-login");
+
+        LoginResponseDto result = loginService.guestLogin();
         return CommonResponse.onSuccess(result);
     }
 }
