@@ -55,6 +55,7 @@ public enum ErrorCode {
     /* Floor 관련 오류 */
     FLOOR_NOT_FOUND(NOT_FOUND, "F001", "존재하지 않는 플로어 입니다."),
     FORBIDDEN_FLOOR(FORBIDDEN, "F002", "플로어 접근 권한이 없습니다."),
+    TOO_MANY_FLOORS(FORBIDDEN, "F003", "플로어는 10개까지만 만들 수 있습니다."),
 
 
 
@@ -70,6 +71,8 @@ public enum ErrorCode {
     SCRAP_NOT_FOUND(BAD_REQUEST, "P009", "스크랩 한 적 없는 사진입니다."),
     FORBIDDEN_PICTURE(FORBIDDEN, "P010", "사진 접근 권한이 없습니다."),
     EMPTY_PICTURE_NO(BAD_REQUEST, "P011", "사진 no는 null이 될 수 없습니다."),
+    TOO_MANY_PICTURES(FORBIDDEN, "F003", "사진은 20개까지만 생성 가능합니다."),
+
 
 
 
