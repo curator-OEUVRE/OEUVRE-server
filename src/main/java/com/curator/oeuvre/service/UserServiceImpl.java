@@ -225,7 +225,8 @@ public class UserServiceImpl implements UserService{
         List<GetUserFollowingResponseDto> result = new ArrayList<>();
         followingUsers.forEach( followingUser -> {
             boolean isFollowing = followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), followingUser.getNo(), 1);
-            result.add(new GetUserFollowingResponseDto(followingUser, isFollowing, Objects.equals(me.getNo(), followingUser.getNo())));
+            boolean isFollower = followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(followingUser.getNo(), me.getNo(), 1);
+            result.add(new GetUserFollowingResponseDto(followingUser, isFollowing, isFollower, Objects.equals(me.getNo(), followingUser.getNo())));
         });
         return result;
     }
@@ -241,7 +242,8 @@ public class UserServiceImpl implements UserService{
         List<GetUserFollowerResponseDto> result = new ArrayList<>();
         followers.forEach( follower -> {
             boolean isFollowing = followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(me.getNo(), follower.getNo(), 1);
-            result.add(new GetUserFollowerResponseDto(follower, isFollowing, Objects.equals(me.getNo(), follower.getNo())));
+            boolean isFollower = followingRepository.existsByFollowUserNoAndFollowedUserNoAndStatus(follower.getNo(), me.getNo(), 1);
+            result.add(new GetUserFollowerResponseDto(follower, isFollowing, isFollower, Objects.equals(me.getNo(), follower.getNo())));
         });
         return result;
     }
