@@ -28,12 +28,16 @@ public class GetUserFollowingResponseDto {
     @ApiModelProperty(notes = "팔로잉 여부", example = "false")
     private final Boolean isFollowing;
 
+    @ApiModelProperty(notes = "팔로워 여부", example = "false")
+    private final Boolean isFollower;
+
     @ApiModelProperty(notes = "나 여부", example = "false")
     private final Boolean isMe;
 
     public GetUserFollowingResponseDto (
             User user,
             Boolean isFollowing,
+            Boolean isFollower,
             Boolean isMe
     ) {
         this.userNo = user.getNo();
@@ -41,6 +45,7 @@ public class GetUserFollowingResponseDto {
         this.id = user.getId();
         this.name = user.getName();
         this.isFollowing = isFollowing;
+        this.isFollower = isFollower;
         this.isMe = isMe;
     }
 }
