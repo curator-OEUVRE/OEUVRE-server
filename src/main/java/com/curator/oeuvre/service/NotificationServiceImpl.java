@@ -54,6 +54,9 @@ public class NotificationServiceImpl implements NotificationService {
                     result.add(new GetNotificationResponseDto(notification, null, null,
                             notification.getLikes().getPicture().getNo(), null, null));
                 }
+                else if (Objects.equals(notification.getType(), "WELCOME") && notification.getStatus() == 1) {
+                    result.add(new GetNotificationResponseDto(notification, null, null, null, null, null));
+                }
             }
         });
         user.setIsNotificationUpdated(false);

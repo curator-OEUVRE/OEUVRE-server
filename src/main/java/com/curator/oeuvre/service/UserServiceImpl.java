@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -77,6 +78,11 @@ public class UserServiceImpl implements UserService{
         // 유저 리프레시 토큰 업데이트
         user.setRefreshToken(newRefreshToken);
         userRepository.save(user);
+
+        // 환영 알림 삽입
+        User oeuvre = userRepository.findByIdAndStatus("oeuvre", 1).orElseThrow(() ->
+                new BaseException(USER_NOT_FOUND));
+        notificationService.postNotification(user, "WELCOME", oeuvre, null, null, true);
 
         return new SignUpResponseDto(user.getNo(), newAccessToken, newRefreshToken);
     }
