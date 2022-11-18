@@ -17,7 +17,7 @@ public interface HashtagRepository extends JpaRepository <Hashtag, Long> {
 
     Page<Hashtag> findAllByHashtagStartsWithOrderByTagCountDesc(String hashtag, Pageable pageable);
 
-    @Query(value = "SELECT count(*) as count, hashtag.no as hashtagNo, hashtag.hashtag " +
+    @Query(value = "SELECT count(*) as count, hashtag.no as hashtagNo, hashtag.hashtag, hashtag.is_head as isHead " +
             "FROM oeuvre.hashtag LEFT JOIN oeuvre.picture_hashtag p on hashtag.no = p.hashtag_no " +
             "LEFT JOIN oeuvre.picture on p.picture_no = picture.no " +
             "LEFT JOIN oeuvre.floor on picture.floor_no = floor.no " +
@@ -29,5 +29,6 @@ public interface HashtagRepository extends JpaRepository <Hashtag, Long> {
     interface GetPopularHashtag {
         Long getHashtagNo();
         String getHashtag();
+        Boolean getIsHead();
     }
 }

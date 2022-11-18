@@ -65,7 +65,7 @@ public class HashtagServiceImpl implements HashtagService {
                     Objects.equals(picture.getUserNo(), user.getNo())
             ));
         });
-        result.add(new GetPopularHashtagResponseDto(hashtag.getHashtagNo(), hashtag.getHashtag(), pictureResult));
+        result.add(new GetPopularHashtagResponseDto(hashtag.getHashtagNo(), hashtag.getHashtag(), hashtag.getIsHead(), pictureResult));
     });
     return result;
     }
