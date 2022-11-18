@@ -19,16 +19,21 @@ public class GetPopularHashtagResponseDto {
     @ApiModelProperty(notes = "해시태그", example = "#노을")
     private final String hashtag;
 
+    @ApiModelProperty(notes = "고정 여부", example = "true")
+    private final Boolean isHead;
+
     @ApiModelProperty(notes = "사진 목록")
     private final List<GetHashtagPictureDto> pictures;
 
     public GetPopularHashtagResponseDto (
             Long hashtagNo,
             String hashtag,
+            Boolean isHead,
             List<GetHashtagPictureDto> pictures
     ) {
         this.hashtagNo = hashtagNo;
         this.hashtag = hashtag;
+        this.isHead = isHead;
         this.pictures = pictures;
     }
 }
