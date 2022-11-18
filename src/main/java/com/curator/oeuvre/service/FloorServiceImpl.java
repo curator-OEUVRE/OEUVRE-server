@@ -5,6 +5,7 @@ import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.floor.request.*;
 import com.curator.oeuvre.dto.floor.response.*;
 import com.curator.oeuvre.exception.BadRequestException;
+import com.curator.oeuvre.exception.BaseException;
 import com.curator.oeuvre.exception.ForbiddenException;
 import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.*;
@@ -105,6 +106,8 @@ public class FloorServiceImpl implements FloorService {
         // 1. 회원 플로어 개수 조회
         Integer count = floorRepository.countFloorByUserNoAndIsGroupExhibitionAndStatus(user.getNo(), false, 1);
 
+        if (count >= 10) throw new ForbiddenException(TOO_MANY_FLOORS);
+
         // 2. 플로어 생성
         Floor floor = Floor.builder()
                 .user(user)
@@ -120,6 +123,8 @@ public class FloorServiceImpl implements FloorService {
 
         // 3. 사진 생성
         List<PostFloorPictureDto> pictures = postFloorRequestDto.getPictures();
+        if (pictures.size() > 20) throw new ForbiddenException(TOO_MANY_PICTURES);
+
         pictures.forEach( pictureDto -> {
             Picture picture = Picture.builder()
                     .floor(floor)
@@ -217,11 +222,13 @@ public class FloorServiceImpl implements FloorService {
         floor.setIsCommentAvailable(patchFloorRequestDto.getIsCommentAvailable());
         floorRepository.save(floor);
 
-        // 없어진 사진 삭제
         List<Long> picturesNos = new ArrayList<Long>();
         patchFloorRequestDto.getPictures().forEach( picture -> {
             picturesNos.add(picture.getPictureNo());
         });
+
+        if (picturesNos.size() > 20) throw new ForbiddenException(TOO_MANY_PICTURES);
+
         // 기존 사진 중 새로 받은 입력에 포함 되지 않을 경우
         List<Picture> originalPictures = pictureRepository.findAllByFloorNoAndStatusOrderByQueue(floorNo, 1);
         originalPictures.forEach( pictureToRemove -> {
