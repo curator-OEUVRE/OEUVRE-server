@@ -38,7 +38,7 @@ public interface PictureHashtagRepository extends JpaRepository <PictureHashtag,
         String getProfileImageUrl();
     }
 
-    @Query(value = "SELECT p.no as pictureNo, p.image_url as imageUrl, p.height, p.width, " +
+    @Query(value = "SELECT distinct p.no as pictureNo, p.image_url as imageUrl, p.height, p.width, " +
             "       user.no as userNo, user.id, user.profile_image_url as profileImageUrl, " +
             "       (SELECT count(likes.no)) as count " +
             "FROM oeuvre.picture p " +
@@ -51,7 +51,7 @@ public interface PictureHashtagRepository extends JpaRepository <PictureHashtag,
             "      user.no not in (SELECT blocked_user_no FROM oeuvre.block WHERE block_user_no = :userNo) " +
             "GROUP BY p.no " +
             "ORDER BY count desc",
-            countQuery = "SELECT count(*) FROM (SELECT p.no as pictureNo, p.image_url as imageUrl, p.height, p.width, " +
+            countQuery = "SELECT count(*) FROM (SELECT distinct p.no as pictureNo, p.image_url as imageUrl, p.height, p.width, " +
                     "       user.no as userNo, user.id, user.profile_image_url as profileImageUrl, " +
                     "       (SELECT count(likes.no)) as count " +
                     "FROM oeuvre.picture p " +
@@ -66,7 +66,7 @@ public interface PictureHashtagRepository extends JpaRepository <PictureHashtag,
                     "ORDER BY count desc) as c", nativeQuery = true)
     Page<GetHashtagPicture> findAllByHashtagNoSortByPopular(@Param("hashtagNo") Long hashtagNo, @Param("userNo") Long userNo, Pageable pageable);
 
-    @Query(value = "SELECT p.no as pictureNo, p.image_url as imageUrl, p.height, p.width, " +
+    @Query(value = "SELECT distinct p.no as pictureNo, p.image_url as imageUrl, p.height, p.width, " +
             "       user.no as userNo, user.id, user.profile_image_url as profileImageUrl " +
             "FROM oeuvre.picture p " +
             "    LEFT JOIN oeuvre.picture_hashtag ph ON p.no = ph.picture_no " +
@@ -76,7 +76,7 @@ public interface PictureHashtagRepository extends JpaRepository <PictureHashtag,
             "      p.status = 1 and ph.status = 1 and user.status = 1 and " +
             "      user.no not in (SELECT blocked_user_no FROM oeuvre.block WHERE block_user_no = :userNo) " +
             "ORDER BY p.created_at desc",
-            countQuery = "SELECT count(*) FROM (SELECT p.no FROM oeuvre.picture p " +
+            countQuery = "SELECT count(*) FROM (SELECT distinct p.no FROM oeuvre.picture p " +
             "    LEFT JOIN oeuvre.picture_hashtag ph ON p.no = ph.picture_no " +
                     "    LEFT JOIN oeuvre.floor ON p.floor_no = floor.no " +
                     "    LEFT JOIN oeuvre.user ON floor.user_no = user.no " +
