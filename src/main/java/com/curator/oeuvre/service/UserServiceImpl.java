@@ -3,6 +3,7 @@ package com.curator.oeuvre.service;
 import com.curator.oeuvre.domain.*;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.oauth.TokenDto;
+import com.curator.oeuvre.dto.user.request.PatchFcmTokenRequestDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.*;
@@ -286,6 +287,17 @@ public class UserServiceImpl implements UserService{
         followingRepository.deleteAllByFollowUserNo(user.getNo());
         followingRepository.deleteAllByFollowedUserNo(user.getNo());
         user.setStatus(0);
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void patchFcmToken(User user, PatchFcmTokenRequestDto patchFcmTokenRequestDto) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        user.setFcmToken(patchFcmTokenRequestDto.getToken());
         userRepository.save(user);
     }
 }

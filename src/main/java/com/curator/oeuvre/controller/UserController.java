@@ -4,6 +4,7 @@ import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.hashtag.response.GetHashtagSearchResponseDto;
+import com.curator.oeuvre.dto.user.request.PatchFcmTokenRequestDto;
 import com.curator.oeuvre.dto.user.response.GetUserFloorResponseDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
@@ -192,6 +193,17 @@ public class UserController {
 
         userService.deleteUser(authUser);
         return CommonResponse.onSuccess("회원 탈퇴 성공");
+    }
+
+    @PatchMapping(value = "/fcm_token")
+    @Operation(summary = "fcm 토큰 업데이트", description = "사용자의 fcm 토큰을 업데이트하는 API 입니다.")
+    public CommonResponse<String> patchFcmToken(@AuthenticationPrincipal User authUser,
+                                                @Valid @RequestBody PatchFcmTokenRequestDto patchFcmTokenRequestDto) {
+        log.info("patch-fcm-token");
+        log.info("api = fcm 토큰 업데이트, user = {}", authUser.getNo());
+
+        userService.patchFcmToken(authUser, patchFcmTokenRequestDto);
+        return CommonResponse.onSuccess("fcm 토큰 업데이트 성공");
     }
 }
 
