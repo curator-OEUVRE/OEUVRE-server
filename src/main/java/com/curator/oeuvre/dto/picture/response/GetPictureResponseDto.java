@@ -30,7 +30,19 @@ public class GetPictureResponseDto {
     @ApiModelProperty(notes = "이미지 url", example = "image_url")
     private final String imageUrl;
 
-    @ApiModelProperty(notes = "사진 설명", example = "노을을 보면서 한컷")
+    @ApiModelProperty(notes = "작품 제목", example = "노을")
+    private final String title;
+
+    @ApiModelProperty(notes = "제작년도", example = "2022")
+    private final String manufactureYear;
+
+    @ApiModelProperty(notes = "작품 재료", example = "캔버스에 유채")
+    private final String material;
+
+    @ApiModelProperty(notes = "작품 크기", example = "22*80(cm)")
+    private final String scale;
+
+    @ApiModelProperty(notes = "작품 설명", example = "노을을 보면서 한컷")
     private final String description;
 
     @ApiModelProperty(notes = "세로 길이", example = "188")
@@ -48,7 +60,7 @@ public class GetPictureResponseDto {
     @ApiModelProperty(notes = "스크랩 여부", example = "true")
     private final Boolean isScraped;
 
-    @ApiModelProperty(notes = "해시태그 목록", example = "[\"#노을\", \"#바다\", \"#제주\"]")
+    @ApiModelProperty(notes = "해시태그 목록", example = "[\"노을\", \"바다\", \"제주\"]")
     private final List<String> hashtags;
 
     public GetPictureResponseDto (
@@ -63,6 +75,10 @@ public class GetPictureResponseDto {
         this.userId = picture.getFloor().getUser().getId();
         this.floorNo = picture.getFloor().getNo();
         this.imageUrl = picture.getImageUrl();
+        this.title = picture.getTitle();
+        this.manufactureYear = picture.getManufactureYear();
+        this.material = picture.getMaterial();
+        this.scale = picture.getScale();
         this.description = picture.getDescription();
         this.height = picture.getHeight();
         this.width = picture.getWidth();

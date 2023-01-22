@@ -148,6 +148,10 @@ public class PictureServiceImpl implements PictureService{
         if (!Objects.equals(picture.getFloor().getUser().getNo(), user.getNo())) throw new ForbiddenException(FORBIDDEN_PICTURE);
 
         // 설명 업데이트
+        picture.setTitle(patchPictureRequestDto.getTitle());
+        picture.setManufactureYear(patchPictureRequestDto.getManufactureYear());
+        picture.setMaterial(patchPictureRequestDto.getMaterial());
+        picture.setScale(patchPictureRequestDto.getScale());
         picture.setDescription(patchPictureRequestDto.getDescription());
         pictureRepository.save(picture);
 

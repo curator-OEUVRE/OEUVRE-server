@@ -22,8 +22,20 @@ public class PostFloorPictureDto {
     @NotNull(message = "이미지 url을 입력해주세요")
     private String imageUrl;
 
-    @ApiModelProperty(notes = "사진 설명", example = "노을을 보면서 한컷")
+    @ApiModelProperty(notes = "작품 제목", example = "노을")
+    private String title;
+
+    @ApiModelProperty(notes = "작품 설명", example = "노을을 보면서 한컷")
     private String description;
+
+    @ApiModelProperty(notes = "제작년도", example = "2023")
+    private String manufactureYear;
+
+    @ApiModelProperty(notes = "작품 재료", example = "캔버스에 유채")
+    private String material;
+
+    @ApiModelProperty(notes = "작품 크기", example = "22*88(cm)")
+    private String scale;
 
     @ApiModelProperty(notes = "세로 길이", example = "188")
     @NotNull
@@ -34,9 +46,8 @@ public class PostFloorPictureDto {
     private Float width;
 
     @ApiModelProperty(notes = "y축 위치", example = "93")
-    @NotNull
     private Float location;
 
-    @ApiModelProperty(notes = "해시태그 목록", example = "[\"#노을\", \"#바다\", \"#제주\"]")
+    @ApiModelProperty(notes = "해시태그 목록", example = "[\"노을\", \"바다\", \"제주\"]")
     private List<String> hashtags;
 }

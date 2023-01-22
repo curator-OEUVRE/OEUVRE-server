@@ -23,6 +23,9 @@ public class PatchFloorRequestDto {
     @NotEmpty
     private String name;
 
+    @ApiModelProperty(notes = "플로어 설명", example = "플로어 설명을 써주세요")
+    private String description;
+
     @ApiModelProperty(notes = "배경 색상코드", example = "#FFFFFF")
     @NotNull
     @NotEmpty
@@ -31,6 +34,15 @@ public class PatchFloorRequestDto {
     @ApiModelProperty(notes = "배경 질감", example = "0")
     @Nullable
     private Integer texture;
+
+    @ApiModelProperty(notes = "정렬", example = "CENTER/TOP/BOTTOM")
+    @NotNull
+    @NotEmpty
+    private String alignment;
+
+    @ApiModelProperty(notes = "액자 여부", example = "false")
+    @NotNull
+    private Boolean isFramed;
 
     @ApiModelProperty(notes = "공개 여부", example = "true")
     @NotNull

@@ -113,8 +113,11 @@ public class FloorServiceImpl implements FloorService {
                 .user(user)
                 .queue(count + 1)
                 .name(postFloorRequestDto.getName())
+                .description(postFloorRequestDto.getDescription())
                 .color(postFloorRequestDto.getColor())
                 .texture(postFloorRequestDto.getTexture())
+                .alignment(postFloorRequestDto.getAlignment())
+                .isFramed(postFloorRequestDto.getIsFramed())
                 .isPublic(postFloorRequestDto.getIsPublic())
                 .isCommentAvailable(postFloorRequestDto.getIsCommentAvailable())
                 .isGroupExhibition(false)
@@ -123,6 +126,7 @@ public class FloorServiceImpl implements FloorService {
 
         // 3. 사진 생성
         List<PostFloorPictureDto> pictures = postFloorRequestDto.getPictures();
+        if (pictures.size() < 1) throw new ForbiddenException(NO_PICTURES);
         if (pictures.size() > 20) throw new ForbiddenException(TOO_MANY_PICTURES);
 
         pictures.forEach( pictureDto -> {
@@ -130,6 +134,10 @@ public class FloorServiceImpl implements FloorService {
                     .floor(floor)
                     .imageUrl(pictureDto.getImageUrl())
                     .queue(pictureDto.getQueue())
+                    .title(pictureDto.getTitle())
+                    .manufactureYear(pictureDto.getManufactureYear())
+                    .material(pictureDto.getMaterial())
+                    .scale(pictureDto.getScale())
                     .description(pictureDto.getDescription())
                     .height(pictureDto.getHeight())
                     .width((pictureDto.getWidth()))
@@ -216,8 +224,11 @@ public class FloorServiceImpl implements FloorService {
 
         // 플로어 정보 업데이트
         floor.setName(patchFloorRequestDto.getName());
+        floor.setDescription(patchFloorRequestDto.getDescription());
         floor.setColor(patchFloorRequestDto.getColor());
         floor.setTexture(patchFloorRequestDto.getTexture());
+        floor.setAlignment(patchFloorRequestDto.getAlignment());
+        floor.setIsFramed(patchFloorRequestDto.getIsFramed());
         floor.setIsPublic(patchFloorRequestDto.getIsPublic());
         floor.setIsCommentAvailable(patchFloorRequestDto.getIsCommentAvailable());
         floorRepository.save(floor);
@@ -227,6 +238,7 @@ public class FloorServiceImpl implements FloorService {
             picturesNos.add(picture.getPictureNo());
         });
 
+        if (picturesNos.size() < 1) throw new ForbiddenException(NO_PICTURES);
         if (picturesNos.size() > 20) throw new ForbiddenException(TOO_MANY_PICTURES);
 
         // 기존 사진 중 새로 받은 입력에 포함 되지 않을 경우
@@ -256,6 +268,10 @@ public class FloorServiceImpl implements FloorService {
                         .floor(floor)
                         .imageUrl(picture.getImageUrl())
                         .queue(picture.getQueue())
+                        .title(picture.getTitle())
+                        .manufactureYear(picture.getManufactureYear())
+                        .material(picture.getMaterial())
+                        .scale(picture.getScale())
                         .description(picture.getDescription())
                         .height(picture.getHeight())
                         .width((picture.getWidth()))
@@ -277,6 +293,10 @@ public class FloorServiceImpl implements FloorService {
                         .orElse(null);
                 if (originalPicture == null) throw new BadRequestException(PICTURE_NOT_FOUND);
 
+                originalPicture.setTitle(picture.getTitle());
+                originalPicture.setManufactureYear(picture.getManufactureYear());
+                originalPicture.setMaterial(picture.getMaterial());
+                originalPicture.setScale(picture.getScale());
                 originalPicture.setDescription(picture.getDescription());
                 originalPicture.setQueue(picture.getQueue());
                 originalPicture.setHeight(picture.getHeight());

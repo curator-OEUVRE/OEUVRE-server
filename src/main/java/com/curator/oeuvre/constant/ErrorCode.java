@@ -49,6 +49,7 @@ public enum ErrorCode {
     DUPLICATED_ID(BAD_REQUEST, "U004", "중복된 ID 입니다."),
     ALREADY_FOLLOWED(BAD_REQUEST, "U005", "이미 팔로우한 유저입니다."),
     FOLLOW_NOT_FOUND(BAD_REQUEST, "U006", "팔로우 한 적 없는 유저입니다."),
+    INVALID_USER_TYPE(BAD_REQUEST, "U007", "유효하지 않은 가입유형 입니다."),
 
 
 
@@ -56,6 +57,7 @@ public enum ErrorCode {
     FLOOR_NOT_FOUND(NOT_FOUND, "F001", "존재하지 않는 플로어 입니다."),
     FORBIDDEN_FLOOR(FORBIDDEN, "F002", "플로어 접근 권한이 없습니다."),
     TOO_MANY_FLOORS(FORBIDDEN, "F003", "플로어는 10개까지만 만들 수 있습니다."),
+    INVALID_ALIGNMENT(BAD_REQUEST, "F004", "유효하지 않은 alignment 입니다."),
 
 
 
@@ -63,7 +65,7 @@ public enum ErrorCode {
     EMPTY_IMAGE_URL(BAD_REQUEST, "P001", "image_url은 null이 될 수 없습니다."),
     EMPTY_QUEUE(BAD_REQUEST, "P002", "queue는 null이 될 수 없습니다."),
     EMPTY_HEIGHT(BAD_REQUEST, "P003", "height는 null이 될 수 없습니다."),
-    EMPTY_LOCATION(BAD_REQUEST, "P004", "location은 null이 될 수 없습니다."),
+    EMPTY_WIDTH(BAD_REQUEST, "P004", "width는 null이 될 수 없습니다."),
     PICTURE_NOT_FOUND(NOT_FOUND, "P005", "존재하지 않는 사진 입니다."),
     ALREADY_LIKED(BAD_REQUEST, "P006", "이미 좋아요한 사진입니다."),
     LIKE_NOT_FOUND(BAD_REQUEST, "P007", "좋아요 한 적 없는 사진입니다."),
@@ -72,6 +74,7 @@ public enum ErrorCode {
     FORBIDDEN_PICTURE(FORBIDDEN, "P010", "사진 접근 권한이 없습니다."),
     EMPTY_PICTURE_NO(BAD_REQUEST, "P011", "사진 no는 null이 될 수 없습니다."),
     TOO_MANY_PICTURES(FORBIDDEN, "F003", "사진은 20개까지만 생성 가능합니다."),
+    NO_PICTURES(FORBIDDEN, "F004", "사진이 하나 이상 있어야 생성 가능합니다."),
 
 
 

@@ -26,9 +26,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.curator.oeuvre.constant.ErrorCode.*;
+import static java.util.Arrays.asList;
 
 @RestController
 @Slf4j
@@ -51,11 +53,15 @@ public class FloorController {
             ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
             return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
         }
+        List<String> align = asList("CENTER", "TOP", "BOTTOM");
+        if (!align.contains(postFloorRequestDto.getAlignment())) {
+            throw new BadRequestException(INVALID_ALIGNMENT);
+        }
         postFloorRequestDto.getPictures().forEach( picture -> {
             if (picture.getImageUrl().isEmpty() || picture.getImageUrl() == null) throw new BadRequestException(EMPTY_IMAGE_URL);
             if (picture.getQueue() == null) throw new BadRequestException(EMPTY_QUEUE);
             if (picture.getHeight() == null) throw new BadRequestException(EMPTY_HEIGHT);
-            if (picture.getLocation() == null ) throw new BadRequestException(EMPTY_LOCATION);
+            if (picture.getWidth() == null ) throw new BadRequestException(EMPTY_WIDTH);
         });
         PostFloorResponseDto result = floorService.postFloor(authUser, postFloorRequestDto);
         return CommonResponse.onSuccess(result);
@@ -83,13 +89,17 @@ public class FloorController {
             ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
             return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
         }
+        List<String> align = asList("CENTER", "TOP", "BOTTOM");
+        if (!align.contains(patchFloorRequestDto.getAlignment())) {
+            throw new BadRequestException(INVALID_ALIGNMENT);
+        }
         patchFloorRequestDto.getPictures().forEach(picture -> {
             if (picture.getPictureNo() == null) throw new BadRequestException(EMPTY_PICTURE_NO);
             if (picture.getPictureNo() == 0 && (picture.getImageUrl().isEmpty() || picture.getImageUrl() == null))
                 throw new BadRequestException(EMPTY_IMAGE_URL);
             if (picture.getQueue() == null) throw new BadRequestException(EMPTY_QUEUE);
             if (picture.getHeight() == null) throw new BadRequestException(EMPTY_HEIGHT);
-            if (picture.getLocation() == null) throw new BadRequestException(EMPTY_LOCATION);
+            if (picture.getWidth() == null) throw new BadRequestException(EMPTY_WIDTH);
         });
 
         floorService.patchFloor(authUser, floorNo, patchFloorRequestDto);

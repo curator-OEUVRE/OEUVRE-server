@@ -3,12 +3,12 @@ package com.curator.oeuvre.controller;
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
-import com.curator.oeuvre.dto.hashtag.response.GetHashtagSearchResponseDto;
 import com.curator.oeuvre.dto.user.request.PatchFcmTokenRequestDto;
 import com.curator.oeuvre.dto.user.response.GetUserFloorResponseDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.*;
+import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,6 +26,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
+
+import static com.curator.oeuvre.constant.ErrorCode.INVALID_ALIGNMENT;
+import static com.curator.oeuvre.constant.ErrorCode.INVALID_USER_TYPE;
+import static java.util.Arrays.asList;
 
 @RestController
 @Slf4j
@@ -46,6 +50,10 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
             return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
+        }
+        List<String> type = asList("KAKAO", "APPLE", "GOOGLE");
+        if (!type.contains(signUpRequestDto.getType())) {
+            throw new BadRequestException(INVALID_USER_TYPE);
         }
         SignUpResponseDto result = userService.signUp(signUpRequestDto);
         return CommonResponse.onSuccess(result);
