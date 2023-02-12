@@ -15,6 +15,9 @@ import java.util.List;
 @ApiModel(value = "🌃 사진 조회 API Response")
 public class GetPictureResponseDto {
 
+    @ApiModelProperty(notes = "사진 순서", example = "1")
+    private final Integer queue;
+
     @ApiModelProperty(notes = "사진 no", example = "1")
     private final Long pictureNo;
 
@@ -48,7 +51,7 @@ public class GetPictureResponseDto {
     @ApiModelProperty(notes = "세로 길이", example = "188")
     private final Float height;
 
-    @ApiModelProperty(notes = "세로 길이", example = "70")
+    @ApiModelProperty(notes = "가로 길이", example = "70")
     private final Float width;
 
     @ApiModelProperty(notes = "본인 사진 여부", example = "true")
@@ -70,6 +73,7 @@ public class GetPictureResponseDto {
             Boolean isScraped,
             List<String> hashtags
     ) {
+        this.queue = picture.getQueue();
         this.pictureNo = picture.getNo();
         this.userNo = picture.getFloor().getUser().getNo();
         this.userId = picture.getFloor().getUser().getId();

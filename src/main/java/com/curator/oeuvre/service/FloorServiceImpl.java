@@ -4,6 +4,7 @@ import com.curator.oeuvre.domain.*;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.floor.request.*;
 import com.curator.oeuvre.dto.floor.response.*;
+import com.curator.oeuvre.dto.picture.response.GetPictureResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.BaseException;
 import com.curator.oeuvre.exception.ForbiddenException;
@@ -30,6 +31,8 @@ public class FloorServiceImpl implements FloorService {
     private final FloorReadRepository floorReadRepository;
     private final FollowingRepository followingRepository;
     private final NotificationRepository notificationRepository;
+    private final LikesRepository likesRepository;
+    private final ScrapRepository scrapRepository;
 
     @Override
     @Transactional
@@ -184,7 +187,7 @@ public class FloorServiceImpl implements FloorService {
             floorReadRepository.save(floorRead);
         }
 
-        List<GetFloorPictureDto> pictureDtos = new ArrayList<GetFloorPictureDto>();
+        List<GetPictureResponseDto> pictureDtos = new ArrayList<GetPictureResponseDto>();
         pictures.forEach( picture -> {
             List<PictureHashtag> pictureHashtags = pictureHashtagRepository.findAllByPictureNo(picture.getNo());
 
@@ -193,8 +196,11 @@ public class FloorServiceImpl implements FloorService {
                 hashtags.add(tag.getHashtag().getHashtag());
             });
             pictureDtos.add(
-                    new GetFloorPictureDto(
+                    new GetPictureResponseDto(
                             picture,
+                            Objects.equals(user.getNo(), picture.getFloor().getUser().getNo()),
+                            likesRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo()),
+                            scrapRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo()),
                             hashtags
                     )
             );

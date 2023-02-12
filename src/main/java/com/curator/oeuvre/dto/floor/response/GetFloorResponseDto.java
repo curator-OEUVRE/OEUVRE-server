@@ -2,6 +2,7 @@ package com.curator.oeuvre.dto.floor.response;
 
 import com.curator.oeuvre.domain.Floor;
 import com.curator.oeuvre.dto.floor.request.PostFloorPictureDto;
+import com.curator.oeuvre.dto.picture.response.GetPictureResponseDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
@@ -62,13 +63,13 @@ public class GetFloorResponseDto {
     private final Boolean hasNewComment;
 
     @ApiModelProperty(notes = "사진 목록")
-    private final List<GetFloorPictureDto> pictures;
+    private final List<GetPictureResponseDto> pictures;
 
     public GetFloorResponseDto(
             Floor floor,
             Boolean isMine,
             Boolean hasNewComment,
-            List<GetFloorPictureDto> pictures
+            List<GetPictureResponseDto> pictures
     ) {
         this.floorNo = floor.getNo();
         this.name = floor.getName();
