@@ -48,6 +48,9 @@ public class GetPictureResponseDto {
     @ApiModelProperty(notes = "작품 설명", example = "노을을 보면서 한컷")
     private final String description;
 
+    @ApiModelProperty(notes = "위치", example = "10")
+    private final Float location;
+
     @ApiModelProperty(notes = "세로 길이", example = "188")
     private final Float height;
 
@@ -84,6 +87,7 @@ public class GetPictureResponseDto {
         this.material = picture.getMaterial();
         this.scale = picture.getScale();
         this.description = picture.getDescription();
+        this.location = picture.getLocation();
         this.height = picture.getHeight();
         this.width = picture.getWidth();
         this.isMine = isMine;

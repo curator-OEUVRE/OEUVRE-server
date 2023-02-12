@@ -97,6 +97,11 @@ public enum ErrorCode {
     BLOCK_NOT_FOUND(BAD_REQUEST, "B003", "차단 한 적 없는 유저입니다."),
 
 
+    /* 푸쉬알림 관련 오류 */
+    INVALID_NOTIFICATION_TOKEN(BAD_REQUEST, "N001", "잘못된 푸쉬알림 expo 토큰입니다."),
+    NOTIFICATION_SERVER_ERROR(INTERNAL_SERVER_ERROR, "N002", "푸쉬알림 서버 에러"),
+
+
     /* Database 관련 오류 */
     DUPLICATE_RESOURCE(CONFLICT, "D001", "데이터가 이미 존재합니다."),
 

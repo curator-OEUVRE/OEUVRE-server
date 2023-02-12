@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import static com.curator.oeuvre.constant.ErrorCode.*;
@@ -34,8 +35,10 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final NotificationService notificationService;
     private final NotificationRepository notificationRepository;
+    private final ExpoNotificationServiceImpl expoNotificationService;
 
     @Override
+    @Transactional
     public PostCommentResponseDto postComment(User user, Long floorNo, PostCommentRequestDto postCommentRequestDto) {
 
         Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
@@ -52,6 +55,9 @@ public class CommentServiceImpl implements CommentService {
 
         if (!Objects.equals(user.getNo(), comment.getFloor().getUser().getNo()))
             notificationService.postNotification(comment.getFloor().getUser(), "COMMENT", user, comment, null, false);
+
+        HashMap<String, Object> newMap = new HashMap<>();
+        expoNotificationService.sendMessage(comment.getFloor().getUser(), "테스트", "테스트입니덩", newMap);
 
         return new PostCommentResponseDto(comment);
     }
