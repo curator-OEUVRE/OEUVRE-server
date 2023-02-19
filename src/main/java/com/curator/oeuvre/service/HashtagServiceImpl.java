@@ -9,7 +9,9 @@ import com.curator.oeuvre.dto.hashtag.response.GetPopularHashtagResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.NotFoundException;
 import com.curator.oeuvre.repository.HashtagRepository;
+import com.curator.oeuvre.repository.LikesRepository;
 import com.curator.oeuvre.repository.PictureHashtagRepository;
+import com.curator.oeuvre.repository.ScrapRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,8 @@ public class HashtagServiceImpl implements HashtagService {
 
     private final HashtagRepository hashtagRepository;
     private final PictureHashtagRepository pictureHashtagRepository;
+    private final LikesRepository likesRepository;
+    private final ScrapRepository scrapRepository;
 
     @Override
     public PageResponseDto<List<GetHashtagSearchResponseDto>> searchHashtags(String keyword, Integer page, Integer size) {
@@ -57,12 +61,19 @@ public class HashtagServiceImpl implements HashtagService {
             pictureResult.add(new GetHashtagPictureDto(
                     picture.getPictureNo(),
                     picture.getImageUrl(),
+                    picture.getTitle(),
+                    picture.getManufactureYear(),
+                    picture.getMaterial(),
+                    picture.getScale(),
+                    picture.getDescription(),
                     picture.getHeight(),
                     picture.getWidth(),
+                    Objects.equals(picture.getUserNo(), user.getNo()),
+                    likesRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getPictureNo()),
+                    scrapRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getPictureNo()),
                     picture.getUserNo(),
                     picture.getId(),
-                    picture.getProfileImageUrl(),
-                    Objects.equals(picture.getUserNo(), user.getNo())
+                    picture.getProfileImageUrl()
             ));
         });
         result.add(new GetPopularHashtagResponseDto(hashtag.getHashtagNo(), hashtag.getHashtag(), hashtag.getIsHead(), pictureResult));
@@ -90,12 +101,19 @@ public class HashtagServiceImpl implements HashtagService {
             result.add(new GetHashtagPictureDto(
                     picture.getPictureNo(),
                     picture.getImageUrl(),
+                    picture.getTitle(),
+                    picture.getManufactureYear(),
+                    picture.getMaterial(),
+                    picture.getScale(),
+                    picture.getDescription(),
                     picture.getHeight(),
                     picture.getWidth(),
+                    Objects.equals(picture.getUserNo(), user.getNo()),
+                    likesRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getPictureNo()),
+                    scrapRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getPictureNo()),
                     picture.getUserNo(),
                     picture.getId(),
-                    picture.getProfileImageUrl(),
-                    Objects.equals(picture.getUserNo(), user.getNo())
+                    picture.getProfileImageUrl()
             ));
         });
         return new PageResponseDto<>(pictures.isLast(), result);
