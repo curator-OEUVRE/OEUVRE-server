@@ -34,8 +34,7 @@ public class ExpoNotificationServiceImpl implements ExpoNotificationService {
 
         String token = user.getFcmToken();
         if (token == null) {
-            log.info("token = {}", user.getFcmToken());
-            throw new BadRequestException(INVALID_NOTIFICATION_TOKEN);
+            return;
         }
         if (!PushClient.isExponentPushToken(token)) {
             log.info("token = {}", user.getFcmToken());
