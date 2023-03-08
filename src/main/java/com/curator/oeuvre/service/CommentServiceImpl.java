@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final NotificationService notificationService;
     private final NotificationRepository notificationRepository;
-    private final ExpoNotificationServiceImpl expoNotificationService;
+    private final ExpoNotificationService expoNotificationService;
 
     @Override
     @Transactional
@@ -53,11 +53,21 @@ public class CommentServiceImpl implements CommentService {
                 .build();
         commentRepository.save(comment);
 
-        if (!Objects.equals(user.getNo(), comment.getFloor().getUser().getNo()))
+        if (!Objects.equals(user.getNo(), comment.getFloor().getUser().getNo())) {
+
             notificationService.postNotification(comment.getFloor().getUser(), "COMMENT", user, comment, null, false);
 
-        HashMap<String, Object> newMap = new HashMap<>();
-        expoNotificationService.sendMessage(comment.getFloor().getUser(), "테스트", "테스트입니덩", newMap);
+            if (comment.getFloor().getUser().getIsCommentAlarmOn())
+            {
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("sendUserNo", user.getNo());
+                data.put("floorNo", comment.getFloor().getNo());
+                data.put("commentNo", comment.getNo());
+                String message = user.getId()+ "님이 작가님의 전시에 방명록을 남겼습니다.";
+                expoNotificationService.sendMessage(comment.getFloor().getUser(), "방명록 알림", message, data);
+                expoNotificationService.postFcmLog(comment.getFloor().getUser(), "comment", data);
+            }
+        }
 
         return new PostCommentResponseDto(comment);
     }

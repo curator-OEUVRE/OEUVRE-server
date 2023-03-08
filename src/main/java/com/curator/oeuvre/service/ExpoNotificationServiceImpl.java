@@ -2,17 +2,20 @@ package com.curator.oeuvre.service;
 
 import static com.curator.oeuvre.constant.ErrorCode.*;
 
-import com.curator.oeuvre.constant.ErrorCode;
+import com.curator.oeuvre.domain.FcmLog;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.InternalServerException;
+import com.curator.oeuvre.repository.FcmLogRepository;
 import io.github.jav.exposerversdk.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.GenericJDBCException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -24,6 +27,9 @@ import java.util.stream.Collectors;
 @Service
 public class ExpoNotificationServiceImpl implements ExpoNotificationService {
 
+    private final FcmLogRepository fcmLogRepository;
+
+    @Override
     public void sendMessage(User user, String title, String body, Map<String, Object> data) {
 
         String token = user.getFcmToken();
@@ -31,10 +37,10 @@ public class ExpoNotificationServiceImpl implements ExpoNotificationService {
             log.info("token = {}", user.getFcmToken());
             throw new BadRequestException(INVALID_NOTIFICATION_TOKEN);
         }
-//        if (!PushClient.isExponentPushToken(token)) {
-//            log.info("token = {}", user.getFcmToken());
-//            throw new BadRequestException(INVALID_NOTIFICATION_TOKEN);
-//        }
+        if (!PushClient.isExponentPushToken(token)) {
+            log.info("token = {}", user.getFcmToken());
+            throw new BadRequestException(INVALID_NOTIFICATION_TOKEN);
+        }
         ExpoPushMessage expoPushMessage = new ExpoPushMessage();
         expoPushMessage.getTo().add(token);
         expoPushMessage.setTitle(title);
@@ -91,5 +97,18 @@ public class ExpoNotificationServiceImpl implements ExpoNotificationService {
             log.info("error message = {}", e.getMessage());
             throw new InternalServerException(NOTIFICATION_SERVER_ERROR);
         }
+    }
+
+
+    @Override
+    @Transactional
+    public void postFcmLog(User user, String type, HashMap<String, Object> data) {
+
+        FcmLog fcmLog = FcmLog.builder()
+                .user(user)
+                .type(type)
+                .data(data.toString())
+                .build();
+        fcmLogRepository.save(fcmLog);
     }
 }

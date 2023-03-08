@@ -19,10 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.curator.oeuvre.constant.ErrorCode.*;
@@ -41,6 +38,7 @@ public class UserServiceImpl implements UserService{
     private final LikesRepository likesRepository;
     private final NotificationService notificationService;
     private final NotificationRepository notificationRepository;
+    private final ExpoNotificationService expoNotificationService;
 
     @Override
     @Transactional
@@ -198,6 +196,15 @@ public class UserServiceImpl implements UserService{
         followingRepository.save(following);
 
         notificationService.postNotification(user, "FOLLOWING", me, null, null, true);
+
+        if (user.getIsFollowAlarmOn())
+        {
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("sendUserNo", me.getNo());
+            String message = me.getId()+ "님이 작가님을 팔로우하기 시작했습니다.";
+            expoNotificationService.sendMessage(user, "새 팔로워 알림", message, data);
+            expoNotificationService.postFcmLog(user, "follow", data);
+        }
     }
 
     @Override
