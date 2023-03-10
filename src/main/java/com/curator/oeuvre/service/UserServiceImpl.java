@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService{
         {
             HashMap<String, Object> data = new HashMap<>();
             data.put("sendUserNo", me.getNo());
-            String message = me.getId()+ "님이 작가님을 팔로우하기 시작했습니다.";
+            String message = "[" + me.getId()+ "]님이 회원님을 팔로우하기 시작했습니다.";
             expoNotificationService.sendMessage(user, "새 팔로워 알림", message, data);
             expoNotificationService.postFcmLog(user, "follow", data);
         }
