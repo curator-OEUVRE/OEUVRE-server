@@ -87,7 +87,7 @@ public class PictureServiceImpl implements PictureService{
                 data.put("sendUserNo", user.getNo());
                 data.put("floorNo", like.getPicture().getFloor().getNo());
                 data.put("pictureNo", like.getPicture().getNo());
-                String message = "[" + user.getId()+ "]님이 회원님의 작품을 좋아합니다.";
+                String message = user.getId()+ "님이 회원님의 작품을 좋아합니다.";
                 expoNotificationService.sendMessage(like.getPicture().getFloor().getUser(), "좋아요 알림", message, data);
                 expoNotificationService.postFcmLog(like.getPicture().getFloor().getUser(), "like", data);
             }

@@ -63,7 +63,7 @@ public class CommentServiceImpl implements CommentService {
                 data.put("sendUserNo", user.getNo());
                 data.put("floorNo", comment.getFloor().getNo());
                 data.put("commentNo", comment.getNo());
-                String message = "[" + user.getId()+ "]님이 회원님의 플로어에 방명록을 남겼습니다: [" + comment.getComment() + "]";
+                String message = user.getId()+ "님이 회원님의 플로어에 방명록을 남겼습니다: " + comment.getComment();
                 expoNotificationService.sendMessage(comment.getFloor().getUser(), "방명록 알림", message, data);
                 expoNotificationService.postFcmLog(comment.getFloor().getUser(), "comment", data);
             }
