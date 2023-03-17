@@ -32,6 +32,7 @@ public class PostFloorRequestDto {
 
     @ApiModelProperty(notes = "배경 그라데이션", example = "FULL")
     @NotNull
+    @NotEmpty
     private String gradient;
 
     @ApiModelProperty(notes = "배경 질감", example = "0")

@@ -18,6 +18,9 @@ public class GetHomeFloorResponseDto {
     @ApiModelProperty(notes = "플로어 이름", example = "제주 여행 기록")
     private final String floorName;
 
+    @ApiModelProperty(notes = "플로어 설명", example = "제주 여행하면서 찍은 사진들")
+    private final String floorDescription;
+
     @ApiModelProperty(notes = "플로어 층", example = "5")
     private final Integer queue;
 
@@ -60,6 +63,7 @@ public class GetHomeFloorResponseDto {
     public GetHomeFloorResponseDto(
             Long floorNo,
             String floorName,
+            String floorDescription,
             Integer queue,
             String exhibitionName,
             String thumbnailUrl,
@@ -76,6 +80,7 @@ public class GetHomeFloorResponseDto {
     ) {
         this.floorNo = floorNo;
         this.floorName = floorName;
+        this.floorDescription = floorDescription;
         this.queue = queue;
         this.exhibitionName = exhibitionName;
         this.thumbnailUrl = thumbnailUrl;

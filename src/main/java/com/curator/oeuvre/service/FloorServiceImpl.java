@@ -368,6 +368,7 @@ public class FloorServiceImpl implements FloorService {
             result.add(new GetHomeFloorResponseDto(
                     floor.getFloorNo(),
                     floor.getFloorName(),
+                    floor.getFloorDescription(),
                     floor.getQueue(),
                     floor.getExhibitionName(),
                     floor.getThumbnailUrl(),

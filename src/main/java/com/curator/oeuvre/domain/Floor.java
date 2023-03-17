@@ -37,7 +37,7 @@ public class Floor extends AbstractTimestamp {
     private String color;
 
     @Column(nullable = false)
-    @ColumnDefault("FULL")
+    @ColumnDefault("'FULL'")
     private String gradient;
 
     @Column(nullable = false)

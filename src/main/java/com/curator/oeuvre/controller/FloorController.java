@@ -58,7 +58,7 @@ public class FloorController {
             throw new BadRequestException(INVALID_ALIGNMENT);
         }
         List<String> gradient = asList("FULL", "TOP", "BOTTOM");
-        if (!align.contains(postFloorRequestDto.getGradient())) {
+        if (!gradient.contains(postFloorRequestDto.getGradient())) {
             throw new BadRequestException(INVALID_GRADIENT);
         }
         postFloorRequestDto.getPictures().forEach( picture -> {
@@ -96,6 +96,10 @@ public class FloorController {
         List<String> align = asList("CENTER", "TOP", "BOTTOM");
         if (!align.contains(patchFloorRequestDto.getAlignment())) {
             throw new BadRequestException(INVALID_ALIGNMENT);
+        }
+        List<String> gradient = asList("FULL", "TOP", "BOTTOM");
+        if (!gradient.contains(patchFloorRequestDto.getGradient())) {
+            throw new BadRequestException(INVALID_GRADIENT);
         }
         patchFloorRequestDto.getPictures().forEach(picture -> {
             if (picture.getPictureNo() == null) throw new BadRequestException(EMPTY_PICTURE_NO);
