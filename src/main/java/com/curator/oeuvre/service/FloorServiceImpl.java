@@ -118,6 +118,7 @@ public class FloorServiceImpl implements FloorService {
                 .name(postFloorRequestDto.getName())
                 .description(postFloorRequestDto.getDescription())
                 .color(postFloorRequestDto.getColor())
+                .gradient(postFloorRequestDto.getGradient())
                 .texture(postFloorRequestDto.getTexture())
                 .alignment(postFloorRequestDto.getAlignment())
                 .isFramed(postFloorRequestDto.getIsFramed())
@@ -232,6 +233,7 @@ public class FloorServiceImpl implements FloorService {
         floor.setName(patchFloorRequestDto.getName());
         floor.setDescription(patchFloorRequestDto.getDescription());
         floor.setColor(patchFloorRequestDto.getColor());
+        floor.setGradient(patchFloorRequestDto.getGradient());
         floor.setTexture(patchFloorRequestDto.getTexture());
         floor.setAlignment(patchFloorRequestDto.getAlignment());
         floor.setIsFramed(patchFloorRequestDto.getIsFramed());

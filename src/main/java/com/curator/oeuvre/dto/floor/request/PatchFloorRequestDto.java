@@ -31,6 +31,10 @@ public class PatchFloorRequestDto {
     @NotEmpty
     private String color;
 
+    @ApiModelProperty(notes = "배경 그라데이션", example = "FULL")
+    @NotNull
+    private String gradient;
+
     @ApiModelProperty(notes = "배경 질감", example = "0")
     @Nullable
     private Integer texture;

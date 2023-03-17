@@ -37,6 +37,10 @@ public class Floor extends AbstractTimestamp {
     private String color;
 
     @Column(nullable = false)
+    @ColumnDefault("FULL")
+    private String gradient;
+
+    @Column(nullable = false)
     @ColumnDefault("0")
     private Integer texture;
 
@@ -68,6 +72,7 @@ public class Floor extends AbstractTimestamp {
             String name,
             String description,
             String color,
+            String gradient,
             Integer texture,
             String alignment,
             Boolean isFramed,
@@ -81,6 +86,7 @@ public class Floor extends AbstractTimestamp {
         this.name = name;
         this.description = description;
         this.color = color;
+        this.gradient = gradient;
         this.texture = texture;
         this.alignment = alignment;
         this.isFramed = isFramed;

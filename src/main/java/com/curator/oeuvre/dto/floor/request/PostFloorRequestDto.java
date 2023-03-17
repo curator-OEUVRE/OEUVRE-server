@@ -1,10 +1,8 @@
 package com.curator.oeuvre.dto.floor.request;
 
-import com.google.firebase.database.annotations.Nullable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -31,6 +29,10 @@ public class PostFloorRequestDto {
     @NotNull
     @NotEmpty
     private String color;
+
+    @ApiModelProperty(notes = "배경 그라데이션", example = "FULL")
+    @NotNull
+    private String gradient;
 
     @ApiModelProperty(notes = "배경 질감", example = "0")
     @NotNull

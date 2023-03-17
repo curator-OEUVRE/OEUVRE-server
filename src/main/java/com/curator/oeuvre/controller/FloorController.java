@@ -57,6 +57,10 @@ public class FloorController {
         if (!align.contains(postFloorRequestDto.getAlignment())) {
             throw new BadRequestException(INVALID_ALIGNMENT);
         }
+        List<String> gradient = asList("FULL", "TOP", "BOTTOM");
+        if (!align.contains(postFloorRequestDto.getGradient())) {
+            throw new BadRequestException(INVALID_GRADIENT);
+        }
         postFloorRequestDto.getPictures().forEach( picture -> {
             if (picture.getImageUrl().isEmpty() || picture.getImageUrl() == null) throw new BadRequestException(EMPTY_IMAGE_URL);
             if (picture.getQueue() == null) throw new BadRequestException(EMPTY_QUEUE);

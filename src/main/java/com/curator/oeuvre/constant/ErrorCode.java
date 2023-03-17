@@ -58,6 +58,7 @@ public enum ErrorCode {
     FORBIDDEN_FLOOR(FORBIDDEN, "F002", "플로어 접근 권한이 없습니다."),
     TOO_MANY_FLOORS(FORBIDDEN, "F003", "플로어는 10개까지만 만들 수 있습니다."),
     INVALID_ALIGNMENT(BAD_REQUEST, "F004", "유효하지 않은 alignment 입니다."),
+    INVALID_GRADIENT(BAD_REQUEST, "F005", "유효하지 않은 gradient 입니다."),
 
 
 
