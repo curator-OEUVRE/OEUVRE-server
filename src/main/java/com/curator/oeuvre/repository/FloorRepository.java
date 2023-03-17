@@ -43,7 +43,7 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
             "and floor.status = 1 and floor.is_public is true and user.no != :userNo " +
             "and (user.no = following.followed_user_no or user.id = 'oeuvre')) " +
             "UNION " +
-            "(SELECT distinct floor.no as floorNo, floor.name as floorName, floor.queue, user.exhibition_name as exhibitionName, " +
+            "(SELECT distinct floor.no as floorNo, floor.name as floorName, floor.description as floorDescription, floor.queue, user.exhibition_name as exhibitionName, " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as thumbnailUrl, " +
             "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
             "(SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as width, " +

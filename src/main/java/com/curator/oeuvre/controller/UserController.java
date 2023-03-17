@@ -3,6 +3,7 @@ package com.curator.oeuvre.controller;
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
+import com.curator.oeuvre.dto.user.request.PatchAlarmRequestDto;
 import com.curator.oeuvre.dto.user.request.PatchFcmTokenRequestDto;
 import com.curator.oeuvre.dto.user.response.GetUserFloorResponseDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
@@ -212,6 +213,39 @@ public class UserController {
 
         userService.patchFcmToken(authUser, patchFcmTokenRequestDto);
         return CommonResponse.onSuccess("fcm 토큰 업데이트 성공");
+    }
+
+    @PatchMapping(value = "/is_like_alarm_on")
+    @Operation(summary = "좋아요 알림 수신여부 업데이트", description = "사용자의 좋아요 알림 수신여부를 업데이트하는 API 입니다.")
+    public CommonResponse<String> patchLikeAlarm(@AuthenticationPrincipal User authUser,
+                                                @Valid @RequestBody PatchAlarmRequestDto patchAlarmRequestDto) {
+        log.info("patch-like-alarm");
+        log.info("api = 좋아요 알림 수신여부 업데이트, user = {}", authUser.getNo());
+
+        userService.patchLikeAlarm(authUser, patchAlarmRequestDto);
+        return CommonResponse.onSuccess("좋아요 알람 수신여부 업데이트 성공");
+    }
+
+    @PatchMapping(value = "/is_comment_alarm_on")
+    @Operation(summary = "댓글 알림 수신여부 업데이트", description = "사용자의 댓글 알림 수신여부를 업데이트하는 API 입니다.")
+    public CommonResponse<String> patchCommentAlarm(@AuthenticationPrincipal User authUser,
+                                                 @Valid @RequestBody PatchAlarmRequestDto patchAlarmRequestDto) {
+        log.info("patch-comment-alarm");
+        log.info("api = 댓글 알림 수신여부 업데이트, user = {}", authUser.getNo());
+
+        userService.patchCommentAlarm(authUser, patchAlarmRequestDto);
+        return CommonResponse.onSuccess("댓글 알람 수신여부 업데이트 성공");
+    }
+
+    @PatchMapping(value = "/is_follow_alarm_on")
+    @Operation(summary = "팔로우 알림 수신여부 업데이트", description = "사용자의 팔로우 알림 수신여부를 업데이트하는 API 입니다.")
+    public CommonResponse<String> patchFollowAlarm(@AuthenticationPrincipal User authUser,
+                                                    @Valid @RequestBody PatchAlarmRequestDto patchAlarmRequestDto) {
+        log.info("patch-follow-alarm");
+        log.info("api = 팔로우 알림 수신여부 업데이트, user = {}", authUser.getNo());
+
+        userService.patchFollowAlarm(authUser, patchAlarmRequestDto);
+        return CommonResponse.onSuccess("팔로우 알람 수신여부 업데이트 성공");
     }
 }
 

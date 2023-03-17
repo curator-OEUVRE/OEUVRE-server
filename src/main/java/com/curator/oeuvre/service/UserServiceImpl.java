@@ -3,6 +3,7 @@ package com.curator.oeuvre.service;
 import com.curator.oeuvre.domain.*;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.oauth.TokenDto;
+import com.curator.oeuvre.dto.user.request.PatchAlarmRequestDto;
 import com.curator.oeuvre.dto.user.request.PatchFcmTokenRequestDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
@@ -306,6 +307,37 @@ public class UserServiceImpl implements UserService{
 
         user.setFcmToken(patchFcmTokenRequestDto.getToken());
         userRepository.save(user);
+    }
+
+    @Override
+    public void patchLikeAlarm(User user, PatchAlarmRequestDto patchAlarmRequestDto) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        user.setIsLikeAlarmOn(patchAlarmRequestDto.getIsAlarmOn());
+        userRepository.save(user);
+    }
+
+    @Override
+    public void patchCommentAlarm(User user, PatchAlarmRequestDto patchAlarmRequestDto) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        user.setIsCommentAlarmOn(patchAlarmRequestDto.getIsAlarmOn());
+        userRepository.save(user);
+    }
+
+    @Override
+    public void patchFollowAlarm(User user, PatchAlarmRequestDto patchAlarmRequestDto) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        user.setIsFollowAlarmOn(patchAlarmRequestDto.getIsAlarmOn());
+        userRepository.save(user);
+
     }
 }
 
