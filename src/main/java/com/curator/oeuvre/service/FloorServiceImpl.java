@@ -355,13 +355,10 @@ public class FloorServiceImpl implements FloorService {
         });
     }
 
-    @Override
-    @Transactional
-    public PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloors(User user, Integer page, Integer size) {
-
+    public PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloorsByFollowing(User user, Integer page, Integer size) {
         Pageable pageRequest = PageRequest.of(page, size);
 
-        Page<FloorRepository.GetHomeFloor> floors = floorRepository.findHomeFloors(user.getNo(), pageRequest);
+        Page<FloorRepository.GetHomeFloor> floors = floorRepository.findHomeFloorsByFollowing(user.getNo(), pageRequest);
 
         List<GetHomeFloorResponseDto> result = new ArrayList<>();
         floors.forEach( floor -> {
@@ -385,6 +382,46 @@ public class FloorServiceImpl implements FloorService {
             ));
         });
         return new PageResponseDto<>(floors.isLast(), result);
+    }
+
+    public PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloorsByRecent(User user, Integer page, Integer size) {
+        Pageable pageRequest = PageRequest.of(page, size);
+
+        Page<FloorRepository.GetHomeFloor> floors = floorRepository.findHomeFloorsByRecent(user.getNo(), pageRequest);
+
+        List<GetHomeFloorResponseDto> result = new ArrayList<>();
+        floors.forEach( floor -> {
+            result.add(new GetHomeFloorResponseDto(
+                    floor.getFloorNo(),
+                    floor.getFloorName(),
+                    floor.getFloorDescription(),
+                    floor.getQueue(),
+                    floor.getExhibitionName(),
+                    floor.getThumbnailUrl(),
+                    floor.getHeight(),
+                    floor.getWidth(),
+                    floor.getUserNo(),
+                    floor.getId(),
+                    floor.getProfileImageUrl(),
+                    null,
+                    null,
+                  null,
+                    floor.getUserNo().equals(user.getNo()),
+                    floor.getUpdatedAt()
+            ));
+        });
+        return new PageResponseDto<>(floors.isLast(), result);
+    }
+
+    @Override
+    @Transactional
+    public PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloors(User user, String view, Integer page, Integer size) {
+
+        if (view.equals("following")) {
+            return this.getHomeFloorsByFollowing(user, page, size);
+        } else {
+            return this.getHomeFloorsByRecent(user, page, size);
+        }
     }
 
     @Override

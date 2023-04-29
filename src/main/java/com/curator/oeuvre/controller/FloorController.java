@@ -134,12 +134,13 @@ public class FloorController {
     @Operation(summary = "홈탭 플로어 전체 조회", description = "홈탭 플로어 전체 조회 API 입니다. \n접근 유저에 따라 업데이트 여부가 다르게 조회 됩니다.")
     public CommonResponse<PageResponseDto<List<GetHomeFloorResponseDto>>> getHomeFloors(
             @AuthenticationPrincipal User authUser,
+            @Parameter(description = "조회 방식(following/recent)", example = "following") @RequestParam(required = true) String view,
             @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
             @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
         log.info("get-home-floors");
         log.info("api = 홈탭 플로어 전체 조회, user = {}", authUser.getNo());
 
-        PageResponseDto<List<GetHomeFloorResponseDto>> result = floorService.getHomeFloors(authUser, page, size);
+        PageResponseDto<List<GetHomeFloorResponseDto>> result = floorService.getHomeFloors(authUser, view, page, size);
         return CommonResponse.onSuccess(result);
     }
 

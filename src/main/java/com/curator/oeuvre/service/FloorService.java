@@ -29,7 +29,7 @@ public interface FloorService {
 
     void patchFloorQueue(User user, List<PatchFloorQueueRequestDto> patchFloorQueueRequestDto);
 
-    PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloors(User user, Integer page, Integer size);
+    PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloors(User user, String view, Integer page, Integer size);
 
     PageResponseDto<List<GetFloorSearchResponseDto>> searchFloors(User user, String keyword, Integer page, Integer size);
 

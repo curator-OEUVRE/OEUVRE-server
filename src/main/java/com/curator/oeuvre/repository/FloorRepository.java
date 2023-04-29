@@ -65,7 +65,26 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
                     "FROM oeuvre.floor JOIN oeuvre.user on floor.user_no = user.no " +
                     "WHERE user.no = :userNo and floor.status = 1)) as c ",
             nativeQuery = true)
-    Page<GetHomeFloor> findHomeFloors(@Param("userNo") Long userNo, Pageable pageable);
+    Page<GetHomeFloor> findHomeFloorsByFollowing(@Param("userNo") Long userNo, Pageable pageable);
+
+    @Query(value = "SELECT distinct floor.no as floorNo, floor.name as floorName, floor.description as floorDescription, floor.queue, user.exhibition_name as exhibitionName, " +
+            "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as thumbnailUrl, " +
+            "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
+            "(SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as width, " +
+            "user.no as userNo, user.id, user.profile_image_url as profileImageUrl, " +
+            "false as isNew, false as isUpdated, 0 as updateCount, false as isMine, floor.updated_at as updatedAt, floor.created_at as createdAt " +
+            "FROM oeuvre.floor JOIN oeuvre.user on floor.user_no = user.no " +
+            "LEFT JOIN oeuvre.block on user.no = block.blocked_user_no " +
+            "WHERE user.no not in (SELECT blocked_user_no FROM block WHERE block_user_no = :userNo) " +
+            "and floor.status = 1 and floor.is_public is true " +
+            "ORDER BY isUpdated desc, createdAt desc ",
+            countQuery = "SELECT count(*) FROM (SELECT distinct floor.no " +
+                    "FROM oeuvre.floor JOIN oeuvre.user on floor.user_no = user.no " +
+                    "LEFT JOIN oeuvre.block on user.no = block.blocked_user_no " +
+                    "WHERE user.no not in (SELECT blocked_user_no FROM block WHERE block_user_no = :userNo) " +
+                    "and floor.status = 1 and floor.is_public is true) as c ",
+            nativeQuery = true)
+    Page<GetHomeFloor> findHomeFloorsByRecent(@Param("userNo") Long userNo, Pageable pageable);
 
     interface GetHomeFloor {
         Long getFloorNo();
