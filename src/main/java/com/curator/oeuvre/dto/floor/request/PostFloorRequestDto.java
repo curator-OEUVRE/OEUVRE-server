@@ -56,6 +56,10 @@ public class PostFloorRequestDto {
     @NotNull
     private Boolean isCommentAvailable;
 
+    @ApiModelProperty(notes = "썸네일 사진 순서", example = "1")
+    @NotNull
+    private Integer thumbnailQueue;
+
     @ApiModelProperty(notes = "사진 목록")
     @NotNull
     private List<PostFloorPictureDto> pictures;

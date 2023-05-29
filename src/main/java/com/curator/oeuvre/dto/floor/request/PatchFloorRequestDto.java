@@ -57,6 +57,10 @@ public class PatchFloorRequestDto {
     @NotNull
     private Boolean isCommentAvailable;
 
+    @ApiModelProperty(notes = "썸네일 사진 no", example = "31")
+    @NotNull
+    private Long thumbnailNo;
+
     @ApiModelProperty(notes = "사진 목록")
     @NotNull
     private List<PatchFloorPictureDto> pictures;

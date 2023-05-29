@@ -64,6 +64,9 @@ public class Floor extends AbstractTimestamp {
     @ColumnDefault("false")
     private Boolean isGroupExhibition;
 
+    @Column(nullable = false)
+    private Long thumbnailNo;
+
     @Builder
     public Floor(
             Long no,
@@ -78,7 +81,8 @@ public class Floor extends AbstractTimestamp {
             Boolean isFramed,
             Boolean isPublic,
             Boolean isCommentAvailable,
-            Boolean isGroupExhibition
+            Boolean isGroupExhibition,
+            Long thumbnailNo
     ) {
         this.no = no;
         this.user = user;
@@ -93,5 +97,6 @@ public class Floor extends AbstractTimestamp {
         this.isPublic = isPublic;
         this.isCommentAvailable = isCommentAvailable;
         this.isGroupExhibition = isGroupExhibition;
+        this.thumbnailNo = thumbnailNo;
     }
 }

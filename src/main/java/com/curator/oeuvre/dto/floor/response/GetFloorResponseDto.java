@@ -65,6 +65,9 @@ public class GetFloorResponseDto {
     @ApiModelProperty(notes = "댓글 업데이트 여부", example = "true")
     private final Boolean hasNewComment;
 
+    @ApiModelProperty(notes = "썸네일 사진 no", example = "31")
+    private final Long thumbnailNo;
+
     @ApiModelProperty(notes = "사진 목록")
     private final List<GetPictureResponseDto> pictures;
 
@@ -90,6 +93,7 @@ public class GetFloorResponseDto {
         this.isCommentAvailable = floor.getIsCommentAvailable();
         this.isMine = isMine;
         this.hasNewComment = hasNewComment;
+        this.thumbnailNo = floor.getThumbnailNo();
         this.pictures = pictures;
     }
 }

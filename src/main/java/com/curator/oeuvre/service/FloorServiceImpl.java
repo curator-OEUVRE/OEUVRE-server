@@ -125,6 +125,7 @@ public class FloorServiceImpl implements FloorService {
                 .isPublic(postFloorRequestDto.getIsPublic())
                 .isCommentAvailable(postFloorRequestDto.getIsCommentAvailable())
                 .isGroupExhibition(false)
+                .thumbnailNo(0L)
                 .build();
         floorRepository.save(floor);
 
@@ -153,6 +154,9 @@ public class FloorServiceImpl implements FloorService {
             pictureDto.getHashtags().forEach( hashtag -> {
                 postHashtag(hashtag, picture);
             });
+            if (pictureDto.getQueue().equals(postFloorRequestDto.getThumbnailQueue())) {
+                floor.setThumbnailNo(picture.getNo());
+            }
         });
 
         // 모든 팔로워 읽음 데이터 추가
@@ -239,6 +243,7 @@ public class FloorServiceImpl implements FloorService {
         floor.setIsFramed(patchFloorRequestDto.getIsFramed());
         floor.setIsPublic(patchFloorRequestDto.getIsPublic());
         floor.setIsCommentAvailable(patchFloorRequestDto.getIsCommentAvailable());
+        floor.setThumbnailNo(patchFloorRequestDto.getThumbnailNo());
         floorRepository.save(floor);
 
         List<Long> picturesNos = new ArrayList<Long>();
