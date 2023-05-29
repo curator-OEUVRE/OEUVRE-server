@@ -29,7 +29,7 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
     List<Floor> findAllByUserNoAndStatus(Long userNo, Integer status);
 
     @Query(value = "(SELECT distinct floor.no as floorNo, floor.name as floorName, floor.description as floorDescription, floor.queue, user.exhibition_name as exhibitionName, " +
-            "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnailNo), " +
+            "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as thumbnailUrl, " +
             "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
             "(SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as width, " +
@@ -45,7 +45,7 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
             "and (user.no = following.followed_user_no or user.id = 'oeuvre')) " +
             "UNION " +
             "(SELECT distinct floor.no as floorNo, floor.name as floorName, floor.description as floorDescription, floor.queue, user.exhibition_name as exhibitionName, " +
-            "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnailNo), " +
+            "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as thumbnailUrl, " +
             "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
             "(SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as width, " +
@@ -70,7 +70,7 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
     Page<GetHomeFloor> findHomeFloorsByFollowing(@Param("userNo") Long userNo, Pageable pageable);
 
     @Query(value = "SELECT distinct floor.no as floorNo, floor.name as floorName, floor.description as floorDescription, floor.queue, user.exhibition_name as exhibitionName, " +
-            "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnailNo), " +
+            "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as thumbnailUrl, " +
             "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
             "(SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as width, " +
@@ -109,7 +109,7 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
     }
 
     @Query(value = "SELECT floor.no as floorNo, floor.name as floorName, user.exhibition_name as exhibitionName, " +
-            "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnailNo), " +
+            "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as thumbnailUrl, " +
             "       (SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
             "       (SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as width " +
