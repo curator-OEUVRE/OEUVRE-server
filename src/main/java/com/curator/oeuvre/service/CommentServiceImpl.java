@@ -6,6 +6,7 @@ import com.curator.oeuvre.domain.Notification;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.comment.reqeust.PostCommentRequestDto;
 import com.curator.oeuvre.dto.comment.response.GetCommentResponseDto;
+import com.curator.oeuvre.dto.comment.response.GetFloorCommentsResponseDto;
 import com.curator.oeuvre.dto.comment.response.GetFloorToMoveResponseDto;
 import com.curator.oeuvre.dto.comment.response.PostCommentResponseDto;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
@@ -90,7 +91,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public PageResponseDto<List<GetCommentResponseDto>> getFloorComments(User user, Long floorNo, Integer page, Integer size) {
+    public GetFloorCommentsResponseDto getFloorComments(User user, Long floorNo, Integer page, Integer size) {
 
         Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
                 new NotFoundException(FLOOR_NOT_FOUND));
@@ -114,7 +115,7 @@ public class CommentServiceImpl implements CommentService {
             notificationRepository.saveAll(notifications);
         }
 
-        return new PageResponseDto<>(comments.isLast(), result);
+        return new GetFloorCommentsResponseDto(floor.getName(), comments.isLast(), result);
     }
 
     @Override
