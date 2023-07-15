@@ -22,16 +22,18 @@ public class PatchPictureRequestDto {
     @ApiModelProperty(notes = "작품 제목", example = "노을")
     private String title;
 
-    @Length(max = 50)
+    @Length(max = 100)
     @ApiModelProperty(notes = "작품 설명", example = "노을을 보면서 한컷")
     private String description;
 
     @ApiModelProperty(notes = "제작년도", example = "2023")
     private String manufactureYear;
 
+    @Length(max = 20)
     @ApiModelProperty(notes = "작품 재료", example = "캔버스에 유채")
     private String material;
 
+    @Length(max = 20)
     @ApiModelProperty(notes = "작품 크기", example = "22*88(cm)")
     private String scale;
 

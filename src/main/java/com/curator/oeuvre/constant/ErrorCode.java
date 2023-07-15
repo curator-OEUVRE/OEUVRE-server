@@ -76,6 +76,8 @@ public enum ErrorCode {
     EMPTY_PICTURE_NO(BAD_REQUEST, "P011", "사진 no는 null이 될 수 없습니다."),
     TOO_MANY_PICTURES(FORBIDDEN, "F003", "사진은 20개까지만 생성 가능합니다."),
     NO_PICTURES(FORBIDDEN, "F004", "사진이 하나 이상 있어야 생성 가능합니다."),
+    ONE_LAST_PICTURE(BAD_REQUEST, "P012", "삭제 할 수 없는 사진입니다."),
+
 
 
 

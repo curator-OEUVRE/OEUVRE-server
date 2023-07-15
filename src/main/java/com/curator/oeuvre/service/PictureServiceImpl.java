@@ -185,6 +185,11 @@ public class PictureServiceImpl implements PictureService{
         // 접근 권한 확인
         if (!Objects.equals(picture.getFloor().getUser().getNo(), user.getNo())) throw new ForbiddenException(FORBIDDEN_PICTURE);
 
+        // 플로어의 하나 남은 사진인지 확인
+        if (pictureRepository.findAllByFloorNoAndStatusOrderByQueue(picture.getFloor().getNo(), 1).size() == 1) {
+            throw new BadRequestException(ONE_LAST_PICTURE);
+        }
+
         pictureHashtagRepository.deleteAllByPictureNo(pictureNo);
         likesRepository.deleteAllByPictureNo(pictureNo);
         scrapRepository.deleteAllByPictureNo(pictureNo);
