@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import static com.curator.oeuvre.constant.ErrorCode.*;
@@ -27,6 +28,8 @@ public class PictureServiceImpl implements PictureService{
     private final PictureHashtagRepository pictureHashtagRepository;
     private final NotificationService notificationService;
     private final NotificationRepository notificationRepository;
+    private final ExpoNotificationService expoNotificationService;
+
 
     @Override
     @Transactional
@@ -75,7 +78,20 @@ public class PictureServiceImpl implements PictureService{
         likesRepository.save(like);
 
         if (!Objects.equals(user.getNo(), like.getPicture().getFloor().getUser().getNo()))
+        {
             notificationService.postNotification(like.getPicture().getFloor().getUser(), "LIKES", user, null, like, false);
+
+            if (like.getPicture().getFloor().getUser().getIsLikeAlarmOn())
+            {
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("sendUserNo", user.getNo());
+                data.put("floorNo", like.getPicture().getFloor().getNo());
+                data.put("pictureNo", like.getPicture().getNo());
+                String message = user.getId()+ "님이 회원님의 작품을 좋아합니다.";
+                expoNotificationService.sendMessage(like.getPicture().getFloor().getUser(), "좋아요 알림", message, data);
+                expoNotificationService.postFcmLog(like.getPicture().getFloor().getUser(), "like", data);
+            }
+        }
     }
 
     @Override
@@ -148,6 +164,10 @@ public class PictureServiceImpl implements PictureService{
         if (!Objects.equals(picture.getFloor().getUser().getNo(), user.getNo())) throw new ForbiddenException(FORBIDDEN_PICTURE);
 
         // 설명 업데이트
+        picture.setTitle(patchPictureRequestDto.getTitle());
+        picture.setManufactureYear(patchPictureRequestDto.getManufactureYear());
+        picture.setMaterial(patchPictureRequestDto.getMaterial());
+        picture.setScale(patchPictureRequestDto.getScale());
         picture.setDescription(patchPictureRequestDto.getDescription());
         pictureRepository.save(picture);
 
@@ -164,6 +184,11 @@ public class PictureServiceImpl implements PictureService{
 
         // 접근 권한 확인
         if (!Objects.equals(picture.getFloor().getUser().getNo(), user.getNo())) throw new ForbiddenException(FORBIDDEN_PICTURE);
+
+        // 플로어의 하나 남은 사진인지 확인
+        if (pictureRepository.findAllByFloorNoAndStatusOrderByQueue(picture.getFloor().getNo(), 1).size() == 1) {
+            throw new BadRequestException(ONE_LAST_PICTURE);
+        }
 
         pictureHashtagRepository.deleteAllByPictureNo(pictureNo);
         likesRepository.deleteAllByPictureNo(pictureNo);

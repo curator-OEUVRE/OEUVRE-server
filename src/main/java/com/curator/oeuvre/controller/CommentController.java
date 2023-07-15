@@ -4,6 +4,7 @@ import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.comment.reqeust.PostCommentRequestDto;
 import com.curator.oeuvre.dto.comment.response.GetCommentResponseDto;
+import com.curator.oeuvre.dto.comment.response.GetFloorCommentsResponseDto;
 import com.curator.oeuvre.dto.comment.response.GetFloorToMoveResponseDto;
 import com.curator.oeuvre.dto.comment.response.PostCommentResponseDto;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
@@ -65,7 +66,7 @@ public class CommentController {
     @Operation(summary = "플로어 방명록 조회", description = "플로어 방명록 조회 API 입니다.\n" +
                          "댓글들을 최신순으로 size개씩 페이지네이션 해서 보여줍니다.\n" +
                          "page는 0부터 시작합니다. size는 10-50 가능합니다.")
-    public CommonResponse<PageResponseDto<List<GetCommentResponseDto>>> getFloorComments(
+    public CommonResponse<GetFloorCommentsResponseDto> getFloorComments(
             @AuthenticationPrincipal User authUser,
             @PathVariable Long floorNo,
             @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
@@ -73,7 +74,7 @@ public class CommentController {
         log.info("get-floor-comments");
         log.info("api = 플로어 방명록 조회, user = {}", authUser.getNo());
 
-        PageResponseDto<List<GetCommentResponseDto>> result = commentService.getFloorComments(authUser, floorNo, page, size);
+        GetFloorCommentsResponseDto result = commentService.getFloorComments(authUser, floorNo, page, size);
         return CommonResponse.onSuccess(result);
     }
 

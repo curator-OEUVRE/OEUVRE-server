@@ -6,6 +6,7 @@ import com.curator.oeuvre.domain.Notification;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.comment.reqeust.PostCommentRequestDto;
 import com.curator.oeuvre.dto.comment.response.GetCommentResponseDto;
+import com.curator.oeuvre.dto.comment.response.GetFloorCommentsResponseDto;
 import com.curator.oeuvre.dto.comment.response.GetFloorToMoveResponseDto;
 import com.curator.oeuvre.dto.comment.response.PostCommentResponseDto;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import static com.curator.oeuvre.constant.ErrorCode.*;
@@ -34,8 +36,10 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final NotificationService notificationService;
     private final NotificationRepository notificationRepository;
+    private final ExpoNotificationService expoNotificationService;
 
     @Override
+    @Transactional
     public PostCommentResponseDto postComment(User user, Long floorNo, PostCommentRequestDto postCommentRequestDto) {
 
         Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
@@ -50,8 +54,21 @@ public class CommentServiceImpl implements CommentService {
                 .build();
         commentRepository.save(comment);
 
-        if (!Objects.equals(user.getNo(), comment.getFloor().getUser().getNo()))
+        if (!Objects.equals(user.getNo(), comment.getFloor().getUser().getNo())) {
+
             notificationService.postNotification(comment.getFloor().getUser(), "COMMENT", user, comment, null, false);
+
+            if (comment.getFloor().getUser().getIsCommentAlarmOn())
+            {
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("sendUserNo", user.getNo());
+                data.put("floorNo", comment.getFloor().getNo());
+                data.put("commentNo", comment.getNo());
+                String message = user.getId()+ "님이 회원님의 플로어에 방명록을 남겼습니다: " + comment.getComment();
+                expoNotificationService.sendMessage(comment.getFloor().getUser(), "방명록 알림", message, data);
+                expoNotificationService.postFcmLog(comment.getFloor().getUser(), "comment", data);
+            }
+        }
 
         return new PostCommentResponseDto(comment);
     }
@@ -74,7 +91,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public PageResponseDto<List<GetCommentResponseDto>> getFloorComments(User user, Long floorNo, Integer page, Integer size) {
+    public GetFloorCommentsResponseDto getFloorComments(User user, Long floorNo, Integer page, Integer size) {
 
         Floor floor = floorRepository.findByNoAndStatus(floorNo, 1).orElseThrow(() ->
                 new NotFoundException(FLOOR_NOT_FOUND));
@@ -98,7 +115,7 @@ public class CommentServiceImpl implements CommentService {
             notificationRepository.saveAll(notifications);
         }
 
-        return new PageResponseDto<>(comments.isLast(), result);
+        return new GetFloorCommentsResponseDto(floor.getName(), comments.isLast(), result);
     }
 
     @Override

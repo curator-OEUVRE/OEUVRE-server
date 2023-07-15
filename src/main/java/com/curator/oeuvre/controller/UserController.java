@@ -3,11 +3,13 @@ package com.curator.oeuvre.controller;
 import com.curator.oeuvre.config.CommonResponse;
 import com.curator.oeuvre.domain.User;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
-import com.curator.oeuvre.dto.hashtag.response.GetHashtagSearchResponseDto;
+import com.curator.oeuvre.dto.user.request.PatchAlarmRequestDto;
+import com.curator.oeuvre.dto.user.request.PatchFcmTokenRequestDto;
 import com.curator.oeuvre.dto.user.response.GetUserFloorResponseDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.*;
+import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +27,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
+
+import static com.curator.oeuvre.constant.ErrorCode.INVALID_ALIGNMENT;
+import static com.curator.oeuvre.constant.ErrorCode.INVALID_USER_TYPE;
+import static java.util.Arrays.asList;
 
 @RestController
 @Slf4j
@@ -45,6 +51,10 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
             return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
+        }
+        List<String> type = asList("KAKAO", "APPLE", "GOOGLE");
+        if (!type.contains(signUpRequestDto.getType())) {
+            throw new BadRequestException(INVALID_USER_TYPE);
         }
         SignUpResponseDto result = userService.signUp(signUpRequestDto);
         return CommonResponse.onSuccess(result);
@@ -192,6 +202,50 @@ public class UserController {
 
         userService.deleteUser(authUser);
         return CommonResponse.onSuccess("회원 탈퇴 성공");
+    }
+
+    @PatchMapping(value = "/fcm_token")
+    @Operation(summary = "fcm 토큰 업데이트", description = "사용자의 fcm 토큰을 업데이트하는 API 입니다.")
+    public CommonResponse<String> patchFcmToken(@AuthenticationPrincipal User authUser,
+                                                @Valid @RequestBody PatchFcmTokenRequestDto patchFcmTokenRequestDto) {
+        log.info("patch-fcm-token");
+        log.info("api = fcm 토큰 업데이트, user = {}", authUser.getNo());
+
+        userService.patchFcmToken(authUser, patchFcmTokenRequestDto);
+        return CommonResponse.onSuccess("fcm 토큰 업데이트 성공");
+    }
+
+    @PatchMapping(value = "/is_like_alarm_on")
+    @Operation(summary = "좋아요 알림 수신여부 업데이트", description = "사용자의 좋아요 알림 수신여부를 업데이트하는 API 입니다.")
+    public CommonResponse<String> patchLikeAlarm(@AuthenticationPrincipal User authUser,
+                                                @Valid @RequestBody PatchAlarmRequestDto patchAlarmRequestDto) {
+        log.info("patch-like-alarm");
+        log.info("api = 좋아요 알림 수신여부 업데이트, user = {}", authUser.getNo());
+
+        userService.patchLikeAlarm(authUser, patchAlarmRequestDto);
+        return CommonResponse.onSuccess("좋아요 알람 수신여부 업데이트 성공");
+    }
+
+    @PatchMapping(value = "/is_comment_alarm_on")
+    @Operation(summary = "댓글 알림 수신여부 업데이트", description = "사용자의 댓글 알림 수신여부를 업데이트하는 API 입니다.")
+    public CommonResponse<String> patchCommentAlarm(@AuthenticationPrincipal User authUser,
+                                                 @Valid @RequestBody PatchAlarmRequestDto patchAlarmRequestDto) {
+        log.info("patch-comment-alarm");
+        log.info("api = 댓글 알림 수신여부 업데이트, user = {}", authUser.getNo());
+
+        userService.patchCommentAlarm(authUser, patchAlarmRequestDto);
+        return CommonResponse.onSuccess("댓글 알람 수신여부 업데이트 성공");
+    }
+
+    @PatchMapping(value = "/is_follow_alarm_on")
+    @Operation(summary = "팔로우 알림 수신여부 업데이트", description = "사용자의 팔로우 알림 수신여부를 업데이트하는 API 입니다.")
+    public CommonResponse<String> patchFollowAlarm(@AuthenticationPrincipal User authUser,
+                                                    @Valid @RequestBody PatchAlarmRequestDto patchAlarmRequestDto) {
+        log.info("patch-follow-alarm");
+        log.info("api = 팔로우 알림 수신여부 업데이트, user = {}", authUser.getNo());
+
+        userService.patchFollowAlarm(authUser, patchAlarmRequestDto);
+        return CommonResponse.onSuccess("팔로우 알람 수신여부 업데이트 성공");
     }
 }
 

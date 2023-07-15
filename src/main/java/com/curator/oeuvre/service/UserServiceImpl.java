@@ -3,6 +3,8 @@ package com.curator.oeuvre.service;
 import com.curator.oeuvre.domain.*;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.oauth.TokenDto;
+import com.curator.oeuvre.dto.user.request.PatchAlarmRequestDto;
+import com.curator.oeuvre.dto.user.request.PatchFcmTokenRequestDto;
 import com.curator.oeuvre.dto.user.request.PatchMyProfileRequestDto;
 import com.curator.oeuvre.dto.user.request.SignUpRequestDto;
 import com.curator.oeuvre.dto.user.response.*;
@@ -18,10 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.curator.oeuvre.constant.ErrorCode.*;
@@ -40,6 +39,7 @@ public class UserServiceImpl implements UserService{
     private final LikesRepository likesRepository;
     private final NotificationService notificationService;
     private final NotificationRepository notificationRepository;
+    private final ExpoNotificationService expoNotificationService;
 
     @Override
     @Transactional
@@ -197,6 +197,15 @@ public class UserServiceImpl implements UserService{
         followingRepository.save(following);
 
         notificationService.postNotification(user, "FOLLOWING", me, null, null, true);
+
+        if (user.getIsFollowAlarmOn())
+        {
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("sendUserNo", me.getNo());
+            String message = me.getId()+ "님이 회원님을 팔로우하기 시작했습니다.";
+            expoNotificationService.sendMessage(user, "새 팔로워 알림", message, data);
+            expoNotificationService.postFcmLog(user, "follow", data);
+        }
     }
 
     @Override
@@ -287,6 +296,48 @@ public class UserServiceImpl implements UserService{
         followingRepository.deleteAllByFollowedUserNo(user.getNo());
         user.setStatus(0);
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void patchFcmToken(User user, PatchFcmTokenRequestDto patchFcmTokenRequestDto) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        user.setFcmToken(patchFcmTokenRequestDto.getToken());
+        userRepository.save(user);
+    }
+
+    @Override
+    public void patchLikeAlarm(User user, PatchAlarmRequestDto patchAlarmRequestDto) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        user.setIsLikeAlarmOn(patchAlarmRequestDto.getIsAlarmOn());
+        userRepository.save(user);
+    }
+
+    @Override
+    public void patchCommentAlarm(User user, PatchAlarmRequestDto patchAlarmRequestDto) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        user.setIsCommentAlarmOn(patchAlarmRequestDto.getIsAlarmOn());
+        userRepository.save(user);
+    }
+
+    @Override
+    public void patchFollowAlarm(User user, PatchAlarmRequestDto patchAlarmRequestDto) {
+
+        userRepository.findByNoAndStatus(user.getNo(), 1).orElseThrow(() ->
+                new NotFoundException(USER_NOT_FOUND));
+
+        user.setIsFollowAlarmOn(patchAlarmRequestDto.getIsAlarmOn());
+        userRepository.save(user);
+
     }
 }
 

@@ -16,7 +16,7 @@ public class GetHashtagSearchResponseDto {
     @ApiModelProperty(notes = "해시태그 no", example = "1")
     private final Long hashtagNo;
 
-    @ApiModelProperty(notes = "해시태그", example = "#노을")
+    @ApiModelProperty(notes = "해시태그", example = "노을")
     private final String hashtag;
 
     @ApiModelProperty(notes = "태그 수", example = "32")

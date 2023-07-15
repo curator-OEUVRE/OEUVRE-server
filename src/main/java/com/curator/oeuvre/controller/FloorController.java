@@ -26,9 +26,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.curator.oeuvre.constant.ErrorCode.*;
+import static java.util.Arrays.asList;
 
 @RestController
 @Slf4j
@@ -51,11 +53,19 @@ public class FloorController {
             ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
             return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
         }
+        List<String> align = asList("CENTER", "TOP", "BOTTOM");
+        if (!align.contains(postFloorRequestDto.getAlignment())) {
+            throw new BadRequestException(INVALID_ALIGNMENT);
+        }
+        List<String> gradient = asList("FULL", "TOP", "BOTTOM");
+        if (!gradient.contains(postFloorRequestDto.getGradient())) {
+            throw new BadRequestException(INVALID_GRADIENT);
+        }
         postFloorRequestDto.getPictures().forEach( picture -> {
             if (picture.getImageUrl().isEmpty() || picture.getImageUrl() == null) throw new BadRequestException(EMPTY_IMAGE_URL);
             if (picture.getQueue() == null) throw new BadRequestException(EMPTY_QUEUE);
             if (picture.getHeight() == null) throw new BadRequestException(EMPTY_HEIGHT);
-            if (picture.getLocation() == null ) throw new BadRequestException(EMPTY_LOCATION);
+            if (picture.getWidth() == null ) throw new BadRequestException(EMPTY_WIDTH);
         });
         PostFloorResponseDto result = floorService.postFloor(authUser, postFloorRequestDto);
         return CommonResponse.onSuccess(result);
@@ -83,13 +93,21 @@ public class FloorController {
             ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
             return CommonResponse.onFailure("400", objectError.getDefaultMessage(), null);
         }
+        List<String> align = asList("CENTER", "TOP", "BOTTOM");
+        if (!align.contains(patchFloorRequestDto.getAlignment())) {
+            throw new BadRequestException(INVALID_ALIGNMENT);
+        }
+        List<String> gradient = asList("FULL", "TOP", "BOTTOM");
+        if (!gradient.contains(patchFloorRequestDto.getGradient())) {
+            throw new BadRequestException(INVALID_GRADIENT);
+        }
         patchFloorRequestDto.getPictures().forEach(picture -> {
             if (picture.getPictureNo() == null) throw new BadRequestException(EMPTY_PICTURE_NO);
             if (picture.getPictureNo() == 0 && (picture.getImageUrl().isEmpty() || picture.getImageUrl() == null))
                 throw new BadRequestException(EMPTY_IMAGE_URL);
             if (picture.getQueue() == null) throw new BadRequestException(EMPTY_QUEUE);
             if (picture.getHeight() == null) throw new BadRequestException(EMPTY_HEIGHT);
-            if (picture.getLocation() == null) throw new BadRequestException(EMPTY_LOCATION);
+            if (picture.getWidth() == null) throw new BadRequestException(EMPTY_WIDTH);
         });
 
         floorService.patchFloor(authUser, floorNo, patchFloorRequestDto);
@@ -116,12 +134,13 @@ public class FloorController {
     @Operation(summary = "홈탭 플로어 전체 조회", description = "홈탭 플로어 전체 조회 API 입니다. \n접근 유저에 따라 업데이트 여부가 다르게 조회 됩니다.")
     public CommonResponse<PageResponseDto<List<GetHomeFloorResponseDto>>> getHomeFloors(
             @AuthenticationPrincipal User authUser,
+            @Parameter(description = "조회 방식(following/recent)", example = "following") @RequestParam(required = true) String view,
             @Parameter(description = "페이지", example = "0") @RequestParam(required = true) @Min(value = 0) Integer page,
             @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = true) @Min(value = 10) @Max(value = 50) Integer size) {
         log.info("get-home-floors");
         log.info("api = 홈탭 플로어 전체 조회, user = {}", authUser.getNo());
 
-        PageResponseDto<List<GetHomeFloorResponseDto>> result = floorService.getHomeFloors(authUser, page, size);
+        PageResponseDto<List<GetHomeFloorResponseDto>> result = floorService.getHomeFloors(authUser, view, page, size);
         return CommonResponse.onSuccess(result);
     }
 

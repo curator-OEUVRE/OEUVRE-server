@@ -1,9 +1,9 @@
 package com.curator.oeuvre.dto.floor.request;
 
-import com.google.firebase.database.annotations.Nullable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -21,16 +21,35 @@ public class PostFloorRequestDto {
     @ApiModelProperty(notes = "플로어 이름", example = "제주 여행 기록")
     @NotNull
     @NotEmpty
+    @Length(max = 10)
     private String name;
+
+    @ApiModelProperty(notes = "플로어 설명", example = "플로어 설명을 써주세요")
+    @Length(max = 50)
+    private String description;
 
     @ApiModelProperty(notes = "배경 색상코드", example = "#FFFFFF")
     @NotNull
     @NotEmpty
     private String color;
 
+    @ApiModelProperty(notes = "배경 그라데이션", example = "FULL")
+    @NotNull
+    @NotEmpty
+    private String gradient;
+
     @ApiModelProperty(notes = "배경 질감", example = "0")
-    @Nullable
+    @NotNull
     private Integer texture;
+
+    @ApiModelProperty(notes = "정렬", example = "CENTER/TOP/BOTTOM")
+    @NotNull
+    @NotEmpty
+    private String alignment;
+
+    @ApiModelProperty(notes = "액자 여부", example = "false")
+    @NotNull
+    private Boolean isFramed;
 
     @ApiModelProperty(notes = "공개 여부", example = "true")
     @NotNull
@@ -39,6 +58,10 @@ public class PostFloorRequestDto {
     @ApiModelProperty(notes = "방명록 허용 여부", example = "true")
     @NotNull
     private Boolean isCommentAvailable;
+
+    @ApiModelProperty(notes = "썸네일 사진 순서", example = "1")
+    @NotNull
+    private Integer thumbnailQueue;
 
     @ApiModelProperty(notes = "사진 목록")
     @NotNull

@@ -4,6 +4,7 @@ import com.curator.oeuvre.domain.*;
 import com.curator.oeuvre.dto.common.response.PageResponseDto;
 import com.curator.oeuvre.dto.floor.request.*;
 import com.curator.oeuvre.dto.floor.response.*;
+import com.curator.oeuvre.dto.picture.response.GetPictureResponseDto;
 import com.curator.oeuvre.exception.BadRequestException;
 import com.curator.oeuvre.exception.BaseException;
 import com.curator.oeuvre.exception.ForbiddenException;
@@ -30,6 +31,8 @@ public class FloorServiceImpl implements FloorService {
     private final FloorReadRepository floorReadRepository;
     private final FollowingRepository followingRepository;
     private final NotificationRepository notificationRepository;
+    private final LikesRepository likesRepository;
+    private final ScrapRepository scrapRepository;
 
     @Override
     @Transactional
@@ -113,16 +116,22 @@ public class FloorServiceImpl implements FloorService {
                 .user(user)
                 .queue(count + 1)
                 .name(postFloorRequestDto.getName())
+                .description(postFloorRequestDto.getDescription())
                 .color(postFloorRequestDto.getColor())
+                .gradient(postFloorRequestDto.getGradient())
                 .texture(postFloorRequestDto.getTexture())
+                .alignment(postFloorRequestDto.getAlignment())
+                .isFramed(postFloorRequestDto.getIsFramed())
                 .isPublic(postFloorRequestDto.getIsPublic())
                 .isCommentAvailable(postFloorRequestDto.getIsCommentAvailable())
                 .isGroupExhibition(false)
+                .thumbnailNo(0L)
                 .build();
         floorRepository.save(floor);
 
         // 3. 사진 생성
         List<PostFloorPictureDto> pictures = postFloorRequestDto.getPictures();
+        if (pictures.size() < 1) throw new ForbiddenException(NO_PICTURES);
         if (pictures.size() > 20) throw new ForbiddenException(TOO_MANY_PICTURES);
 
         pictures.forEach( pictureDto -> {
@@ -130,6 +139,10 @@ public class FloorServiceImpl implements FloorService {
                     .floor(floor)
                     .imageUrl(pictureDto.getImageUrl())
                     .queue(pictureDto.getQueue())
+                    .title(pictureDto.getTitle())
+                    .manufactureYear(pictureDto.getManufactureYear())
+                    .material(pictureDto.getMaterial())
+                    .scale(pictureDto.getScale())
                     .description(pictureDto.getDescription())
                     .height(pictureDto.getHeight())
                     .width((pictureDto.getWidth()))
@@ -141,6 +154,9 @@ public class FloorServiceImpl implements FloorService {
             pictureDto.getHashtags().forEach( hashtag -> {
                 postHashtag(hashtag, picture);
             });
+            if (pictureDto.getQueue().equals(postFloorRequestDto.getThumbnailQueue())) {
+                floor.setThumbnailNo(picture.getNo());
+            }
         });
 
         // 모든 팔로워 읽음 데이터 추가
@@ -176,7 +192,7 @@ public class FloorServiceImpl implements FloorService {
             floorReadRepository.save(floorRead);
         }
 
-        List<GetFloorPictureDto> pictureDtos = new ArrayList<GetFloorPictureDto>();
+        List<GetPictureResponseDto> pictureDtos = new ArrayList<GetPictureResponseDto>();
         pictures.forEach( picture -> {
             List<PictureHashtag> pictureHashtags = pictureHashtagRepository.findAllByPictureNo(picture.getNo());
 
@@ -185,8 +201,11 @@ public class FloorServiceImpl implements FloorService {
                 hashtags.add(tag.getHashtag().getHashtag());
             });
             pictureDtos.add(
-                    new GetFloorPictureDto(
+                    new GetPictureResponseDto(
                             picture,
+                            Objects.equals(user.getNo(), picture.getFloor().getUser().getNo()),
+                            likesRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo()),
+                            scrapRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getNo()),
                             hashtags
                     )
             );
@@ -216,10 +235,15 @@ public class FloorServiceImpl implements FloorService {
 
         // 플로어 정보 업데이트
         floor.setName(patchFloorRequestDto.getName());
+        floor.setDescription(patchFloorRequestDto.getDescription());
         floor.setColor(patchFloorRequestDto.getColor());
+        floor.setGradient(patchFloorRequestDto.getGradient());
         floor.setTexture(patchFloorRequestDto.getTexture());
+        floor.setAlignment(patchFloorRequestDto.getAlignment());
+        floor.setIsFramed(patchFloorRequestDto.getIsFramed());
         floor.setIsPublic(patchFloorRequestDto.getIsPublic());
         floor.setIsCommentAvailable(patchFloorRequestDto.getIsCommentAvailable());
+        floor.setThumbnailNo(patchFloorRequestDto.getThumbnailNo());
         floorRepository.save(floor);
 
         List<Long> picturesNos = new ArrayList<Long>();
@@ -227,6 +251,7 @@ public class FloorServiceImpl implements FloorService {
             picturesNos.add(picture.getPictureNo());
         });
 
+        if (picturesNos.size() < 1) throw new ForbiddenException(NO_PICTURES);
         if (picturesNos.size() > 20) throw new ForbiddenException(TOO_MANY_PICTURES);
 
         // 기존 사진 중 새로 받은 입력에 포함 되지 않을 경우
@@ -256,6 +281,10 @@ public class FloorServiceImpl implements FloorService {
                         .floor(floor)
                         .imageUrl(picture.getImageUrl())
                         .queue(picture.getQueue())
+                        .title(picture.getTitle())
+                        .manufactureYear(picture.getManufactureYear())
+                        .material(picture.getMaterial())
+                        .scale(picture.getScale())
                         .description(picture.getDescription())
                         .height(picture.getHeight())
                         .width((picture.getWidth()))
@@ -277,6 +306,10 @@ public class FloorServiceImpl implements FloorService {
                         .orElse(null);
                 if (originalPicture == null) throw new BadRequestException(PICTURE_NOT_FOUND);
 
+                originalPicture.setTitle(picture.getTitle());
+                originalPicture.setManufactureYear(picture.getManufactureYear());
+                originalPicture.setMaterial(picture.getMaterial());
+                originalPicture.setScale(picture.getScale());
                 originalPicture.setDescription(picture.getDescription());
                 originalPicture.setQueue(picture.getQueue());
                 originalPicture.setHeight(picture.getHeight());
@@ -327,19 +360,17 @@ public class FloorServiceImpl implements FloorService {
         });
     }
 
-    @Override
-    @Transactional
-    public PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloors(User user, Integer page, Integer size) {
-
+    public PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloorsByFollowing(User user, Integer page, Integer size) {
         Pageable pageRequest = PageRequest.of(page, size);
 
-        Page<FloorRepository.GetHomeFloor> floors = floorRepository.findHomeFloors(user.getNo(), pageRequest);
+        Page<FloorRepository.GetHomeFloor> floors = floorRepository.findHomeFloorsByFollowing(user.getNo(), pageRequest);
 
         List<GetHomeFloorResponseDto> result = new ArrayList<>();
         floors.forEach( floor -> {
             result.add(new GetHomeFloorResponseDto(
                     floor.getFloorNo(),
                     floor.getFloorName(),
+                    floor.getFloorDescription(),
                     floor.getQueue(),
                     floor.getExhibitionName(),
                     floor.getThumbnailUrl(),
@@ -356,6 +387,46 @@ public class FloorServiceImpl implements FloorService {
             ));
         });
         return new PageResponseDto<>(floors.isLast(), result);
+    }
+
+    public PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloorsByRecent(User user, Integer page, Integer size) {
+        Pageable pageRequest = PageRequest.of(page, size);
+
+        Page<FloorRepository.GetHomeFloor> floors = floorRepository.findHomeFloorsByRecent(user.getNo(), pageRequest);
+
+        List<GetHomeFloorResponseDto> result = new ArrayList<>();
+        floors.forEach( floor -> {
+            result.add(new GetHomeFloorResponseDto(
+                    floor.getFloorNo(),
+                    floor.getFloorName(),
+                    floor.getFloorDescription(),
+                    floor.getQueue(),
+                    floor.getExhibitionName(),
+                    floor.getThumbnailUrl(),
+                    floor.getHeight(),
+                    floor.getWidth(),
+                    floor.getUserNo(),
+                    floor.getId(),
+                    floor.getProfileImageUrl(),
+                    null,
+                    null,
+                  null,
+                    floor.getUserNo().equals(user.getNo()),
+                    floor.getUpdatedAt()
+            ));
+        });
+        return new PageResponseDto<>(floors.isLast(), result);
+    }
+
+    @Override
+    @Transactional
+    public PageResponseDto<List<GetHomeFloorResponseDto>> getHomeFloors(User user, String view, Integer page, Integer size) {
+
+        if (view.equals("following")) {
+            return this.getHomeFloorsByFollowing(user, page, size);
+        } else {
+            return this.getHomeFloorsByRecent(user, page, size);
+        }
     }
 
     @Override

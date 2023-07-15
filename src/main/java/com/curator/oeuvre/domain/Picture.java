@@ -31,6 +31,18 @@ public class Picture extends AbstractTimestamp {
     @Column(nullable = false)
     private Integer queue;
 
+    @Column(nullable = true)
+    private String title;
+
+    @Column(nullable = true)
+    private String manufactureYear;
+
+    @Column(nullable = true)
+    private String material;
+
+    @Column(nullable = true)
+    private String scale;
+
     @Nullable
     @Length(max = 50)
     private String description;
@@ -41,7 +53,7 @@ public class Picture extends AbstractTimestamp {
     @Column(nullable = false)
     private Float width;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Float location;
 
     @Builder
@@ -50,6 +62,10 @@ public class Picture extends AbstractTimestamp {
             Floor floor,
             String imageUrl,
             Integer queue,
+            String title,
+            String manufactureYear,
+            String material,
+            String scale,
             String description,
             Float height,
             Float width,
@@ -59,6 +75,10 @@ public class Picture extends AbstractTimestamp {
         this.floor = floor;
         this.imageUrl = imageUrl;
         this.queue = queue;
+        this.title = title;
+        this.manufactureYear = manufactureYear;
+        this.material = material;
+        this.scale = scale;
         this.description = description;
         this.height = height;
         this.width = width;

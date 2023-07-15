@@ -58,7 +58,7 @@ public class SignUpRequestDto {
     private String backgroundImageUrl;
 
     @ApiModelProperty(notes = "전시회 이름", example = "원진이의 전시회")
-    @Length(min = 2, max = 10)
+    @Length(min = 2, max = 15)
     @NotNull
     @NotEmpty
     private String exhibitionName;

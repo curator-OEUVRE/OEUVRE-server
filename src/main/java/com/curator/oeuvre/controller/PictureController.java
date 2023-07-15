@@ -95,7 +95,7 @@ public class PictureController {
     }
 
     @PatchMapping("/{pictureNo}")
-    @Operation(summary = "사진 설명 수정", description = "사진 설명과 해시태그 수정 API 입니다.")
+    @Operation(summary = "사진 개별 수정", description = "사진 정보과 해시태그 수정 API 입니다.")
     public CommonResponse<String> patchPictureDescription(@AuthenticationPrincipal User authUser,
                                                           @PathVariable Long pictureNo,
                                                           @Valid @RequestBody PatchPictureRequestDto patchPictureRequestDto, BindingResult bindingResult) {

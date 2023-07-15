@@ -26,6 +26,9 @@ public class GetUserFloorResponseDto {
     @ApiModelProperty(notes = "배경 색상코드", example = "#FFFFFF")
     private final String color;
 
+    @ApiModelProperty(notes = "배경 그라데이션", example = "FULL")
+    private final String gradient;
+
     @ApiModelProperty(notes = "배경 질감", example = "0")
     private final Integer texture;
 
@@ -38,6 +41,7 @@ public class GetUserFloorResponseDto {
         this.floorNo = floor.getNo();
         this.name = floor.getName();
         this.color = floor.getColor();
+        this.gradient = floor.getGradient();
         this.texture = floor.getTexture();
         this.thumbnails = thumbnails;
     }

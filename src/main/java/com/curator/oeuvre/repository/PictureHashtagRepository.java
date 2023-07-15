@@ -17,7 +17,8 @@ public interface PictureHashtagRepository extends JpaRepository <PictureHashtag,
 
     void deleteByNo(Long pictureHashtagNo);
 
-    @Query(value = "SELECT count(l.no) as count, p.no as pictureNo, p.image_url as imageUrl, p.height, p.width, u.no as userNo, u.id, u.profile_image_url as profileImageUrl " +
+    @Query(value = "SELECT count(l.no) as count, p.no as pictureNo, p.image_url as imageUrl, p.title, p.manufacture_year as manufactureYear, p.material, p.scale, p.description, " +
+            " p.height, p.width, u.no as userNo, u.id, u.profile_image_url as profileImageUrl " +
             "FROM oeuvre.picture_hashtag ph LEFT JOIN oeuvre.picture p on ph.picture_no = p.no " +
             "        LEFT JOIN oeuvre.likes l on p.no = l.picture_no " +
             "        LEFT JOIN oeuvre.floor f on p.floor_no = f.no " +
@@ -31,6 +32,11 @@ public interface PictureHashtagRepository extends JpaRepository <PictureHashtag,
     interface GetPopularPicture {
         Long getPictureNo();
         String getImageUrl();
+        String getTitle();
+        String getManufactureYear();
+        String getMaterial();
+        String getScale();
+        String getDescription();
         Float getHeight();
         Float getWidth();
         Long getUserNo();
@@ -38,7 +44,7 @@ public interface PictureHashtagRepository extends JpaRepository <PictureHashtag,
         String getProfileImageUrl();
     }
 
-    @Query(value = "SELECT distinct p.no as pictureNo, p.image_url as imageUrl, p.height, p.width, " +
+    @Query(value = "SELECT distinct p.no as pictureNo, p.image_url as imageUrl, p.title, p.manufacture_year as manufactureYear, p.material, p.scale, p.description, p.height, p.width, " +
             "       user.no as userNo, user.id, user.profile_image_url as profileImageUrl, " +
             "       (SELECT count(likes.no) FROM oeuvre.picture LEFT JOIN oeuvre.likes ON likes.picture_no = p.no and likes.status = 1 WHERE picture.status = 1) as count " +
             "FROM oeuvre.picture p " +
@@ -62,7 +68,7 @@ public interface PictureHashtagRepository extends JpaRepository <PictureHashtag,
                     "ORDER BY count desc, p.created_at desc) as c", nativeQuery = true)
     Page<GetHashtagPicture> findAllByHashtagNoSortByPopular(@Param("hashtagNo") Long hashtagNo, @Param("userNo") Long userNo, Pageable pageable);
 
-    @Query(value = "SELECT distinct p.no as pictureNo, p.image_url as imageUrl, p.height, p.width, " +
+    @Query(value = "SELECT distinct p.no as pictureNo, p.image_url as imageUrl, p.title, p.manufacture_year as manufactureYear, p.material, p.scale, p.description, p.height, p.width, " +
             "       user.no as userNo, user.id, user.profile_image_url as profileImageUrl " +
             "FROM oeuvre.picture p " +
             "    LEFT JOIN oeuvre.picture_hashtag ph ON p.no = ph.picture_no " +
@@ -84,6 +90,11 @@ public interface PictureHashtagRepository extends JpaRepository <PictureHashtag,
     interface GetHashtagPicture {
         Long getPictureNo();
         String getImageUrl();
+        String getTitle();
+        String getManufactureYear();
+        String getMaterial();
+        String getScale();
+        String getDescription();
         Float getHeight();
         Float getWidth();
         Long getUserNo();

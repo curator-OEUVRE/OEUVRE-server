@@ -30,12 +30,27 @@ public class Floor extends AbstractTimestamp {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = true)
+    private String description;
+
     @Column(nullable = false)
     private String color;
 
     @Column(nullable = false)
+    @ColumnDefault("'FULL'")
+    private String gradient;
+
+    @Column(nullable = false)
     @ColumnDefault("0")
     private Integer texture;
+
+    @Column(nullable = false)
+    @ColumnDefault("'CENTER'")
+    private String alignment;
+
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private Boolean isFramed;
 
     @Column(nullable = false)
     @ColumnDefault("true")
@@ -49,26 +64,39 @@ public class Floor extends AbstractTimestamp {
     @ColumnDefault("false")
     private Boolean isGroupExhibition;
 
+    @Column(nullable = false)
+    private Long thumbnailNo;
+
     @Builder
     public Floor(
             Long no,
             User user,
             Integer queue,
             String name,
+            String description,
             String color,
+            String gradient,
             Integer texture,
+            String alignment,
+            Boolean isFramed,
             Boolean isPublic,
             Boolean isCommentAvailable,
-            Boolean isGroupExhibition
+            Boolean isGroupExhibition,
+            Long thumbnailNo
     ) {
         this.no = no;
         this.user = user;
         this.queue = queue;
         this.name = name;
+        this.description = description;
         this.color = color;
+        this.gradient = gradient;
         this.texture = texture;
+        this.alignment = alignment;
+        this.isFramed = isFramed;
         this.isPublic = isPublic;
         this.isCommentAvailable = isCommentAvailable;
         this.isGroupExhibition = isGroupExhibition;
+        this.thumbnailNo = thumbnailNo;
     }
 }
