@@ -44,7 +44,7 @@ public class Picture extends AbstractTimestamp {
     private String scale;
 
     @Nullable
-    @Length(max = 50)
+    @Length(max = 100)
     private String description;
 
     @Column(nullable = false)
