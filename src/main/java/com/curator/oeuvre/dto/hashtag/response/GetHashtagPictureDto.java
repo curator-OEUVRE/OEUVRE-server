@@ -48,11 +48,14 @@ public class GetHashtagPictureDto {
     @ApiModelProperty(notes = "스크랩 여부", example = "true")
     private final Boolean isScraped;
 
+    @ApiModelProperty(notes = "플로어 no", example = "1")
+    private final Long floorNo;
+
     @ApiModelProperty(notes = "회원 no", example = "1")
     private final Long userNo;
 
-    @ApiModelProperty(notes = "아이디", example = "one_zzini_")
-    private final String id;
+    @ApiModelProperty(notes = "회원 아이디", example = "one_zzini_")
+    private final String userId;
 
     @ApiModelProperty(notes = "프로필 이미지 url", example = "image_url")
     private final String profileImageUrl;
@@ -70,8 +73,9 @@ public class GetHashtagPictureDto {
             Boolean isMine,
             Boolean isLiked,
             Boolean isScraped,
+            Long floorNo,
             Long userNo,
-            String id,
+            String userId,
             String profileImageUrl
     ) {
         this.pictureNo = pictureNo;
@@ -86,8 +90,9 @@ public class GetHashtagPictureDto {
         this.isMine = isMine;
         this.isLiked = isLiked;
         this.isScraped = isScraped;
+        this.floorNo = floorNo;
         this.userNo = userNo;
-        this.id = id;
+        this.userId = userId;
         this.profileImageUrl = profileImageUrl;
     }
 }

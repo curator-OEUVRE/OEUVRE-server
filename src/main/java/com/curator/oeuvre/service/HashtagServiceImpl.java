@@ -71,8 +71,9 @@ public class HashtagServiceImpl implements HashtagService {
                     Objects.equals(picture.getUserNo(), user.getNo()),
                     likesRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getPictureNo()),
                     scrapRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getPictureNo()),
+                    picture.getFloorNo(),
                     picture.getUserNo(),
-                    picture.getId(),
+                    picture.getUserId(),
                     picture.getProfileImageUrl()
             ));
         });
@@ -111,8 +112,9 @@ public class HashtagServiceImpl implements HashtagService {
                     Objects.equals(picture.getUserNo(), user.getNo()),
                     likesRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getPictureNo()),
                     scrapRepository.existsByUserNoAndPictureNo(user.getNo(), picture.getPictureNo()),
+                    picture.getFloorNo(),
                     picture.getUserNo(),
-                    picture.getId(),
+                    picture.getUserId(),
                     picture.getProfileImageUrl()
             ));
         });
