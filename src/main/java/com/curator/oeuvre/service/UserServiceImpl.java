@@ -284,7 +284,6 @@ public class UserServiceImpl implements UserService{
             pictures.forEach( picture -> {
                 picture.setStatus(0);
                 pictureHashtagRepository.deleteAllByPictureNo(picture.getNo());
-                likesRepository.deleteAllByPictureNo(picture.getNo());
                 scrapRepository.deleteAllByPictureNo(picture.getNo());
             });
             pictureRepository.saveAll(pictures);
