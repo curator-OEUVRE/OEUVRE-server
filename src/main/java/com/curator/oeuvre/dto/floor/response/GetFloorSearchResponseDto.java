@@ -24,6 +24,9 @@ public class GetFloorSearchResponseDto {
     @ApiModelProperty(notes = "썸네일 사진 url", example = "image_url")
     private final String thumbnailUrl;
 
+    @ApiModelProperty(notes = "작은 썸네일 사진 url", example = "image_url")
+    private final String smallThumbnailUrl;
+
     @ApiModelProperty(notes = "세로 길이", example = "188")
     private final Float height;
 
@@ -35,6 +38,7 @@ public class GetFloorSearchResponseDto {
             String floorName,
             String exhibitionName,
             String thumbnailUrl,
+            String smallThumbnailUrl,
             Float height,
             Float width
     ) {
@@ -42,6 +46,7 @@ public class GetFloorSearchResponseDto {
         this.floorName = floorName;
         this.exhibitionName = exhibitionName;
         this.thumbnailUrl = thumbnailUrl;
+        this.smallThumbnailUrl = smallThumbnailUrl;
         this.height = height;
         this.width = width;
     }

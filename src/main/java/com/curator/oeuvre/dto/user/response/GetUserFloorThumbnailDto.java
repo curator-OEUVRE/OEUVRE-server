@@ -14,6 +14,9 @@ public class GetUserFloorThumbnailDto {
     @ApiModelProperty(notes = "이미지 url", example = "image_url")
     private final String imageUrl;
 
+    @ApiModelProperty(notes = "작은 이미지 url", example = "image_url")
+    private final String smallImageUrl;
+
     @ApiModelProperty(notes = "세로 길이", example = "188")
     private final Float height;
 
@@ -22,6 +25,7 @@ public class GetUserFloorThumbnailDto {
 
     public GetUserFloorThumbnailDto (Picture picture) {
         this.imageUrl = picture.getImageUrl();
+        this.smallImageUrl = picture.getSmallImageUrl();
         this.height = picture.getHeight();
         this.width = picture.getWidth();
     }

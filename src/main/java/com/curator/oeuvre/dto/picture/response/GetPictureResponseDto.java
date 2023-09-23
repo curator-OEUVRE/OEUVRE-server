@@ -33,6 +33,9 @@ public class GetPictureResponseDto {
     @ApiModelProperty(notes = "이미지 url", example = "image_url")
     private final String imageUrl;
 
+    @ApiModelProperty(notes = "작은 이미지 url", example = "small_image_url")
+    private final String smallImageUrl;
+
     @ApiModelProperty(notes = "작품 제목", example = "노을")
     private final String title;
 
@@ -82,6 +85,7 @@ public class GetPictureResponseDto {
         this.userId = picture.getFloor().getUser().getId();
         this.floorNo = picture.getFloor().getNo();
         this.imageUrl = picture.getImageUrl();
+        this.smallImageUrl = picture.getSmallImageUrl();
         this.title = picture.getTitle();
         this.manufactureYear = picture.getManufactureYear();
         this.material = picture.getMaterial();

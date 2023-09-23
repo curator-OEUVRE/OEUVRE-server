@@ -18,6 +18,9 @@ public class GetHashtagPictureDto {
     @ApiModelProperty(notes = "이미지 url", example = "image_url")
     private final String imageUrl;
 
+    @ApiModelProperty(notes = "작은 이미지 url", example = "image_url")
+    private final String smallImageUrl;
+
     @ApiModelProperty(notes = "작품 제목", example = "노을")
     private final String title;
 
@@ -63,6 +66,7 @@ public class GetHashtagPictureDto {
     public GetHashtagPictureDto (
             Long pictureNo,
             String imageUrl,
+            String smallImageUrl,
             String title,
             String manufactureYear,
             String material,
@@ -80,6 +84,7 @@ public class GetHashtagPictureDto {
     ) {
         this.pictureNo = pictureNo;
         this.imageUrl = imageUrl;
+        this.smallImageUrl = smallImageUrl;
         this.title = title;
         this.manufactureYear = manufactureYear;
         this.material = material;

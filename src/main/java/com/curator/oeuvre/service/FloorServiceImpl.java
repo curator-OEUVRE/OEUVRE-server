@@ -138,6 +138,7 @@ public class FloorServiceImpl implements FloorService {
             Picture picture = Picture.builder()
                     .floor(floor)
                     .imageUrl(pictureDto.getImageUrl())
+                    .smallImageUrl(pictureDto.getSmallImageUrl())
                     .queue(pictureDto.getQueue())
                     .title(pictureDto.getTitle())
                     .manufactureYear(pictureDto.getManufactureYear())
@@ -280,6 +281,7 @@ public class FloorServiceImpl implements FloorService {
                 Picture newPicture = Picture.builder()
                         .floor(floor)
                         .imageUrl(picture.getImageUrl())
+                        .smallImageUrl(picture.getSmallImageUrl())
                         .queue(picture.getQueue())
                         .title(picture.getTitle())
                         .manufactureYear(picture.getManufactureYear())
@@ -374,6 +376,7 @@ public class FloorServiceImpl implements FloorService {
                     floor.getQueue(),
                     floor.getExhibitionName(),
                     floor.getThumbnailUrl(),
+                    floor.getSmallThumbnailUrl(),
                     floor.getHeight(),
                     floor.getWidth(),
                     floor.getUserNo(),
@@ -403,6 +406,7 @@ public class FloorServiceImpl implements FloorService {
                     floor.getQueue(),
                     floor.getExhibitionName(),
                     floor.getThumbnailUrl(),
+                    floor.getSmallThumbnailUrl(),
                     floor.getHeight(),
                     floor.getWidth(),
                     floor.getUserNo(),
@@ -443,6 +447,7 @@ public class FloorServiceImpl implements FloorService {
                     floor.getFloorName(),
                     floor.getExhibitionName(),
                     floor.getThumbnailUrl(),
+                    floor.getSmallThumbnailUrl(),
                     floor.getHeight(),
                     floor.getWidth()
             ));
