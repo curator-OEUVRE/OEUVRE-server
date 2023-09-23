@@ -30,6 +30,9 @@ public class GetHomeFloorResponseDto {
     @ApiModelProperty(notes = "썸네일 사진 url", example = "image_url")
     private final String thumbnailUrl;
 
+    @ApiModelProperty(notes = "작은 썸네일 사진 url", example = "small_image_url")
+    private final String smallThumbnailUrl;
+
     @ApiModelProperty(notes = "세로 길이", example = "188")
     private final Float height;
 
@@ -67,6 +70,7 @@ public class GetHomeFloorResponseDto {
             Integer queue,
             String exhibitionName,
             String thumbnailUrl,
+            String smallThumbnailUrl,
             Float height,
             Float width,
             Long userNo,
@@ -84,6 +88,7 @@ public class GetHomeFloorResponseDto {
         this.queue = queue;
         this.exhibitionName = exhibitionName;
         this.thumbnailUrl = thumbnailUrl;
+        this.smallThumbnailUrl = smallThumbnailUrl;
         this.height = height;
         this.width = width;
         this.userNo = userNo;

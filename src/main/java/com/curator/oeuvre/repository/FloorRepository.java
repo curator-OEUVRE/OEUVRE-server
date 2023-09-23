@@ -31,7 +31,8 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
     @Query(value = "(SELECT distinct floor.no as floorNo, floor.name as floorName, floor.description as floorDescription, floor.queue, user.exhibition_name as exhibitionName, " +
             "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as thumbnailUrl, " +
-            "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
+            "ifnull((SELECT picture.small_image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
+            "(SELECT picture.small_image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as smallThumbnailUrl, " +            "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
             "(SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as width, " +
             "user.no as userNo, user.id, user.profile_image_url as profileImageUrl, " +
             "ifnull(floor_read.is_new, false) as isNew, ifnull(floor_read.is_updated, false) as isUpdated, " +
@@ -47,7 +48,8 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
             "(SELECT distinct floor.no as floorNo, floor.name as floorName, floor.description as floorDescription, floor.queue, user.exhibition_name as exhibitionName, " +
             "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as thumbnailUrl, " +
-            "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
+            "ifnull((SELECT picture.small_image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
+            "(SELECT picture.small_image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as smallThumbnailUrl, " +            "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
             "(SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as width, " +
             "user.no as userNo, user.id, user.profile_image_url as profileImageUrl, " +
             "false as isNew, false as isUpdated, 0 as updateCount, true as isMine, floor.updated_at as updatedAt, floor.created_at as createdAt " +
@@ -72,7 +74,8 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
     @Query(value = "SELECT distinct floor.no as floorNo, floor.name as floorName, floor.description as floorDescription, floor.queue, user.exhibition_name as exhibitionName, " +
             "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as thumbnailUrl, " +
-            "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
+            "ifnull((SELECT picture.small_image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
+            "(SELECT picture.small_image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as smallThumbnailUrl, " +            "(SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
             "(SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as width, " +
             "user.no as userNo, user.id, user.profile_image_url as profileImageUrl, " +
             "false as isNew, false as isUpdated, 0 as updateCount, false as isMine, floor.updated_at as updatedAt, floor.created_at as createdAt " +
@@ -96,6 +99,7 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
         Integer getQueue();
         String getExhibitionName();
         String getThumbnailUrl();
+        String getSmallThumbnailUrl();
         Float getHeight();
         Float getWidth();
         Long getUserNo();
@@ -111,6 +115,8 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
     @Query(value = "SELECT floor.no as floorNo, floor.name as floorName, user.exhibition_name as exhibitionName, " +
             "ifnull((SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
             "(SELECT picture.image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as thumbnailUrl, " +
+            "ifnull((SELECT picture.small_image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 and picture.no = floor.thumbnail_no), " +
+            "(SELECT picture.small_image_url FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1)) as smallThumbnailUrl, " +
             "       (SELECT picture.height FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as height, " +
             "       (SELECT picture.width FROM oeuvre.picture WHERE picture.floor_no = floor.no and picture.status = 1 ORDER BY picture.queue LIMIT 1) as width " +
             "FROM oeuvre.floor LEFT JOIN oeuvre.user on floor.user_no = user.no " +
@@ -126,6 +132,7 @@ public interface FloorRepository extends JpaRepository <Floor, Long> {
         String getFloorName();
         String getExhibitionName();
         String getThumbnailUrl();
+        String getSmallThumbnailUrl();
         Float getHeight();
         Float getWidth();
     }

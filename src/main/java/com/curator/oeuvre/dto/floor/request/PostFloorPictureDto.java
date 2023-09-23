@@ -23,6 +23,9 @@ public class PostFloorPictureDto {
     @NotNull(message = "이미지 url을 입력해주세요")
     private String imageUrl;
 
+    @ApiModelProperty(notes = "작은 이미지 url", example = "small_image_url")
+    private String smallImageUrl;
+
     @ApiModelProperty(notes = "작품 제목", example = "노을")
     @Length(max = 20)
     private String title;

@@ -61,6 +61,7 @@ public class HashtagServiceImpl implements HashtagService {
             pictureResult.add(new GetHashtagPictureDto(
                     picture.getPictureNo(),
                     picture.getImageUrl(),
+                    picture.getSmallImageUrl(),
                     picture.getTitle(),
                     picture.getManufactureYear(),
                     picture.getMaterial(),
@@ -102,6 +103,7 @@ public class HashtagServiceImpl implements HashtagService {
             result.add(new GetHashtagPictureDto(
                     picture.getPictureNo(),
                     picture.getImageUrl(),
+                    picture.getSmallImageUrl(),
                     picture.getTitle(),
                     picture.getManufactureYear(),
                     picture.getMaterial(),

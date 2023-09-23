@@ -28,6 +28,9 @@ public class Picture extends AbstractTimestamp {
     @Column(nullable = false)
     private String imageUrl;
 
+    @Column(nullable = true)
+    private String smallImageUrl;
+
     @Column(nullable = false)
     private Integer queue;
 
@@ -61,6 +64,7 @@ public class Picture extends AbstractTimestamp {
             Long no,
             Floor floor,
             String imageUrl,
+            String smallImageUrl,
             Integer queue,
             String title,
             String manufactureYear,
@@ -74,6 +78,7 @@ public class Picture extends AbstractTimestamp {
         this.no = no;
         this.floor = floor;
         this.imageUrl = imageUrl;
+        this.smallImageUrl = smallImageUrl;
         this.queue = queue;
         this.title = title;
         this.manufactureYear = manufactureYear;
